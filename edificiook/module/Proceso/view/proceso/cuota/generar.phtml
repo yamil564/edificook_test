@@ -1,0 +1,169 @@
+<div class="row">
+	<div class="col-md-12">
+		<form id="frmCuotaMensual" action="">
+			<div class="page-head">
+				<h2>Generación de cuota mensual</h2>
+			</div>
+			<div class="row">
+				<div class="col-xs-12">
+					<h3 class="header smaller lighter blue">Periodo</h3>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-3">
+					<label for="selMes">Mes</label>
+					<select name="selMes" id="selMes" class="form-control" onchange="Validacion.escribirParametrosfecha();">
+						<option value="0">Mes</option>
+						<?
+							$arrayMeses=array('Enero','Febrero','Marzo','Abril',
+											'Mayo','Junio','Julio','Agosto',
+											'Septiembre','Octubre','Noviembre','Diciembre');
+							foreach ($arrayMeses as $key => $value) {
+								if(date('m')==$key+1){
+									echo '<option value="'.($key+1).'" selected>'.$value.'</option>';
+								}else{
+									echo '<option value="'.($key+1).'">'.$value.'</option>';
+								}
+							}
+						?>
+					</select>
+				</div>
+				<div class="col-xs-3">
+					<label for="selYear">Año</label>
+					<select name="selYear" id="selYear" class="form-control" onchange="Validacion.escribirParametrosfecha();">
+						<?php
+							$fechaSuscripcion=$this->parametrosEdificio['fechaSuscripcion'];
+							$yearSuscripcion=($fechaSuscripcion=='0000-00-00') ? date('Y'): date('Y',strtotime($fechaSuscripcion));
+							$yearActual=date('Y');
+							for($i=$yearSuscripcion;$i<=$yearActual;$i++){
+								if($i==$yearActual){
+									echo '<option value="'.$i.'" selected>'.$i.'</option>';
+								}else{
+									echo '<option value="'.$i.'">'.$i.'</option>';
+								}
+								
+							}
+						?>
+					</select>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-12">
+					<h3 class="header smaller lighter blue">Parametros</h3>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-3">
+					<label for="selDiaIni">Dia Emisión</label>
+					<input type="number" class="form-control" name="textDiaEmi" id="textDiaEmi" onblur ="Validacion.escribirParametrosfecha();" disabled>
+					<div style="font-style: italic;color: red;">Fecha de Emisión (<span id="labelFechaEmi">00/00/0000</span>)</div>
+				</div>
+				<div class="col-xs-3">
+					<label for="selDiaIni">Dia Vencimiento</label>
+					<input type="number" class="form-control" name="textDiaVence" id="textDiaVence" onblur ="Validacion.escribirParametrosfecha();" disabled>
+					<div style="font-style: italic;color: red;">Fecha de Vencimiento (<span id="labelFechaVen">00/00/0000</span>)</div>
+				</div>
+				<div class="col-xs-3">
+				<br>
+					<label class="middle">
+						<input class="ace" type="checkbox" id="chkPersonalizar" onclick="Validacion.personalizarParams();">
+						<span class="lbl"> Personalizar</span>
+					</label>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-3">
+					<br>
+					<button type="button" class="btn btn-success btn-large has-spinner" id="btn-iniciar" name="">
+						<span class="spinner"><i class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></i></span>&nbsp;<span id="label">Iniciar Proceso</span>
+					</button>
+				</div>
+			</div>
+			
+		</form>
+	</div>
+</div>
+
+
+<div class="modal fade" id="modalConfirmacionGenerarCuota" tabindex="-1" role="dialog" aria-labelledby="labelModalConfirmacion" data-backdrop="static" data-keyboard="false">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title"><span>Generar Cuota</span></h4>
+			</div>
+			<div class="modal-body">
+				<div class="row">
+					<div class="col-xs-12">
+						<div class="form-group" style="height: 50px;">
+							<span class="ace-icon question-button bigger-200">?</span>
+							<div style="padding-left: 50px; font-size: 15px;">¿Está seguro de que desea generar la cuota de mantenimiento?</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<center>
+					<button id="btnConfirmarProcesar" type="button" class="btn btn-success btn-sm" onclick="Action.iniciar();"> Aceptar</button>
+	        		<button type="button" class="btn btn-default btn-sm" data-dismiss="modal"> Cancelar</button>	
+				</center>
+	      	</div>
+		</div>
+	</div>
+</div>
+
+<style>
+
+	.glyphicon-refresh-animate {
+	    -animation: spin .7s infinite linear;
+	    -webkit-animation: spin2 .7s infinite linear;
+	}
+
+	@-webkit-keyframes spin2 {
+	    from { -webkit-transform: rotate(0deg);}
+	    to { -webkit-transform: rotate(360deg);}
+	}
+
+	@keyframes spin {
+	    from { transform: scale(1) rotate(0deg);}
+	    to { transform: scale(1) rotate(360deg);}
+	}
+
+	.spinner {
+	  display: inline-block;
+	  opacity: 0;
+	  width: 0;
+
+	  -webkit-transition: opacity 0.25s, width 0.25s;
+	  -moz-transition: opacity 0.25s, width 0.25s;
+	  -o-transition: opacity 0.25s, width 0.25s;
+	  transition: opacity 0.25s, width 0.25s;
+	}
+
+	.has-spinner.active {
+	  cursor:progress;
+	}
+
+	.has-spinner.active .spinner {
+	  opacity: 1;
+	  width: auto; /* This doesn't work, just fix for unkown width elements */
+	}
+
+	.has-spinner.btn-mini.active .spinner {
+	    width: 10px;
+	}
+
+	.has-spinner.btn-small.active .spinner {
+	    width: 13px;
+	}
+
+	.has-spinner.btn.active .spinner {
+	    width: 16px;
+	}
+
+	.has-spinner.btn-large.active .spinner {
+	    width: 19px;
+	}
+</style>
+<?php $this->inlineScript()->appendFile($this->basePath('/script/proceso/cuota.js?t='.time()),'text/javascript')
+?>

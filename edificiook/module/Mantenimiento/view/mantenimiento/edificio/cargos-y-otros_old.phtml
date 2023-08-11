@@ -1,0 +1,277 @@
+<style>
+	.form-group input{border: 0px;}
+	.form-group .radio{margin-top: 5px;}
+	.img-pdf{width: 50px;cursor: pointer;}
+	.remove{cursor: pointer;display: none!important;}
+</style>
+
+<div class="row">
+	
+	<div class="col-lg-12">
+
+		<button class="btn btn-default btn-sm right margin-left-5 btn-edit">
+			<i class="ace-icon fa fa-pencil-square-o bigger-110"></i> Editar información
+		</button>
+		<button class="btn btn-success btn-sm right margin-left-5 btn-save hide">
+			<i class="ace-icon fa fa-floppy-o bigger-110"></i> Guardar datos
+		</button>
+		<button class="btn btn-warning btn-sm right margin-left-5 btn-cancel hide">
+			<i class="ace-icon fa fa-times bigger-110"></i> Cancelar
+		</button>
+		<a href="<?php echo $this->url('mantenimiento', array('controller' => 'edificio', 'action' => 'index')); ?>" class="btn btn-default btn-sm right margin-left-5 btn-return">
+			<i class="ace-icon fa fa-reply bigger-110"></i>Regresar
+		</a>
+
+
+		<h4 class="header smaller lighter blue">Cargos y Otros</h4>
+	</div>
+	
+	<form id="validate" class="contact-form" accion="cargos-y-otros">
+	<input type="hidden" name="ruta" value="Edificio > Cargos y Otros">
+	<div class="col-sm-6">
+	
+	<div class="form-group">
+		<label class="col-sm-4 control-label no-padding-right"> Tipo de Cuota </label>
+		<div class="col-sm-8" style="margin-bottom: 5px;">
+			<select class="form-control" name="selTipoDeCuota" disabled="">
+                <option value="UNIFORME" <?php if($this->edificio['tipoCuota'] == 'UNIFORME') echo "selected='select'"; ?>>UNIFORME</option>
+                <option value="PORCENTUAL" <?php if($this->edificio['tipoCuota'] == 'PORCENTUAL') echo "selected='select'"; ?>>PORCENTUAL</option>
+                <option value="USO" <?php if($this->edificio['tipoCuota'] == 'USO') echo "selected='select'"; ?>>USO</option>
+            </select>
+		</div>
+	</div>
+
+	<div class="form-group">
+		<label class="col-sm-4 control-label no-padding-right"> Supervisor </label>
+		<div class="col-sm-8" style="margin-bottom: 5px;">
+			<?php
+		        echo '<select class="chosen-select" id="selSupervidor" name="selSupervidor" data-placeholder="Seleccione el Supervisor...">';
+		        foreach($this->listarUsuarios as $supervisor) {
+		        	if($supervisor['usu_in_cod'] == $this->edificio['edi_ch_sup']) $selected = "selected='select'";
+		        	else $selected = '';
+		            if ($supervisor['usu_ch_tip'] == 'PN') {
+		                echo "<option value='" . $supervisor['usu_in_cod'] . "' ".$selected.">" . $supervisor['usu_vc_ape'] . " " . $supervisor['usu_vc_nom'] . "</option>";
+		            } else {
+		                echo "<option value='" . $supervisor['usu_in_cod'] . "' ".$selected.">" . $supervisor['usu_vc_ape'] . "</option>";
+		            }
+		        }
+		        echo '</select>';
+	   		?>
+		</div>
+	</div>
+
+	<div class="form-group">
+		<label class="col-sm-4 control-label no-padding-right"> Conserje </label>
+		<div class="col-sm-8" style="margin-bottom: 5px;">
+			<?php
+		        echo '<select class="chosen-select" id="selConserje" name="selConserje" data-placeholder="Seleccione el Conserje...">';
+		        foreach($this->listarUsuarios as $conserje) {
+		        	if($conserje['usu_in_cod'] == $this->edificio['edi_ch_con']) $selected = "selected='select'";
+		        	else $selected = '';
+		            if ($conserje['usu_ch_tip'] == 'PN') {
+		                echo "<option value='" . $conserje['usu_in_cod'] . "' ".$selected.">" . $conserje['usu_vc_ape'] . " " . $conserje['usu_vc_nom'] . "</option>";
+		            } else {
+		                echo "<option value='" . $conserje['usu_in_cod'] . "' ".$selected.">" . $conserje['usu_vc_ape'] . "</option>";
+		            }
+		        }
+		        echo '</select>';
+	   		?>
+		</div>
+	</div>
+
+	<div class="form-group">
+		<label class="col-sm-4 control-label no-padding-right"> Recaudación </label>
+		<div class="col-sm-8" style="margin-bottom: 5px;">
+			<select class="form-control" name="selRecaudacion" disabled="">
+				<option value="TOTAL" <?php if($this->edificio['recaudacion'] == 'TOTAL') echo "selected='select'"; ?>>COBRANZA TOTAL</option>
+				<option value="PARCIAL" <?php if($this->edificio['recaudacion'] == 'PARCIAL') echo "selected='select'"; ?>>COBRANZA PARCIAL</option>
+			</select>
+		</div>
+	</div>
+	
+	
+	</div>
+
+	<div class="col-sm-6">
+		
+		<div class="form-group">
+			<label class="col-sm-5 control-label no-padding-right"> Tipo Presupuesto: </label>
+			<div class="col-sm-7" style="margin-bottom: 5px;">
+				<select class="form-control" name="selTipoPresupuesto" disabled="">
+					<option value="PROYECTADO" <?php if($this->edificio['presupuesto'] == 'PROYECTADO') echo "selected='select'"; ?>>INGRESO PROYECTADO</option>
+                    <option value="GASTO" <?php if($this->edificio['presupuesto'] == 'GASTO') echo "selected='select'"; ?>>GASTO REALIZADO</option>
+				</select>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label class="col-sm-5 control-label no-padding-right"> Visualizar lista de morosos: </label>
+			<div class="col-sm-7" style="margin-bottom: 5px;">
+				<div class="radio">
+					<label class="padding-left-0">
+						<input name="rbMorosos" type="radio" class="ace" value="1" disabled="" <?php if($this->edificio['morosos']=='1') echo 'checked=""'; ?> > <!--checked=""-->
+						<span class="lbl"> Si </span>
+					</label>
+					<label>
+						<input name="rbMorosos" type="radio" class="ace" value="0" disabled="" <?php if($this->edificio['morosos']=='0') echo 'checked=""'; ?>>
+						<span class="lbl"> No </span>
+					</label>
+				</div>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label class="col-sm-5 control-label no-padding-right"> Cobranza Legal: </label>
+			<div class="col-sm-7" style="margin-bottom: 5px;">
+				<div class="checkbox">
+					<label class="padding-left-0">
+						<?php
+							if($this->edificio['cobranzaLegal'] == 1) $checked = 'checked';
+							else $checked = '';
+						?>
+						<input name="chkCobranzaLegal" type="checkbox" class="ace" value="1" <?php echo $checked; ?> disabled="">
+						<span class="lbl"></span>
+					</label>
+				</div>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<div class="col-sm-6 content-file" content="rinterno" id="rinterno" style="margin-bottom: 5px;">
+				<label class="control-label no-padding-right"> Reglamento interno: </label>
+				
+
+				<?php if($this->edificio['reglamentoInterno']!=''): ?>
+					<div class="si-file" style="margin-top: 10px;position: relative;height: 50px;">
+						<i class="fa fa-file-pdf-o" style="font-size: 40px;color: #000000;position: relative;top: 0;">
+							<i class="fa fa-times-circle m-pdf del-pdf-i disabled" style="font-size: 21px;position: absolute;bottom: -7px;right: -8px;color: #E75840;cursor: pointer;background: white;border-radius: 100%;" data-name='<?php echo $this->edificio['reglamentoInterno']; ?>'></i>
+						</i>
+						<a href="file/reglamento-interno/<?php echo $this->edificio['reglamentoInterno']."?t=".time(); ?>" target="_blank" class="margin-left-5">Ver archivo</a>
+					</div>
+				<?php else: ?>
+					<input type="file" class="id-input-file-2" accept="application/pdf" data-type="interno" id="reglamento-interno" onchange="edificio.subirArchivo(this);" disabled="" name="reglamentoInterno">
+				<?php endif; ?>
+
+			</div>
+			<div class="col-sm-6 content-file" content="moperaciones" id="moperaciones" style="margin-bottom: 5px;">
+				<label class="control-label no-padding-right"> Manual de operaciones: </label>
+
+				<?php if($this->edificio['manualOperaciones']!=''): ?>
+					<div class="si-file" style="margin-top: 10px;position: relative;height: 50px;">
+						<i class="fa fa-file-pdf-o" style="font-size: 40px;color: #000000;position: relative;top: 0;">
+							<i class="fa fa-times-circle m-pdf del-pdf-m disabled" style="font-size: 21px;position: absolute;bottom: -7px;right: -8px;color: #E75840;cursor: pointer;background: white;border-radius: 100%;" data-name='<?php echo $this->edificio['manualOperaciones']; ?>'></i>
+						</i>
+						<a href="file/manual-operaciones/<?php echo $this->edificio['manualOperaciones']."?t=".time(); ?>" target="_blank" class="margin-left-5">Ver archivo</a>
+					</div>
+				<?php else: ?>
+					<input type="file" class="id-input-file-2" accept="application/pdf" data-type="operaciones" id="manual-operaciones" onchange="edificio.subirArchivo(this);" disabled="" name="manualOperaciones">
+				<?php endif; ?>
+
+			</div>
+		</div>
+
+
+	</div>
+
+
+	<!--<div class="col-sm-5 hidden">
+		
+		<h4 class="header smaller lighter blue">Administrador</h4>
+
+		<div class="form-group">
+			<label class="col-sm-4 control-label no-padding-right"> Administrador </label>
+			<div class="col-sm-8" style="margin-bottom: 5px;">
+				<?php
+			        echo '<select class="chosen-select" name="selAdministrador" data-placeholder="Seleccione el Administrador...">';
+			        foreach($this->listarUsuarios as $administrador) {
+			        	if($administrador['usu_in_cod'] == $this->edificio['edi_ch_con']) $selected = "selected='select'";
+			        	else $selected = '';
+			            if ($administrador['usu_ch_tip'] == 'PN') {
+			                echo "<option value='" . $administrador['usu_in_cod'] . "' ".$selected.">" . $administrador['usu_vc_ape'] . " " . $administrador['usu_vc_nom'] . "</option>";
+			            } else {
+			                echo "<option value='" . $administrador['usu_in_cod'] . "' ".$selected.">" . $administrador['usu_vc_ape'] . "</option>";
+			            }
+			        }
+			        echo '</select>';
+		   		?>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label class="col-sm-4 control-label no-padding-right"> Periodicidad de visitas </label>
+			<div class="col-sm-8" style="margin-bottom: 5px;">
+				<img src="images/calendar2.png" alt="">
+			</div>
+		</div>
+	
+	</div>-->
+
+	<div class="col-sm-10 hidden">
+		
+		<h4 class="header smaller lighter blue">Junta Directiva</h4>	
+		
+		<div class="form-group">
+			<label class="col-sm-3 control-label no-padding-right"> Junta Directiva: </label>
+			<div class="col-sm-4" style="margin-bottom: 5px;">
+				<?php
+			        echo '<select id="junta-directiva" class="chosen-select" data-placeholder="Seleccione la Junta Directiva...">';
+			        foreach($this->listarUsuarios as $juntaDirectiva) {
+			        	if($juntaDirectiva['usu_in_cod'] == $this->edificio['edi_ch_con']) $selected = "selected='select'";
+			        	else $selected = '';
+			            if ($juntaDirectiva['usu_ch_tip'] == 'PN') {
+			                echo "<option value='" . $juntaDirectiva['usu_in_cod'] . "' ".$selected.">" . $juntaDirectiva['usu_vc_ape'] . " " . $juntaDirectiva['usu_vc_nom'] . "</option>";
+			            } else {
+			                echo "<option value='" . $juntaDirectiva['usu_in_cod'] . "' ".$selected.">" . $juntaDirectiva['usu_vc_ape'] . "</option>";
+			            }
+			        }
+			        echo '</select>';
+		   		?>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<div class="col-sm-5" style="margin-bottom: 5px;">
+				<?php
+	                echo "<select id='cargo' class='chosen-select'>";
+	                foreach($this->listaCargoJuntaDirectiva as $cargoJuntaDirectiva){
+	                    echo "<option value='" . $cargoJuntaDirectiva['car_ch_cod'] . "'>" . $cargoJuntaDirectiva['car_vc_des'] . "</option>";
+	                }
+	                echo "</select>";
+                ?>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label class="col-sm-3 control-label no-padding-right"></label>
+			<div class="col-sm-9" style="margin-bottom: 5px;">
+				<select multiple='multiple' id='select-junta-directiva' style='width: 100%; height: 100px;' disabled="">
+					<?php foreach($this->listarJuntaDirectiva as $juntaDirectiva):?>
+						<option value="<?php echo $juntaDirectiva['idusuario'] . "_" . $juntaDirectiva['idcargo']?>">#<?php echo $juntaDirectiva['nombresUsuario'] . "   ->   " . $juntaDirectiva['nombreCargo']; ?></option>
+					<?php endforeach; ?>
+				</select>
+			</div>
+		</div>
+
+	</div>
+	
+	<div class="col-lg-2 hidden">
+		<h4 class="header smaller lighter blue">&nbsp;</h4>
+		<button type="button" class="btn btn-xs btn-success" id="btn_agregar" disabled="">
+			<i class="ace-icon fa fa-check bigger-110"></i>
+			<span class="bigger-110 no-text-shadow">Agregar</span>
+		</button>
+		<button type="button" class="btn btn-xs btn-warning" id="btn_quitar" disabled="">
+			<i class="ace-icon fa fa-times bigger-110"></i>
+			<span class="bigger-110 no-text-shadow">Quitar</span>
+		</button>
+	</div>
+
+	<button type="submit" class="btn-submit hidden"></button>
+	</form>
+
+</div>	
+
+<?php $this->inlineScript()
+	->appendFile($this->basePath('/script/mantenimiento/edificio.js'),'text/javascript')
+?>
+	

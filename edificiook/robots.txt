@@ -1,0 +1,29 @@
+# Niega el acceso a todos los bots (implementando el comodín [/]), en todos los archivos
+# almacenados en el directorio raíz
+
+User-agent: *
+Disallow: /
+
+
+# Donde Unsolobot es el nombre del bot al que le queremos permitir el acceso
+# User-agent: Unsolobot 
+# Disallow: 
+# User-agent: *
+# Disallow: /
+
+
+# Para eliminar todas las imágenes de un sitio de Google Imágenes, añade lo siguiente:
+
+User-agent: Googlebot-Image
+Disallow: / 
+
+# Para evitar que se rastreen las páginas de tu sitio, sin impedir que se muestren 
+# anuncios de AdSense en esas páginas
+
+User-agent: Mediapartners-Google
+Disallow: /
+
+
+# Para especificar la concordancia con el final de la URL, utiliza $. Por ejemplo, para bloquear una URL # que termine en .pdf:
+# User-agent: Googlebot 
+# Disallow: /*.pdf$

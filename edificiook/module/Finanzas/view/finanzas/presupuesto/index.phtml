@@ -1,0 +1,227 @@
+<?php
+
+	$optionsUsuariosPorEdificio='';
+	if($this->usuariosPorEdificio){
+		foreach ($this->usuariosPorEdificio as $key => $value){
+			if($value['tipo']=='PJ'){
+				$optionsUsuariosPorEdificio.='<option value="'.$value['id'].'">'.$value['apellido'].'</option>';
+			}else{
+				$optionsUsuariosPorEdificio.='<option value="'.$value['id'].'">'.$value['nombre']." ".$value['apellido'].'</option>';
+			}
+		}
+	}
+?>
+<div class="row">
+	<div class="col-xs-12">
+		<div class="table-header">
+			<div class="row">
+				<div class="col-xs-4">Presupuesto Mensual</div>
+				<div class="col-xs-8">
+					<div id="btn-actions" class="btn-group pull-right" role="group" aria-label="...">
+						<button type="button" class="btn btn-default btn-sm btnOpe" onclick="Action.new()">
+					  		<i class="glyphicon glyphicon-file"></i>
+					  		<span>Nuevo </span>
+					  	</button>
+					</div>
+					<div id="btn-actions" class="btn-group pull-right" role="group" aria-label="...">
+						<button type="button" class="btn btn-default btn-sm btnOpe" onclick="DateControls.backYear()">
+					  		<i class="ace-icon fa fa-angle-left biger-150"></i>
+					  	</button>
+					  	<button  type="button" class="btn btn-default btn-sm btnOpe">
+					  		<span id="currentYear"><?php echo date('Y');?></span>
+					  	</button>
+					  	<button type="button" class="btn btn-default btn-sm btnOpe" onclick="DateControls.nextYear()">
+					  		<i class="ace-icon fa fa-angle-right"></i>
+					  	</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<table id="grid-table"></table>
+		<div id="grid-pager"></div>
+	</div>
+</div>
+
+
+<div class="modal fade" id="modalFormPresupuesto" tabindex="-1" role="dialog" aria-labelledby="labelModalFormPresupuesto" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="labelModalFormPresupuesto">Registrar Presupuesto</h4>
+      </div>
+      <div class="modal-body">
+    	<form id="form-presupuesto" action="#">
+    		<div class="space"></div>
+	       	<div class="row">
+		        <div class="col-md-2 col-xs-12">
+		        	<label for="textAreaOcupada">Mes</label>
+		        	<select name="selMes" id="selMes" class="form-control">
+		        		<?php
+		        			
+							$arrayMeses=array('Enero','Febrero','Marzo','Abril',
+												'Mayo','Junio','Julio','Agosto',
+												'Septiembre','Octubre','Noviembre','Diciembre');
+							foreach ($arrayMeses as $key => $value) {
+								if(date('m')==$key+1){
+									echo '<option value="'.($key+1).'" selected>'.$value.'</option>';
+								}else{
+									echo '<option value="'.($key+1).'">'.$value.'</option>';
+								}
+							}
+		        		?>
+		        	</select>
+		        </div>
+		        <div class="col-md-2 col-xs-12">
+		        	<label for="selYear">Año</label>
+		        	<select name="selYear" id="selYear" class="form-control">
+		        		<?php
+								$fechaSuscripcion=$this->parametrosEdificio['fechaSuscripcion'];
+								$fechaSuscripcion=strtotime($fechaSuscripcion);
+								$yearSuscripcion=date('Y',$fechaSuscripcion);
+								$yearFuturo=date('Y')+1;
+								for($i=$yearSuscripcion;$i<=$yearFuturo;$i++){
+									if($i==date('Y')){
+										echo '<option value="'.$i.'" selected>'.$i.'</option>';
+									}else{
+										echo '<option value="'.$i.'">'.$i.'</option>';
+									}
+									
+								}
+
+					?>
+		        	</select>
+		        </div>
+	       	</div>
+	       	<div class="space"></div>
+	       	<div class="row">
+	       		<div class="col-md-2 col-xs-12">
+		            <label for="selTipo">Tipo:</label>
+		            <select id="selTipo" name="selTipo" class="form-control" data-placeholder="Seleccionar Tipo" onchange="Options.listarConceptos()">
+		            	<option value="INGRESO">Ingreso</option>
+		            	<option value="EGRESO">Egreso</option>
+		            </select>
+		        </div>
+		        <div class="col-md-7 col-xs-12">
+		        	<label for="selConcepto">Concepto:</label><br>
+		            <select id="selConcepto" name="selConcepto" class="chosen-select" data-placeholder="Seleccionar Concepto">
+		            	<?php 
+
+		            		if($this->conceptos){
+		            			foreach ($this->conceptos as $key => $value) {
+		            				echo '<option value="'.$value['id'].'">'.$value['descripcion'].'</option>';
+		            			}
+		            		}
+		            	?>
+		            </select>
+		        </div>
+		        <div class="col-md-3 col-xs-12">
+		        	<div class="form-group">
+		        		<label class="control-label" for="textTotal">Total S/.</label>
+			        	<div class="clearfix">
+			        		<input type="text" id="textTotal" name="textTotal" class="form-control" value="">
+			        	</div>
+		        	</div>
+		        </div>
+	       	</div>
+	       	<div class="space"></div>
+	       	<div class="row">
+	       		<div class="col-md-12 col-xs-12">
+	       		<h3 class="header smaller lighter blue">
+					Datos adicionales <small></small>
+				</h3>
+		       		<label>
+		       			<input name="chkActualizar" type="checkbox" class="ace">
+		       			<span class="lbl">&nbsp; Actualizar si el concepto cuenta con un presupuesto en el periodo seleccionado.</span>
+		       		</label>
+				</div>
+	       	</div>
+	       	<div class="space"></div>
+	       	<div class="space"></div>
+	       	<button  id="submit" type="submit"  class="hide"></button>
+       	</form> 
+      </div>
+      <div class="modal-footer">
+		  <button id="btnSave" type="button" class="btn btn-success btn-sm"><i class="ace-icon fa fa-floppy-o bigger-110"></i> Guardar</button>
+          <button type="button" class="btn btn-default btn-sm" data-dismiss="modal" onclick="Action.closeModal()"><i class="ace-icon fa fa-times bigger-110"></i> Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+<div class="modal fade" id="modalEgresoEjecutado" tabindex="-1" role="dialog" aria-labelledby="labelModalEgresoEjecutado" data-backdrop="static" data-keyboard="false">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title"><span>Egreso Ejecutado</span></h4>
+			</div>
+			<div class="modal-body">
+				<input type="hidden" id="dte_co_conceptoId" name="" value="">
+				<input type="hidden" id="dte_co_proveedorId" name="" value="">
+				<input type="hidden" id="dte_co_mes" name="" value="">
+				<div style="padding: 0px 0px;">
+					<div class="col-md-6">
+						<div class="form-group">
+							<label for="">Concepto</label>
+							<input id="textConceptoNombre" type="text" class="form-control input-sm" value="" readonly>
+						</div>	
+					</div>
+					<div class="col-md-6">
+						<div class="form-group">
+							<label for="">Proveedor</label>
+							<input id="textProveedorRZ" type="text" class="form-control input-sm" value="" readonly>
+						</div>
+					</div>
+				</div>
+				<div style="">
+					<div class="col-md-12" style="height: 32px;">
+						<div id="btn-actions-detalleEgr" class="btn-group pull-right hidden" role="group" aria-label="...">
+							<button type="button" class="btn btn-default btn-sm btnOpe" onclick="Action.edit()">
+								<i class="glyphicon glyphicon-pencil"></i>
+								<span>Editar </span>
+							</button>
+							<button  type="button" class="btn btn-default btn-sm btnOpe" id="btn_deleteEgreso">
+								<i class="glyphicon  glyphicon-trash"></i>
+								<span>Eliminar </span>
+							</button>
+						</div>
+					</div>
+				</div>
+				<div style="padding: 0px 12px;">
+					<table id="tblEgresoPorConceptoAndProveedor" class="table table-striped table-hover" style="margin-bottom:0px!important;">
+						<thead>
+							<tr>
+								<th width="30"></th>
+								<th width="100"><i class="ace-icon fa fa-caret-right blue"></i> F. Emisión.</th>
+								<th width="100"><i class="ace-icon fa fa-caret-right blue"></i> F. Vence.</th>
+								<th><i class="ace-icon fa fa-caret-right blue"></i>Documento</th>
+								<th width="120"><i class="ace-icon fa fa-caret-right blue"></i> N° Doc</th>
+								<th width="120"><div style="text-align: right;"><i class="ace-icon fa fa-caret-right blue"></i> Importe</div></th>
+								<th width="30"></th>
+								<th width="60"><i class="ace-icon fa fa-caret-right blue"></i>RD</th>
+							</tr>
+						</thead>
+						<tbody>
+						</tbody>
+						<tfoot></tfoot>
+					</table>
+				</div>
+			</div>
+			<div class="modal-footer">
+	        	<button type="button" class="btn btn-default btn-sm" data-dismiss="modal"> Cancelar</button>	
+	      	</div>
+		</div>
+	</div>
+</div>
+
+	<?php $this->inlineScript()
+    ->appendFile($this->basePath('/js/jqGrid/src/i18n/grid.locale-es.js'),'text/javascript')
+    ->appendFile($this->basePath('/js/jqGrid/js/jquery.jqGrid.min.js'),'text/javascript')
+    ->appendFile($this->basePath('/script/finanzas/presupuesto.js'),'text/javascript')
+  
+    ?>
+

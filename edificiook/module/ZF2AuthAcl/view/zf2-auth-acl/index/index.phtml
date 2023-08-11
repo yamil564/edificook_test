@@ -1,0 +1,90 @@
+<?php
+$flashMessage = $this->flashMessenger()->getMessages();
+
+if (count($flashMessage)) :
+    ?>
+        <div class="row">
+            <ul class="msg_denied">
+                <?php
+                    foreach ($flashMessage as $msg) :
+                        foreach ($msg as $type => $message) :
+                ?>
+                            <li><span class="<?php echo $type; ?>">
+                            <i class="glyphicon glyphicon-remove bigger-130"></i>&nbsp;<?php echo $message; ?></span></li>
+                <?php 
+                        endforeach;
+                    endforeach;
+                 ?>
+            </ul>
+<?php endif; ?>
+<?php if(isset($this->messages)) : ?>
+            <ul class="message">
+                <?php foreach ($this->messages as $type => $msg) : ?>
+                <li><span class="<?php echo $type; ?>"><?php echo $msg; ?></span></li>
+                <?php endforeach; ?>
+            </ul>
+            hola
+        </div>
+<?php endif; ?>
+
+<div id="login-box" class="no-border">
+    <div class="widget-body">
+        <div class="widget-main">
+            <div class="space-3"></div>
+            <?php
+                $form = $this->loginForm;
+                $form->prepare();
+                echo $this->form()->openTag($form);
+            ?>
+            <div class="row">
+                <fieldset>
+                    <div class="form-group">
+                      <label class="block clearfix">
+                            <b>Nombre de usuario</b>
+                            <span class="block input-icon input-icon-left">
+                                <i class="ace-icon fa fa-user"></i>
+                                <?php echo $this->formElement($form->get('username')); ?>
+                            </span>
+                            <span class="common-error-msg"><?php echo $this->formElementErrors($form->get('username'));?>
+                            </span>
+                        </label>  
+                    </div>
+                    <div class="form-group">
+                        <label class="block clearfix">
+                            <b>Contraseña</b>
+                            <span class="block input-icon input-icon-left">
+                                <?php echo $this->formElement($form->get('password')); ?>
+                                <i class="ace-icon fa fa-lock"></i>
+                            </span>
+                            <span class="common-error-msg"><?php echo $this->formElementErrors($form->get('password'));?>
+                            </span>
+                        </label>
+                    </div>
+                    <div class="space"></div>
+                    <div class="clearfix">
+                        <?php
+                        echo $this->formRow($form->get('loginCsrf'));
+                        ?>
+
+                        <button type="submit" class="btn-block btn btn-sm btn-login">
+                            <span class="bigger-110"> Inicio de sesión</span>
+                        </button>
+                    </div>
+                    <div class="space-4"></div>
+                </fieldset>
+            </div>
+            <div class="row">
+                <div class="col-xs-6">
+                    <input type="checkbox" class="ace" />
+                    <span class="lbl"> Recordar mis datos</span>
+                </div>
+                <div class="col-xs-6">
+                    <span class="lbl"><a href="javascript:void();">¿Olvidaste tu contraseña?</a></span>
+                </div>
+            </div>
+            <?php
+                echo $this->form()->closeTag($form);
+            ?>
+        </div>
+    </div>
+</div>

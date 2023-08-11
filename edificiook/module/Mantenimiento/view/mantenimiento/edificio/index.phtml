@@ -1,0 +1,133 @@
+<style>
+	.profile-activity img{
+		width: 40px;
+		height: 40px;
+	}
+	.enlace{
+		color: #9585BF;
+    	cursor: pointer;
+	}
+	.enlace:hover{
+		text-decoration: underline;
+	}
+</style>
+<div class="row">
+	
+	<div class="col-lg-12">
+		<div class="row">
+			
+			<div class="col-md-12">
+
+				<div class="thumbnail">
+
+					<div class="content-img">
+						<div class="bg-img" style="background: #eee url('<?php echo $this->edificio['banner']; ?>') no-repeat center;"></div>
+						<div class="change-img img-principal"><i class="fa fa-camera"></i></div>
+						<div class="bg-load" style="display:none;"></div>
+						<p class="load-img number-load" style="display:none;"></p>
+						<div class="load-img" style="display:none;"><i class="fa fa-spinner fa-spin"></i></div>
+						<input type="file" id="imgprincipal" type-class="bg-img" accept="image/*" onchange="edificio.cambiarImagenBanner(this, event);" class="hidden">
+					</div>
+
+					<div class="content-progress" style="display:none;">
+						<div class="progress progress-mini progress-striped active pos-rel" style="width: 100%;" data-percent=""><div class="progress-bar progress-bar-danger" style="width: 0%;"></div>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-xs-3">
+							<a href="<?php echo $this->url('edificio', array('action' => 'datos-generales')); ?>" class="btn btn-primary btn-app radius-4 width-100">
+							<i class="ace-icon fa fa-list-alt bigger-230"></i>Datos Generales
+							</a>
+						</div>
+						<div class="col-xs-3">
+							<a href="<?php echo $this->url('edificio', array('action' => 'cargos-y-otros')); ?>" class="btn btn-success btn-app radius-4 width-100">
+							<i class="ace-icon fa fa-user bigger-230"></i>Cargos y otros
+							</a>
+						</div>
+						<div class="col-xs-3">
+							<!--<a href="<?php echo $this->url('edificio', array('action' => 'equipo')); ?>" class="btn btn-info btn-app radius-4 width-100">-->
+							<a href="javascript:void();" class="btn btn-info btn-app radius-4 width-100">
+							<i class="ace-icon fa fa-users bigger-230"></i>Equipos
+							</a>
+						</div>
+						<div class="col-xs-3">
+							<a href="<?php echo $this->url('edificio', array('action' => 'configuracion')); ?>" class="btn btn-danger btn-app radius-4 width-100">
+							<i class="ace-icon fa fa-cog bigger-230"></i>Configuración
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-md-12">
+
+				<!-- /section:pages/profile.info -->
+
+				<div class="widget-box transparent">
+					<div class="widget-header widget-header-small">
+						<h4 class="widget-title blue smaller">
+							<i class="ace-icon fa fa-rss orange"></i>Noticias Recientes
+						</h4>
+						<div class="widget-toolbar action-buttons">
+							<i class="ace-icon fa fa-check blue"></i>
+						</div>
+					</div>
+
+					<div class="widget-body">
+						<div class="widget-main padding-8">
+							<div id="profile-feed-1" class="profile-feed">
+								<?php foreach($this->noticias as $value): ?>
+								<div class="profile-activity clearfix">
+									<div>
+										<img class="pull-left margin-bottom-20" alt="" src="<?php echo 'file/noticia/'.$value['id'].'/'.$value['imagen']; ?>">
+										<span class="enlace" id="<?php echo $value['id']; ?>" onclick="edificio.detalleNoticia(this)"> <?php echo $value['titulo']; ?> </span><br>
+										<span><?php echo $value['concepto']; ?></span>
+										<div class="time">
+											<i class="ace-icon fa fa-calendar bigger-110"></i>
+											<?php echo $value['fecha']; ?>
+										</div>
+									</div>
+								</div>
+								<?php endforeach; ?>
+								<hr class="margin-bottom-5">
+								<div>
+									<a href="<?php echo $this->url('noticias', array('action' => 'index')); ?>" class="margin-left-10">
+										VER MÁS NOTICIAS
+									</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</div>
+
+
+</div>
+</div>
+
+	<!--<div class="col-lg-3">
+	  <img src="file/anuncios/publicidad.jpg" width="100%">
+	</div>-->
+
+</div>
+
+<div class="modal fade" id="myModalNoticia" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      
+    </div>
+  </div>
+</div>
+
+<script>
+	$(document).ready(function(){
+		edificio.id_edificio = '<?php echo $this->edificio['id']; ?>';
+	});
+</script>
+
+<?php $this->inlineScript()
+	->appendFile($this->basePath('/script/mantenimiento/edificio.js?t='.time()),'text/javascript')
+?>
+

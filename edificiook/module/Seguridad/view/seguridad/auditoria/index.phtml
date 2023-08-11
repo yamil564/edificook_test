@@ -1,0 +1,41 @@
+<style>
+	.table-header .btn-group {
+	    margin-right: 20px!important;
+	}
+	.noticia-image{
+	    background-position: center!important;
+	    height: 200px!important;
+	    background-size: contain!important;
+	    background-repeat: no-repeat!important;
+	}
+	.ui-jqgrid .ui-jqgrid-htable .ui-search-toolbar th{
+		padding-bottom: 2px!important;
+	}
+	.remove-file{
+		background: #333;
+	    border-radius: 100%;
+	    width: 25px;
+	    color: #fff;
+	    height: 25px;
+	    position: absolute;
+	    right: 5px;
+	    top: -8px;
+	    cursor: pointer;
+	}
+</style>
+
+<div class="row">
+	<div class="col-xs-12">
+		<div class="table-header" id="jqgrid">
+			<div class="row">
+				<div class="col-xs-4">Auditoria</div>
+				
+			</div>	
+		</div>
+		<table id="grid-auditoria"></table>
+    	<div id="grid-pager"></div>
+	</div>
+</div>
+
+<?php $this->inlineScript()
+    ->appendFile($this->basePath('/script/seguridad/auditoria.js?t='.time()),'text/javascript');

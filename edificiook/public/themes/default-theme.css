@@ -1,0 +1,295 @@
+
+/*MENU*/
+.navbar{
+    background-color: #9a437a;
+}
+
+.ace-nav>li.fondo_color>a {
+    background-color: #8A3B6D;
+}
+.ace-nav>li.fondo_color>a:hover, .ace-nav>li.fondo_color>a:focus {
+    background-color: #8E2567;
+}
+
+.no-skin .nav-list li.active>a:after{
+            border-right-color: #9A437A;
+}
+.no-skin .nav-list>li.active:after{
+    border-color: #892E65;
+}
+
+.no-skin .nav-list>li.active>a{
+    color: #b471a0;
+}
+
+.no-skin .nav-list>li.open>a{
+    color: #B471A0;
+}
+.no-skin .nav-list>li>a:focus{
+    color:#B471A0;
+}
+.no-skin .nav-list>li:hover>a{
+    color:#9A437A
+}
+/*submenu*/
+.no-skin .nav-list>li .submenu>li>a:hover{
+    color: #b471a0;
+    background-color: #f7ecf2;
+}
+
+.no-skin .nav-list>li .submenu>li.active>a {
+    color: #892E65;
+}
+
+/*-----------------------------------------------------*/
+.breadcrumb a{
+    color: #9A437A;
+}
+
+/*datables*/
+.table-header,.ui-jqgrid-view>.ui-jqgrid-titlebar{
+    background-color: #C15F9D;
+}
+.dataTables_wrapper .row:first-child{
+    /*background-color: #F7E3FA;*/
+}
+.dataTables_wrapper .row:last-child{
+    /*background-color: #F7E3FA;*/
+}
+
+/*choen*/
+.chosen-container .chosen-results li.highlighted{
+    background-color: #9A437A;
+}
+
+.ui-search-input input{
+    padding: 0px;
+    width: 100%;
+}
+
+/*barra de botones de operaciones*/
+.table-header .btnOpe{
+    background-color: #C15F9D!important;
+    border: 1px solid #AD4F8A!important;
+    border-radius: 5px!important;
+}
+.table-header .btnOpe:hover,table-header .btnOpe:focus{
+    background-color: #C15F9D!important;
+    border: 1px solid #ffffff!important;
+}
+.table-header .btn-group{
+    margin-top: 5px;
+    margin-right:10px;
+}
+.table-header .btn.dropdown-toggle {
+    background-color: #C15F9D!important;
+}
+
+/*Estilos comunes*/
+div.space{
+    margin:4px 0px;
+}
+.pointer{
+    cursor: pointer;
+}
+
+
+/*Panels */
+.panel-green{
+    border-color: #5cb85c;
+}
+.panel-green > .panel-heading {
+    border-color: #5cb85c;
+    color: #fff;
+    background-color: #5cb85c;
+}
+.panel-green > a {
+    color: #5cb85c;
+}
+.panel-yellow {
+    border-color: #f0ad4e;
+}
+.panel-yellow > .panel-heading {
+    border-color: #f0ad4e;
+    color: #fff;
+    background-color: #f0ad4e;
+}
+.panel-yellow > a {
+    color: #f0ad4e;
+}
+.panel-red{
+    border-color: #d9534f;
+}
+.panel-red > .panel-heading {
+    border-color: #d9534f;
+    color: #fff;
+    background-color: #d9534f;
+}
+.panel-red > a {
+    color: #d9534f;
+}
+
+/*jqgrid empty rows mensaje*/
+#jqmsg_emptyrows{
+    position: absolute;
+    top: 45%;
+    left: 40%;
+    width: auto;
+    height: auto;
+    z-index: 101;
+    padding: 6px;
+    margin: 5px;
+    text-align: center;
+    font-size: 12px;
+}
+
+#t_tblConsumo {
+    background: #C15F9D;
+    color: #fff;
+    font-weight: bold;
+}
+
+.label_1{
+    font-weight:600; 
+}
+
+.datepicker{z-index: 10000!important;}
+
+.ace-file-input .ace-file-container:before{
+    background-color: transparent;
+}
+.question-button{
+    height: 37px;
+    color: #004193;
+    padding: 0 12px;
+    line-height: 32px;
+    text-align: center;
+    border-radius: 100%;
+    background: #E1F6FF;
+    border: 2px solid #A1C6F2;
+    -webkit-box-shadow: 0 1px 0 1px rgba(0,0,0,.2);
+    box-shadow: 0 1px 0 1px rgba(0,0,0,.2);
+    position: absolute;
+}
+
+
+
+
+/*login*/
+
+.main-container:before{
+    background-color:#f0eff0;
+}
+
+#login-box .widget-body{
+    background-color: #f0eff0;
+}
+
+#loginForm .input-icon>input {
+    height: 40px;
+    padding-left: 30px;
+    padding-right: 6px;
+    background-color: #f9f9f9!important;
+    border-radius: 8px!important;
+}
+#loginForm .input-icon>.ace-icon{
+    line-height: 34px;
+}
+#loginForm .lbl{
+    font-size: 12px;
+}
+#loginForm .common-error-msg ul{
+    list-style: none;
+    margin: 0px;
+}
+#loginForm .common-error-msg ul li{
+    font-style: italic;
+    color: #D4351A;
+}
+.msg_denied li{
+    background-color: #d35351;
+    padding: 10px;
+    color:#f1f1f1;
+    border-radius: 8px
+}
+#loginForm .btn-login{
+    border-radius: 5px!important;
+}
+.btn-login, .btn:focus{
+    background-color: #974379!important;
+    border-color: #974379;
+}
+.btn-login:hover{
+    background-color: #71355c!important;
+    border-color: #974379;
+}
+
+
+/********************/
+/********************/
+#m_recaudacion_bcp .modal-header, #m_message_crep .modal-header, #m_cobranza_recaudacion .modal-header{background: #9a437a;color: #fff;text-align:center;}
+#m_recaudacion_bcp button span{color: #fff;}
+#m_recaudacion_bcp .modal-body, #m_message_crep .modal-header{text-align: center;}
+#m_message_crep .modal-body{font-size: 14px;text-align: center}
+#m_recaudacion_bcp .modal-body i{font-size: 47px;margin: 8px;}
+#m_recaudacion_bcp .modal-body p, #m_cobranza_recaudacion .modal-body p{font-size: 16px;font-weight: 400;} 
+#m_recaudacion_bcp .r_error{text-align: center;}
+#m_recaudacion_bcp .r_error p{margin: 10px 0 10px;}
+
+#m_cobranza_recaudacion .table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th{
+    vertical-align: middle;
+}
+#m_cobranza_recaudacion .table-bordered, .table-bordered>tbody>tr>td, .table-bordered>tbody>tr>th, .table-bordered>tfoot>tr>td, .table-bordered>tfoot>tr>th, .table-bordered>thead>tr>td, .table-bordered>thead>tr>th {
+    border: 0px solid #ddd;
+}
+#m_cobranza_recaudacion table tr{
+    border-bottom: 1px solid #ddd;
+}
+#m_cobranza_recaudacion .btn.btn-white {
+    border-width: 0;
+    border-left: 1px solid #ddd;
+    margin-bottom: 10px;
+}
+#m_cobranza_recaudacion .spinner {
+  width: 70px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+      z-index: 1000;
+}
+
+#m_cobranza_recaudacion .spinner > div {
+  width: 18px;
+  height: 18px;
+  background-color: #9a437a;
+
+  border-radius: 100%;
+  display: inline-block;
+  -webkit-animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+  animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+}
+
+#m_cobranza_recaudacion .spinner .bounce1 {
+  -webkit-animation-delay: -0.32s;
+  animation-delay: -0.32s;
+}
+
+#m_cobranza_recaudacion .spinner .bounce2 {
+  -webkit-animation-delay: -0.16s;
+  animation-delay: -0.16s;
+}
+
+@-webkit-keyframes sk-bouncedelay {
+  0%, 80%, 100% { -webkit-transform: scale(0) }
+  40% { -webkit-transform: scale(1.0) }
+}
+
+@keyframes sk-bouncedelay {
+  0%, 80%, 100% { 
+    -webkit-transform: scale(0);
+    transform: scale(0);
+  } 40% { 
+    -webkit-transform: scale(1.0);
+    transform: scale(1.0);
+  }
+}

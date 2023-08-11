@@ -1,0 +1,240 @@
+<?php
+
+
+$currentYear=date('Y');
+$listYear=array();
+
+
+for($i=1;$i<=4;$i++){
+	$listYear[]=$currentYear;
+	$currentYear--;
+}
+
+$nombreMeses=array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
+
+
+?>
+
+
+<div class="row">
+	<div class="col-xs-12">
+		<div class="table-header">
+			<div class="row">
+				<div class="col-xs-5">
+					<span>Morosos <small>
+				</div>
+				<div class="col-xs-7">
+					<div class="btn-actions-default btn-group pull-right" role="group" aria-label="...">
+					  <button type="button" id="btnDescargar" class="btn btn-default btn-sm btnOpe"">
+					  		<span>Descargar </span>
+					  		<i class="ace fa fa-cloud-download"></i>
+					  </button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<table id="grid-table"></table>
+		<div id="grid-pager"></div>
+	</div>
+</div>
+
+
+<div class="modal fade" id="modalExportarOptions" tabindex="-1" role="dialog" aria-labelledby="labelModalExportarOptions" data-backdrop="static" data-keyboard="false">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title"><span>Morosos</span></h4>
+			</div>
+			<div class="modal-body">
+				<input type="hidden" id="textMesActual" value="<?php echo (int)date('m'); ?>">
+				<input type="hidden" id="textYearActual" value="<?php echo date('Y'); ?>">
+
+				<form id="formMorosos" action="#">
+				<input type="hidden" name="ruta" value="Reportes > Morosos">
+				<div class="row">
+					<div class="col-md-6">
+						<div class="box-dateInterval">Desde</div>
+						<div class="box-dateIntervalInpus">
+							<div class="col-md-7">
+								<label for="">Mes</label>
+								<select name="textMesDesde" id="textMesDesde" class="form-control">
+									<?php
+										foreach ($nombreMeses as $key => $value) {
+											echo "<option value='".($key+1)."'>".$value."</option>";
+										}
+									?>
+								</select>
+							</div>
+							<div class="col-md-5">
+								<label for="">Año</label>
+								<select name="textYearDesde" id="textYearDesde" class="form-control">
+									<?php 
+										foreach ($listYear as $key => $value) {
+											echo "<option>".$value."</option>";
+										}
+									?>
+								</select>
+							</div>	
+						</div>
+						
+					</div>
+					<div class="col-md-6">
+						<div class="box-dateInterval">Hasta</div>
+						<div class="box-dateIntervalInpus">
+							<div class="col-md-7">
+								<label for="">Mes</label>
+								<select name="textMesHasta" id="textMesHasta" class="form-control">
+									<?php
+										foreach ($nombreMeses as $key => $value) {
+											if(($key+1)==date('m')){
+												echo "<option value='".($key+1)."' selected>".$value."</option>";
+											}else{
+												echo "<option value='".($key+1)."'>".$value."</option>";
+											}
+											
+										}
+									?>
+								</select>
+							</div>
+							<div class="col-md-5">
+								<label for="">Año</label>
+								<select name="textYearHasta" id="textYearHasta" class="form-control">
+									<?php 
+										foreach ($listYear as $key => $value) {
+											echo "<option>".$value."</option>";
+										}
+									?>
+								</select>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+						<div class="col-md-12">
+							<fieldset>
+								<legend style="font-size: 19px!important;">De la unidad, ¿a quien desea incluir en el reporte?</legend>
+								<div class="form-group">
+									<div class="inline radio">
+										<label>
+											<input id="or_Propietario" name="rd_representateUnidad" type="radio" value="propietario" class="ace" checked="checked">
+											<span class="lbl"> Propietario</span>
+										</label>
+									</div>
+									<div class="inline radio">
+										<label>
+											<input id="or_Residente" name="rd_representateUnidad" type="radio" value="residente" class="ace">
+											<span class="lbl"> Residente</span>
+										</label>
+									</div>
+									<div class="inline radio">
+										<label>
+											<input id="or_Ambos" name="rd_representateUnidad" type="radio" value="ambos" class="ace">
+											<span class="lbl"> Ambos</span>
+										</label>
+									</div>
+								</div>
+							</fieldset>
+						</div>
+					</div>
+					
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button id="btnConfirmarEliminarEP" type="button" class="btn btn-success btn-sm has-spinner" onclick="Action.generarReporteMorosos()"><span class="spinner"><i class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></i></span> <span id="label">Generar</span></button>
+	        	<button type="button" class="btn btn-default btn-sm" data-dismiss="modal"> Cancelar</button>
+	      	</div>
+		</div>
+	</div>
+</div>
+
+
+<style>
+
+	.glyphicon-refresh-animate {
+	    -animation: spin .7s infinite linear;
+	    -webkit-animation: spin2 .7s infinite linear;
+	}
+
+	@-webkit-keyframes spin2 {
+	    from { -webkit-transform: rotate(0deg);}
+	    to { -webkit-transform: rotate(360deg);}
+	}
+
+	@keyframes spin {
+	    from { transform: scale(1) rotate(0deg);}
+	    to { transform: scale(1) rotate(360deg);}
+	}
+
+	.spinner {
+	  display: inline-block;
+	  opacity: 0;
+	  width: 0;
+
+	  -webkit-transition: opacity 0.25s, width 0.25s;
+	  -moz-transition: opacity 0.25s, width 0.25s;
+	  -o-transition: opacity 0.25s, width 0.25s;
+	  transition: opacity 0.25s, width 0.25s;
+	}
+
+	.has-spinner.active {
+	  cursor:progress;
+	}
+
+	.has-spinner.active .spinner {
+	  opacity: 1;
+	  width: auto; /* This doesn't work, just fix for unkown width elements */
+	}
+
+	.has-spinner.btn-mini.active .spinner {
+	    width: 10px;
+	}
+
+	.has-spinner.btn-small.active .spinner {
+	    width: 13px;
+	}
+
+	.has-spinner.btn.active .spinner {
+	    width: 16px;
+	}
+
+	.has-spinner.btn-large.active .spinner {
+	    width: 19px;
+	}
+	.ui-search-input input{
+		height: 30px;
+    	width: 95%;
+	}
+
+	.box-dateInterval{
+		display: inline-block;
+	    width: 83px;
+	    font-size: 13px;
+	    text-align: center;
+	    background-color: #d0cbce;
+	    -webkit-border-top-left-radius: 5px;
+		-webkit-border-top-right-radius: 5px;
+		-moz-border-radius-topleft: 5px;
+		-moz-border-radius-topright: 5px;
+		border-top-left-radius: 5px;
+		border-top-right-radius: 5px;
+	}
+
+	.box-dateIntervalInpus{
+		border-style: dotted;
+	    display: inline-block;
+	    padding: 10px 0px;
+	    border-width: 1.8px;
+	    border-color: #d0cbce;
+	}
+
+
+</style>
+<?php
+
+$this->inlineScript()
+    ->appendFile($this->basePath('/js/jqGrid/src/i18n/grid.locale-es.js'),'text/javascript')
+    ->appendFile($this->basePath('/js/jqGrid/js/jquery.jqGrid.min.js'),'text/javascript')
+    ->appendFile($this->basePath('/js/slidereveal/js/slidereveal.js'),'text/javascript')
+    ->appendFile($this->basePath('/script/ue/morosos.js?t='.time()),'text/javascript')
+?>

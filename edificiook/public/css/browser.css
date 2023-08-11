@@ -1,0 +1,38 @@
+.gritter-left {
+    left: 0!important;
+    right: 0!important;
+    border: 0!important;
+    top: 0!important;
+    width: 100%!important;
+    margin: 0!important;
+    bottom: initial!important;
+}
+.gritter-left .gritter-item > img{
+    display: none!important;
+}
+.gritter-left .gritter-image {
+    width: 40px;
+    height: 40px;
+    margin-right: 5px;
+    float: none!important;
+}
+.gritter-left .gritter-without-image {
+    text-align: center;
+}
+.gritter-left span{
+    color: #000!important;
+    text-shadow: none!important;
+}
+.gritter-left .gritter-title{
+    padding: 14px 0 7px 0; 
+}
+.gritter-browser{
+    background: #d2d2cf!important;
+}
+
+.gritter-left .gritter-top{
+    height: 0!important;
+}
+.gritter-left .gritter-bottom{
+    height: 0!important;
+}

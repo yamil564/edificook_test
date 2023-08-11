@@ -1,0 +1,75 @@
+<?php
+$currentYear=date('Y');
+$listYear=array();
+
+
+for($i=1;$i<=4;$i++){
+	$listYear[]=$currentYear;
+	$currentYear--;
+}
+
+$nombreMeses=array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
+
+?>
+<style>
+	
+	table .pointer{
+		cursor: default!important;
+	}
+
+	table tr#TOTAL_INGRESO, table tr#TOTAL_COBRADO, table tr#TOTAL_PENDIENTE, table tr#TOTAL_BANCO{
+		background-color: #F3F3F3!important;
+	}
+	
+</style>
+<div id="pageTab_grid" class="row" style="/*display: none*/;">
+	<div class="col-xs-12">
+		<div class="table-header">
+			<div class="row">
+				<div class="col-xs-5">
+					<div class="btn-group pull-left">
+						<button data-toggle="dropdown" class="btn btn-sm btnOpe dropdown-toggle ">
+							<i class="ace-icon glyphicon glyphicon-cog bigger-120"></i>
+							<i class="ace-icon fa fa-angle-down icon-on-right"></i>
+						</button>
+						<ul class="dropdown-menu dropdown-danger">
+							<li>
+								<a id="viewUnidadesPrincipales" href="javascript:void(0);"> Unidades principales</a>
+							</li>
+							<li class="divider"></li>
+							<li>
+								<a id="viewUnidadesSecundarias" href="javascript:void(0);"> Unidades secundarias</a>
+							</li>
+						</ul>
+					</div><!-- /.btn-group -->
+
+					<span>Ingreso <small><i class="ace-icon fa fa-angle-double-right"></i> <span id="subtitleIngreso">Unidades principales</span></small><span>
+				</div>
+				<div class="col-xs-7">
+					<div class="btn-group pull-right" role="group" aria-label="...">
+						<button type="button" class="btn btn-default btn-sm btnOpe" onclick="DateControls.backYear()">
+					  		<i class="ace-icon fa fa-angle-left biger-150"></i>
+					  	</button>
+					  	<button  type="button" class="btn btn-default btn-sm btnOpe">
+					  		<span id="currentYear"><?php echo date('Y');?></span>
+					  	</button>
+					  	<button type="button" class="btn btn-default btn-sm btnOpe" onclick="DateControls.nextYear()">
+					  		<i class="ace-icon fa fa-angle-right"></i>
+					  	</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<table id="grid-table"></table>
+		<div id="grid-pager"></div>
+	</div>
+</div>
+
+
+<?php $this->inlineScript()
+    ->appendFile($this->basePath('/js/jqGrid/src/i18n/grid.locale-es.js'),'text/javascript')
+    ->appendFile($this->basePath('/js/jqGrid/js/jquery.jqGrid.min.js'),'text/javascript')
+    ->appendFile($this->basePath('/js/slidereveal/js/slidereveal.js'),'text/javascript')
+    ->appendFile($this->basePath('/script/ue/ingreso.js?t='.time()),'text/javascript')
+  
+    ?>

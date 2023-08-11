@@ -1,0 +1,648 @@
+<div class="row" id="pageTab_grid">
+	<div class="col-xs-12">
+		<div class="table-header">
+			<div class="row">
+				<div class="col-xs-5">
+					<div class="btn-group pull-left" role="group" aria-label="...">
+						<button data-toggle="dropdown" class="btn btn-sm btnOpe dropdown-toggle ">
+							<i class="ace-icon glyphicon glyphicon-cog bigger-120"></i>
+							<i class="ace-icon fa fa-angle-down icon-on-right"></i>
+						</button>
+						<?php echo $this->partial('menu-egreso.phtml'); ?>
+					</div>
+					<span>Egreso<span>
+				</div>
+				<div class="col-xs-7">
+					<div id="btn-actions" class="btn-group pull-right" role="group" aria-label="...">
+						<button type="button" class="btn btn-default btn-sm btnOpe" onclick="Action.new()">
+					  		<i class="glyphicon glyphicon-file"></i>
+					  		<span>Nuevo </span>
+					  	</button>
+					</div>
+					<div id="btn-actions" class="btn-group pull-right" role="group" aria-label="...">
+						<button type="button" class="btn btn-default btn-sm btnOpe" onclick="DateControls.backYear()">
+					  		<i class="ace-icon fa fa-angle-left biger-150"></i>
+					  	</button>
+					  	<button  type="button" class="btn btn-default btn-sm btnOpe">
+					  		<span id="currentYear"><?php echo date('Y');?></span>
+					  	</button>
+					  	<button type="button" class="btn btn-default btn-sm btnOpe" onclick="DateControls.nextYear()">
+					  		<i class="ace-icon fa fa-angle-right"></i>
+					  	</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<table id="grid-table"></table>
+		<div id="grid-pager"></div>
+	</div>
+</div>
+
+<div id="pageTab_detalle" style="display: none;">
+	<input type="hidden" id="dte_co_conceptoId" name="" value="">
+	<input type="hidden" id="dte_co_proveedorId" name="" value="">
+	<input type="hidden" id="dte_co_mes" name="" value="">
+	<div class="modal-header">
+		<button type="button" id="btn-closeDetalle" class="close"><span aria-hidden="true">×</span></button>
+		<h4 class="modal-title" id="labelNuevoIngreso">Egreso</h4>
+	</div>
+	<div style="padding: 0px 0px;">
+		<div class="col-md-6">
+			<div class="form-group">
+				<label for="">Concepto</label>
+				<input id="textConceptoNombre" type="text" class="form-control input-sm" value="" readonly>
+			</div>	
+		</div>
+		<div class="col-md-6">
+			<div class="form-group">
+				<label for="">Proveedor</label>
+				<input id="textProveedorRZ" type="text" class="form-control input-sm" value="" readonly>
+			</div>
+		</div>
+	</div>
+	<div style="">
+		<div class="col-md-12" style="height: 32px;">
+			<div id="btn-actions-detalleEgr" class="btn-group pull-right hidden" role="group" aria-label="...">
+				<button type="button" class="btn btn-default btn-sm btnOpe" onclick="Action.edit()">
+					<i class="glyphicon glyphicon-pencil"></i>
+					<span>Editar </span>
+				</button>
+				<button  type="button" class="btn btn-default btn-sm btnOpe" id="btn_deleteEgreso">
+					<i class="glyphicon  glyphicon-trash"></i>
+					<span>Eliminar </span>
+				</button>
+			</div>
+		</div>
+	</div>
+	<div style="padding: 0px 12px;">
+		<table id="tblEgresoPorConceptoAndProveedor" class="table table-striped table-hover" style="margin-bottom:0px!important;">
+			<thead>
+				<tr>
+					<th width="40"></th>
+					<th width="30"></th>
+					<th width="100"><i class="ace-icon fa fa-caret-right blue"></i> F. Emisión.</th>
+					<th width="100"><i class="ace-icon fa fa-caret-right blue"></i> F. Vence.</th>
+					<th><i class="ace-icon fa fa-caret-right blue"></i>Documento</th>
+					<th width="120"><i class="ace-icon fa fa-caret-right blue"></i> N° Doc</th>
+					<th width="120"><div style="text-align: right;"><i class="ace-icon fa fa-caret-right blue"></i> Importe</div></th>
+					<th width="60"><i class="ace-icon fa fa-caret-right blue"></i>RD</th>
+					<th width="30"></th>
+				</tr>
+			</thead>
+			<tbody>
+			</tbody>
+			<tfoot></tfoot>
+		</table>
+	</div>
+</div>
+
+
+<div id="pageTab_detalleBanco" style="display:none;">
+	<div class="modal-header">
+		<button type="button" id="btn-closeDetalleBanco" class="close"><span aria-hidden="true">×</span></button>
+		<h4 class="modal-title" id="labelNuevoIngreso">
+			<span>Egreso Bancario<small><i class="ace-icon fa fa-angle-double-right"></i> <span id="subtitleIngreso"></span></small>
+				<span class="label-title">enero 2016</span>
+			</span>
+		</h4>
+	</div>
+	<div class="">
+		<table id="grid-tableBanco"></table>
+		<div id="dgrid-pagerBanco"></div>
+	</div>
+</div>
+
+
+
+
+<div class="modal fade" id="modalEgreso" tabindex="-1" role="dialog" aria-labelledby="labelModalEgreso" data-backdrop="static" data-keyboard="false">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="labelModalEgreso"><span>Egreso</span></h4>
+			</div>
+			<div class="modal-body">
+				<div class="space"></div>
+				<form id="formEgreso" action="#" enctype="multipart/form-data">
+					<input type="hidden" id="co_egresoId" name="co_egresoId" class="form-control">
+					<div class="row">
+						<div class="col-xs-12 col-md-6">
+							<div class="form-group">
+								<label for="selTipoDoc" class="label_1">Tipo de documento</label>
+								<select name="selTipoDoc" id="selTipoDoc" class="form-control chosen-select">
+									<option value="0" disabled>Seleccionar</option>
+									<option value="FACTURA">FACTURA</option>
+									<option value="FACTURA ELECTRONICA">FACTURA ELECTRONICA</option>
+									<option value="TICKET FACTURA">TICKET FACTURA</option>
+					                <option value="BOLETA">BOLETA</option>
+					                <option value="BOLETA ELECTRONICA">BOLETA ELECTRONICA</option>
+					                <option value="TICKET BOLETA">TICKET BOLETA</option>
+					                <option value="RECIBO SERVICIOS PUBLICOS">RECIBO SERVICIOS PUBLICOS</option>
+					                <option value="RECIBO POR HONORARIOS">RECIBO POR HONORARIOS</option>
+					                <option value="PLANILLA DE HABERES">PLANILLA DE HABERES</option>
+					                <option value="COMPROBANTE MOVILIDAD">COMPROBANTE MOVILIDAD</option>
+					                <option value="NOTA DE CREDITO">NOTA DE CREDITO</option>
+					                <option value="RECIBO">RECIBO</option>
+					                <option value="OTROS">OTROS</option>
+								</select>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-4 col-md-2">
+							<div class="form-group">
+								<label for="textSerie" class="label_1">N° de Serie</label>
+								<input type="text" id="textSerie" name="textSerie" value="" placeholder="" class="form-control">
+								<span class="e"></span>
+							</div>
+						</div>
+						<div class="col-xs-8 col-md-4">
+							<div class="form-group">
+								<label for="textNroDocumento" class="label_1">N° de documento</label>
+								<input type="text" id="textNroDocumento" name="textNroDocumento" value="" placeholder="" class="form-control">
+								<span class="e"></span>
+							</div>
+						</div>
+						<div class="col-xs-8 col-md-6" id="chkValidarDoc">
+							<label style="padding-top:31px;">
+								<input name="chkValidarDoc" type="checkbox" class="ace">
+								<span class="lbl">&nbsp; Omitir validación de n° de serie y n° de documento.</span>
+							</label>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-6">
+							<div class="form-group">
+								<label for="textSerie" class="label_1">Fecha de emisión</label>
+								<input type="text" id="textFechaEmi" name="textFechaEmi" value="" placeholder="00-00-0000" class="form-control datepicker-default fecha">
+								<span class="e"></span>
+							</div>
+						</div>
+						<div class="col-xs-6">
+							<div class="form-group">
+								<label for="textSerie" class="label_1">Fecha de vencimiento</label>
+								<input type="text" id="textFechaVence" name="textFechaVence" value="" placeholder="00-00-0000" class="form-control datepicker-default fecha">
+								<span class="e"></span>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12">
+							<div class="form-group">
+								<label for="selProveedor" class="label_1">Proveedor</label>
+								<select name="selProveedor" id="selProveedor" class="form-control chosen-select">
+									<option value="0" disabled>Seleccionar</option>
+									<?php 
+					            		if($this->proveedor){
+					            			foreach ($this->proveedor as $key => $value) {
+					            				echo '<option value="'.$value['id'].'">'.$value['razonsocial'].'</option>';
+					            			}
+					            		}
+					            	?>
+								</select>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12">
+							<div class="form-group">
+								<label for="selConcepto" class="label_1">Concepto</label>
+								<select name="selConcepto" id="selConcepto" class="form-control chosen-select" >
+									<option value="0" disabled>Seleccionar</option>
+									<?php 
+					            		if($this->conceptos){
+					            			foreach ($this->conceptos as $key => $value) {
+					            				echo '<option value="'.$value['id'].'">'.$value['descripcion'].'</option>';
+					            			}
+					            		}
+					            	?>
+								</select>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-6">
+							<div class="form-group">
+								<label for="textSerie" class="label_1">Importe S/.</label>
+								<input type="text" id="textImporte" name="textImporte" value="" placeholder="0.00" class="form-control">
+								<span class="e"></span>
+							</div>
+						</div>
+						<div id="wrapper_metroscubicos" class="col-xs-6 hidde">
+							<div class="form-group">
+								<label for="textSerie" class="label_1">Metros cúbicos (M3)</label>
+								<input type="text" id="textM3" name="textM3" value="" placeholder="0" class="form-control" value="" >
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12">
+							<textarea class="form-control" id="ta_nota" name="ta_nota" placeholder="Escriba una nota." style="resize:none"></textarea>
+						</div>
+					</div>
+					<div class="space"></div>
+					<div class="row">
+						<div class="col-xs-12">
+							<div id="input_recibo_digital" class="form-group" style="height: 65px;">
+								<label for="">Recibo digital</label>
+								<input type="file" id="file_recibo_digital" name="recibo-digital" />
+								<input type="hidden" id="estado_recibo_digital" name="estado_recibo_digital" value="0">
+							</div>
+							<div id="preview_recibo_digital" class="form-group hidden" style="height: 65px;">
+								<a href="" target="_blank">
+									<img class="img-thumbnail" width="60" height="65" src="images/iconos/pdf.png" alt="">
+								</a>
+								<span id="remove_preview_recibo_digital" class="btn-remove-file" title="Eliminar archivo"><i class=" ace-icon fa fa-times"></i></span>
+							</div>
+						</div>
+					</div>
+					<button type="submit" id="submit_SaveEgreso" style="display: none;"></button>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button id="btnSaveEgreso" type="button" class="btn btn-success btn-sm"><i class="ace-icon fa fa-floppy-o bigger-110"></i> Guardar</button>
+	        	<button type="button" class="btn btn-default btn-sm" data-dismiss="modal"><i class="ace-icon fa fa-times bigger-110"></i> Cerrar</button>
+	      	</div>
+		</div>
+	</div>
+</div>
+
+
+<div class="modal fade" id="modalConfirmacionEliminarEgreso" tabindex="-1" role="dialog" aria-labelledby="labelModalConfirmacionEliminarEgreso" data-backdrop="static" data-keyboard="false">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title"><span>Egreso</span></h4>
+			</div>
+			<div class="modal-body">
+				<div class="row">
+					<div class="col-xs-12">
+						<div class="form-group" style="height: 50px;">
+							<span class="ace-icon question-button bigger-200">?</span>
+							<div style="padding-left: 50px; font-size: 15px;">¿Está seguro de eliminar el egreso seleccionado?</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<center>
+					<button id="btnConfirmarEliminarEgreso" type="button" class="btn btn-danger btn-sm" onclick="Action.delete()"> Aceptar</button>
+	        		<button type="button" class="btn btn-default btn-sm" data-dismiss="modal"> Cancelar</button>	
+				</center>
+	      	</div>
+		</div>
+	</div>
+</div>
+
+
+
+
+
+
+
+
+<div class="modal fade" id="modalConfirmacionProcesar" tabindex="-1" role="dialog" aria-labelledby="labelModalConfirmacion" data-backdrop="static" data-keyboard="false">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title"><span>Egreso</span></h4>
+			</div>
+			<div class="modal-body">
+				<div class="row">
+					<div class="col-xs-12">
+						<div class="form-group" style="height: 50px;">
+							<span class="ace-icon question-button bigger-200">?</span>
+							<div style="padding-left: 50px; font-size: 15px;">¿Está seguro de que desea procesar el egreso seleccionado?</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<center>
+					<button id="btnConfirmarProcesar" type="button" class="btn btn-success btn-sm" onclick="Action.procesar()"><i class="ace-icon fa fa-check bigger-110"></i> Aceptar</button>
+	        		<button type="button" class="btn btn-default btn-sm" data-dismiss="modal"><i class="ace-icon fa fa-times bigger-110"></i> Cancelar</button>	
+				</center>
+	      	</div>
+		</div>
+	</div>
+</div>
+
+
+
+<div class="modal fade" id="modalConfirmacionAprobar" tabindex="-1" role="dialog" aria-labelledby="labelModalConfirmacion" data-backdrop="static" data-keyboard="false">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title"><span>Egreso</span></h4>
+			</div>
+			<div class="modal-body">
+				<div class="row">
+					<div class="col-xs-12">
+						<div class="form-group" style="height: 50px;">
+							<span class="ace-icon question-button bigger-200">?</span>
+							<div style="padding-left: 50px; font-size: 15px;">¿Está seguro de que desea aprobar el egreso seleccionado?</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<center>
+					<button id="btnConfirmarProcesar" type="button" class="btn btn-success btn-sm" onclick="Action.aprobar()"> Aceptar</button>
+	        		<button type="button" class="btn btn-default btn-sm" data-dismiss="modal"> Cancelar</button>	
+				</center>
+	      	</div>
+		</div>
+	</div>
+</div>
+
+
+
+<div class="modal fade" id="modalPagoEgreso" tabindex="-1" role="dialog" aria-labelledby="labelModalPagoEgreso" data-backdrop="static" data-keyboard="false">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="labelModalEgreso_pe"><span>Egreso</span></h4>
+			</div>
+			<div class="modal-body">
+				<div>
+					<!-- Nav tabs -->
+					<ul id="TabPagos" class="nav nav-tabs nav-justified" role="tablist">
+						<li id="tab_registrarpago" role="presentation" class="active">
+							<a href="#home" aria-controls="home" role="tab" data-toggle="tab">
+								<h4 class="list-group-item-heading">Registrar pago</h4>
+								<p id="mpe_tab1descripcion" class="list-group-item-text">Debe 10.00 de 210.00</p>
+							</a>
+						</li>
+						<li id="tab_listarpagos" role="presentation" class="">
+							<a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">
+								<h4 class="list-group-item-heading">Pagos parciales</h4>
+								<p id="mpe_tab2descripcion" class="list-group-item-text">Pagado 200.00 de 210.00</p>
+							</a>
+						</li>
+					</ul>
+
+					<!-- Tab panes -->
+					<div class="tab-content">
+						<div role="tabpanel" class="tab-pane active" id="home">
+							<form id="formPagoEgreso" action="" class="">
+								<div class="profile-user-info profile-user-info-striped">
+									<div class="form-group profile-info-row">
+										<div class="profile-info-name">Importe S/.</div>
+										<div class="profile-info-value">
+											<input id="mpe_textImporte" name="textImporte" type="text" class="form-control input-sm precio" value="">
+											<span class="e"></span>
+										</div>
+									</div>
+									<div class="profile-info-row">
+										<div class="profile-info-name">Banco</div>
+										<div class="profile-info-value">
+											<select  id="selBanco" name="selBanco" class="form-control input-sm">
+												<option value="" selected>Ningún banco / Efectivo</option>
+												<option value="BANCO DE CREDITO DEL PERU" selected>Banco de Crédito</option>
+												<option value="BANCO CONTINENTAL">BBVA Banco Continental</option>
+												<option value="BANCO DE LA NACIÓN">Banco de la Nación</option>
+											</select>
+											<span class="e"></span>
+										</div>
+									</div>
+									<div class="form-group profile-info-row">
+										<div class="profile-info-name">N° Operación</div>
+										<div class="profile-info-value">
+											<input type="text" id="textNroOperacion" name="textNroOperacion" class="form-control input-sm" autofocus>
+											<span class="e"></span>
+										</div>
+									</div>
+									<div class="form-group profile-info-row">
+										<div class="profile-info-name">Fecha Pago</div>
+										<div class="profile-info-value">
+											<input type="text" id="textFechaPago" name="textFechaPago" class="form-control input-sm mask-fecha datepicker-default" placeholder="00-00-0000">
+											<span class="e"></span>
+										</div>
+									</div>
+								</div>
+								<div class="wrapperPagoMensual" style="width:100%!important;">
+									<div class="col-xs-12">
+										<textarea id="taObservacion" name="taObservacion" class="form-control" cols="7" rows="2" placeholder="Observación" style="resize:none"></textarea>
+									</div>
+								</div>
+								<button  id="submitPagoEgreso" type="submit"  class="hide"></button>
+								<div style="clear:both;"></div>
+								<div style="padding: 5px 12px;">
+									<button type="button" id="btnSavePagoEgreso" class="btn btn-success btn-sm"><i class="glyphicon glyphicon-play-circle"></i> Efecturar Pago</button>
+								</div>
+							</form>
+						</div>
+						<div role="tabpanel" class="tab-pane" id="profile">
+							<div class="row">
+								<div style="padding: 0px 24px;">
+									<table id="mpe_listaEgresosParciales" class="table table-striped table-hover" style="margin-bottom:0px!important;">
+										<thead>
+											<tr>
+												<th width="20"><i class="ace-icon fa fa-caret-right blue"></i></th>
+												<th width="120"><i class="ace-icon fa fa-caret-right blue"></i> Fecha</th>
+												<th><i class="ace-icon fa fa-caret-right blue"></i> Banco</th>
+												<th width="120"><i class="ace-icon fa fa-caret-right blue"></i> Operación</th>
+												<th width="120"><div style="text-align: right;"><i class="ace-icon fa fa-caret-right blue"></i> Importe</div></th>
+												<th width="30"></th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+											</tr>
+										</tbody>
+										<tfoot></tfoot>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+	        	<button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Cerrar</button>
+	      	</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="modalConfirmacionEliminarEP_mep" tabindex="-1" role="dialog" aria-labelledby="labelModalConfirmacion" data-backdrop="static" data-keyboard="false">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title"><span>Egreso</span></h4>
+			</div>
+			<div class="modal-body">
+				<input type="hidden" id="co_idPagoDelete_mep" value="">
+				<div class="row">
+					<div class="col-xs-12">
+						<div class="form-group" style="height: 50px;">
+							<span class="ace-icon question-button bigger-200">?</span>
+							<div style="padding-left: 50px; font-size: 15px;">¿Está seguro de eliminar el pago seleccionado?</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<center>
+					<button id="btnConfirmarEliminarEP" type="button" class="btn btn-danger btn-sm" onclick="Action.deleteEP_mep()"> Aceptar</button>
+	        		<button type="button" class="btn btn-default btn-sm" data-dismiss="modal"> Cancelar</button>	
+				</center>
+	      	</div>
+		</div>
+	</div>
+</div>
+
+
+<div class="modal fade" id="modalListaPagosEgreso" tabindex="-1" role="dialog" aria-labelledby="labelModalListaPagosEgreso" data-backdrop="static" data-keyboard="false">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="labelModalEgreso_lpe"><span>Egreso</span></h4>
+			</div>
+			<div class="modal-body">
+				<div class="row">
+					<div class="col-md-12">
+					   <div class="btn-group btn-group-justified" role="group" aria-label="...">
+							<div class="btn-group" role="group">
+							    <button type="button" class="btn btn-white" id="lbTotalEgreso" disabled="true"><h4>Total</h4> S/. <span>0.00</span></button>
+							</div>
+							<div class="btn-group" role="group">
+							    <button type="button" class="btn btn-white" id="lbTotalPagado" disabled="true"><h4>Pagado</h4> S/. <span>0.00</span></button>
+							</div>
+							<div class="btn-group" role="group">
+							    <button type="button" class="btn btn-white" id="lbTotalDebe" disabled="true"><h4>Debe</h4> S/. <span>0.00</span></button>
+							</div>
+						</div>
+					</div><!-- /.col-lg-6 -->
+				</div>
+				<div class="space"></div>
+				<div class="row">
+					<div class="col-md-12">
+						<table id="tblEgresosParciales" class="table table-striped table-hover" style="margin-bottom:0px!important;">
+						 	<thead>
+						 		<tr>
+						 			<th></th>
+						 			<th width="120"><i class="ace-icon fa fa-caret-right blue"></i> Fecha</th>
+						 			<th><i class="ace-icon fa fa-caret-right blue"></i> Banco</th>
+						 			<th width="120"><i class="ace-icon fa fa-caret-right blue"></i> Operación</th>
+						 			<th width="120"><div style="text-align: right;"><i class="ace-icon fa fa-caret-right blue"></i> Importe</div></th>
+						 			<th width="30"></th>
+						 		</tr>
+						 	</thead>
+						 	<tbody>
+						 	</tbody>
+						 	<tfoot></tfoot>
+						</table>
+						<div class="msg_listaPagos" style="background-color: #f9f9f9;height: 50px;"><center>No hay pagos registrados en la lista.</center></div>
+					</div>
+				</div>
+				<div class="space"></div>
+			</div>
+			<div class="modal-footer">
+	        	<button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Cerrar</button>
+	      	</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="modalConfirmacionEliminarEP" tabindex="-1" role="dialog" aria-labelledby="labelModalConfirmacion" data-backdrop="static" data-keyboard="false">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title"><span>Egreso</span></h4>
+			</div>
+			<div class="modal-body">
+				<input type="hidden" id="co_idPagoDelete" value="">
+				<div class="row">
+					<div class="col-xs-12">
+						<div class="form-group" style="height: 50px;">
+							<span class="ace-icon question-button bigger-200">?</span>
+							<div style="padding-left: 50px; font-size: 15px;">¿Está seguro de eliminar el pago seleccionado?</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<center>
+					<button id="btnConfirmarEliminarEP" type="button" class="btn btn-danger btn-sm" onclick="Action.deleteEP()"> Aceptar</button>
+	        		<button type="button" class="btn btn-default btn-sm" data-dismiss="modal"> Cancelar</button>	
+				</center>
+	      	</div>
+		</div>
+	</div>
+</div>
+
+
+
+
+<style>
+	.btn-changeStatus{
+		border-radius: 5px;
+		width: 90px;
+	}
+	table tr td{
+		vertical-align: middle!important;
+	}
+	.nav-tabs>li>a{
+		text-align: center!important;
+	}
+	.btn_deletePago{
+		background:#A24332!important;border:0!important;
+	}
+
+	.btn-remove-file{
+		background-color: #555;
+	    border-radius: 100%;
+	    position: absolute;
+	    margin-left: -9px;
+	    margin-top: -6px;
+	    color: #FFF;
+	    height: 25px;
+	    width: 25px;
+	    text-align: center;
+	    font-size: 15px;
+	    cursor: pointer;
+	}
+	.btn-remove-file:hover{
+		background-color: #B12B14;
+	}
+	
+
+	tr#TOTAL_BANCO td.col-mes:hover{
+		cursor: pointer;
+		color: #03A01D;
+		text-decoration: underline
+	}
+	.page-content{
+		display: block;
+		overflow-y: scroll;
+	}
+
+	td.col-egrban{
+		background-color: #f5f5f5f5;
+	}
+
+</style>
+
+
+
+	<?php $this->inlineScript()
+    ->appendFile($this->basePath('/js/jqGrid/src/i18n/grid.locale-es.js'),'text/javascript')
+    ->appendFile($this->basePath('/js/jqGrid/js/jquery.jqGrid.min.js'),'text/javascript')
+    ->appendFile($this->basePath('/script/finanzas/egreso.js?t='.time()),'text/javascript')
+  
+    ?>
+

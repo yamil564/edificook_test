@@ -1,0 +1,64 @@
+ul.icons li{
+    position: relative;
+    border-width: .077em;
+    -webkit-border-radius: .154em;
+    -moz-border-radius: .154em;
+    border-radius: .154em;
+    -webkit-background-clip: padding-box;
+    -moz-background-clip: padding;
+    background-clip: padding-box;
+    display: inline-block;
+    line-height: 1.6em;
+    list-style: none outside none;
+    text-align: center;
+    vertical-align: middle;
+    margin: .77em 1.538em .77em 0;
+    /*max-width: 15.44em;*/
+    max-width: 19.44em;
+}
+li.pageIcon {
+    vertical-align: top;
+    text-decoration: none;
+    border: 1px solid #d8d8d8;
+    -webkit-border-radius: .385em;
+    -moz-border-radius: .385em;
+    border-radius: .385em;
+    -webkit-background-clip: padding-box;
+    -moz-background-clip: padding;
+    background-clip: padding-box;
+    background-color: #F6F6F6;
+    /*width: 161px;
+    height: 100px;*/
+    width: 237px;
+    height: 113px;
+
+}
+.pageIcon a span {
+    display: block;
+    padding: 0 .77em .77em .77em;
+    color: #B3719F;
+}
+.pageIcon a img,.pageIcon a i {
+    height: 1.923em;
+    width: 1.923em;
+    margin: 1em 0 -1em 0;
+    color: #B3719F;
+}
+li.pageIcon a:hover, li.pageIcon a:focus{
+    color: #4c4c4c;
+    background-color: #e9e9e9;
+    background: -moz-linear-gradient(top,#e9e9e9 0,#f7f7f7 100%);
+    background: -webkit-gradient(linear,left top,left bottom,color-stop(0%,#e9e9e9),color-stop(100%,#f7f7f7));
+    background: -webkit-linear-gradient(top,#e9e9e9 0,#f7f7f7 100%);
+    background: -o-linear-gradient(top,#e9e9e9 0,#f7f7f7 100%);
+    background: -ms-linear-gradient(top,#e9e9e9 0,#f7f7f7 100%);
+    background: linear-gradient(top,#e9e9e9 0,#f7f7f7 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#e9e9e9',endColorstr='#f7f7f7',GradientType=0);
+    border-color: #c1c6cb;
+}
+.pageIcon a:link {
+    display: block;
+    width: 100%;
+    height: 100%;
+    text-decoration: none;
+}

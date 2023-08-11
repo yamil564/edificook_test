@@ -1,0 +1,292 @@
+<style>
+	.img-edificio{
+		background-size: contain!important;
+	}
+	#preview-logo{
+		width: 50%;
+    	height: 160px;
+	}
+	#msg-maps{
+		font-weight: bold;
+		font-size: 11px;
+	}
+</style>
+
+<div class="row">
+
+	<div class="col-lg-12">
+
+		<button class="btn btn-default btn-sm right margin-left-5 btn-edit">
+			<i class="ace-icon fa fa-pencil-square-o bigger-110"></i> Editar información
+		</button>
+		<button class="btn btn-success btn-sm right margin-left-5 btn-save hide">
+			<i class="ace-icon fa fa-floppy-o bigger-110"></i> Guardar datos
+		</button>
+		<button class="btn btn-warning btn-sm right margin-left-5 btn-cancel hide">
+			<i class="ace-icon fa fa-times bigger-110"></i> Cancelar
+		</button>
+		<a href="<?php echo $this->url('mantenimiento', array('controller' => 'edificio', 'action' => 'index')); ?>" class="btn btn-default btn-sm right margin-left-5 btn-return">
+			<i class="ace-icon fa fa-reply bigger-110"></i>Regresar
+		</a>
+
+		<h4 class="header smaller lighter blue">Datos Generales</h4>
+	</div>
+
+	<div class="col-sm-12">
+
+	<form id="validate" class="contact-form" accion="datos-generales">
+	<input type="hidden" name="ruta" value="Edificio > Datos Generales">
+	<div class="form-group">
+		<label class="col-sm-2 control-label no-padding-right"> Nombre </label>
+		<div class="col-sm-10" style="margin-bottom: 5px;">
+			<div><input type="text" name="textNombre" class="col-xs-10 col-sm-12" readonly value="<?php echo $this->edificio['nombre']; ?>" /></div>
+		</div>
+	</div>
+
+	<div class="form-group">
+		<label class="col-sm-2 control-label no-padding-right"> Tipo </label>
+		<div class="col-sm-10" style="margin-bottom: 5px;">
+			<div>
+				<select class="form-control" name="selIdTipo" disabled="" id="idtipo">
+					<option disabled="">Seleccione...</option>
+					<?php foreach($this->tipo as $tipo): ?>
+					<option value="<?php echo $tipo['id']; ?>" <?php if($this->edificio['idtipo'] == $tipo['id']) echo "selected='select'"; ?>><?php echo $tipo['descripcion']; ?></option>
+					<?php endforeach; ?>
+				</select>
+			</div>
+		</div>
+	</div>
+
+	<div class="form-group">
+		<label class="col-sm-2 control-label no-padding-right">Ubicación</label>
+		<div class="col-sm-10" style="margin-bottom: 5px;">
+			<div class="input-group">
+				<div><input type="text" id="txtDetalleUbigeo" id-ubigeo="<?php echo $this->edificio['iddistrito']; ?>" class="form-control search-query" placeholder="Seleccionar ubicación" readonly="" value="<?php echo $this->edificio['departamento']."/".$this->edificio['provincia']."/".$this->edificio['distrito']; ?>"></div>
+				<span class="input-group-btn">
+					<button type="button" class="btn-search btn btn-pink btn-sm" disabled onclick="edificio.viewUbigeo();">
+						<i class="ace-icon fa fa-search icon-on-right bigger-110"></i>
+					</button>
+				</span>
+			</div>
+		</div>
+	</div>
+
+	<div class="form-group">
+		<label class="col-sm-2 control-label no-padding-right" data-toggle="tooltip" data-placement="top" title="Fecha de construcción"> Fecha de cons. </label>
+		<div class="col-sm-4" style="margin-bottom: 5px;">
+			<div class="input-group">
+				<div><input class="form-control btn-datepicker" value="<?php echo $this->edificio['fechaConst']; ?>" readonly name="textFechaConst" type="text" data-date-format="yyyy-mm-dd" /></div>
+				<span class="input-group-addon">
+					<i class="fa fa-calendar bigger-110"></i>
+				</span>
+			</div>
+		</div>
+	</div>
+
+	<div class="form-group">
+		<label class="col-sm-2 control-label no-padding-right text-right"> Número </label>
+		<div class="col-sm-4" style="margin-bottom: 5px;">
+			<div><input type="text" class="col-xs-10 col-sm-12" name="textNumero" readonly value="<?php echo $this->edificio['numero']; ?>"></div>
+		</div>
+	</div>
+
+	<div class="form-group">
+		<label class="col-sm-2 control-label no-padding-right"> Área útil </label>
+		<div class="col-sm-2" style="margin-bottom: 5px;">
+			<div><input type="text" class="col-xs-10 col-sm-12" name="textAreaUtil" readonly value="<?php echo $this->edificio['areaUtil']; ?>" /></div>
+		</div>
+	</div>
+
+	<div class="form-group">
+		<label class="col-sm-2 control-label no-padding-right text-right"> Área ocupada </label>
+		<div class="col-sm-2" style="margin-bottom: 5px;">
+			<div><input type="text" class="col-xs-10 col-sm-12" name="textAreaOcupada" readonly value="<?php echo $this->edificio['areaOcupada']; ?>" /></div>
+		</div>
+	</div>
+
+	<div class="form-group">
+		<label class="col-sm-2 control-label no-padding-right text-right"> Nro. de pisos </label>
+		<div class="col-sm-2" style="margin-bottom: 5px;">
+			<div><input type="text" class="col-xs-10 col-sm-12" name="textNumeroPisos" readonly value="<?php echo $this->edificio['numeroPisos']; ?>" /></div>
+		</div>
+	</div>
+
+	<div class="form-group">
+		<label class="col-sm-2 control-label no-padding-right"> Nro. Sotanos </label>
+		<div class="col-sm-4" style="margin-bottom: 5px;">
+			<div><input type="text" class="col-xs-10 col-sm-12" name="textNumeroSotanos" readonly value="<?php echo $this->edificio['numeroSotanos']; ?>" /></div>
+		</div>
+	</div>
+	
+	<div class="form-group">
+		<label class="col-sm-4 control-label no-padding-right text-rght text-right"> Área de propiedad exclusiva total: </label>
+		<div class="col-sm-2" style="margin-bottom: 5px;">
+			<div><input type="text" class="col-xs-10 col-sm-12" name="textAreaPropiedadExclusiva" readonly value="<?php echo $this->edificio['areaPropiedadExclusiva']; ?>" /></div>
+		</div>
+	</div>
+	
+	<div class="form-group">
+		<label class="col-sm-2 control-label no-padding-right"> Amb. Comunes </label>
+		<div class="col-sm-10" style="margin-bottom: 5px;">
+			<select multiple="" name="textAmbienteComunes[]" class="chosen-select" id="idambcomun" data-placeholder="Seleccion el ambiente...">
+				<?php
+					if(count($this->lugar)>0){
+						foreach($this->lugar as $lugar){
+							if(in_array($lugar['id'], $this->ambienteLugar)){
+								echo '<option value="'.$lugar['id'].'" selected>'.$lugar['descripcion'].'</option>';
+							}else{
+								echo '<option value="'.$lugar['id'].'">'.$lugar['descripcion'].'</option>';
+							}
+						}
+					}else{
+						echo '<option disabled>Seleccione el ambiente...</option>';
+					}
+				?>
+			</select>
+		</div>
+	</div>
+
+	<div class="form-group">
+		<label class="col-sm-2 control-label no-padding-right"> Dirección </label>
+		<div class="col-sm-10" style="margin-bottom: 5px;">
+			<div><input type="text" id="direccion" name="textDireccion" class="col-xs-10 col-sm-12" readonly value="<?php echo $this->edificio['direccion']; ?>" /></div>
+		</div>
+	</div>
+
+	<div class="form-group">
+		<label class="col-sm-2 control-label no-padding-right"> Urbanización </label>
+		<div class="col-sm-10" style="margin-bottom: 5px;">
+			<div><input type="text" id="urbanizacion" name="textUrbanizacion" class="col-xs-10 col-sm-12" readonly value="<?php echo $this->edificio['urbanizacion']; ?>" /></div>
+		</div>
+	</div>
+
+	<div class="form-group">
+		<label class="col-sm-2 control-label no-padding-right"> Nro. unidades </label>
+		<div class="col-sm-4" style="margin-bottom: 5px;">
+			<div><input type="text" class="col-xs-10 col-sm-12" name="textNumeroUnidades" readonly value="<?php echo $this->edificio['numeroUnidades']; ?>" /></div>
+		</div>
+	</div>
+
+	<div class="form-group">
+		<label class="col-sm-3 control-label no-padding-right text-right"> Nro partida registral </label>
+		<div class="col-sm-3" style="margin-bottom: 5px;">
+			<div><input type="text" class="col-xs-10 col-sm-12" name="textNumeroPartRegist" readonly value="<?php echo $this->edificio['numeroPartida']; ?>" /></div>
+		</div>
+	</div>
+
+	<div class="form-group">
+		<label class="col-sm-2 control-label no-padding-right"> Área total: </label>
+		<div class="col-sm-4" style="margin-bottom: 5px;">
+			<div><input type="text" class="col-xs-10 col-sm-12" name="textAreaTotal" readonly value="<?php echo $this->edificio['areaTotal']; ?>" /></div>
+		</div>
+	</div>
+
+	<div class="form-group">
+		<label class="col-sm-2 control-label no-padding-right text-right"> Área terreno: </label>
+		<div class="col-sm-4" style="margin-bottom: 5px;">
+			<div><input type="text" class="col-xs-10 col-sm-12" readonly name="textAreaTerreno" value="<?php echo $this->edificio['areaTerreno']; ?>" /></div>
+		</div>
+	</div>
+
+	<div class="form-group">
+		<label class="col-sm-2 control-label no-padding-right"> Serv.Comunes </label>
+		<div class="col-sm-10" style="margin-bottom: 5px;">
+			<div>
+				<select class="form-control" name="selServiciosComunes" disabled="" id="idsercomun">
+					<option value=""></option>
+				</select>
+			</div>
+		</div>
+	</div>
+
+	<div class="form-group">
+		<div class="col-sm-6" style="margin-bottom: 5px;">
+			<label class="control-label no-padding-right"><strong>Google maps:</strong> <a id="view-maps-big">(Ver más grande)</a></label>
+			<div id="googleMaps1" style="width: 100%;height:194px;"></div>
+			<p id="msg-maps" class="margin-top-5"></p>
+		</div>
+	</div>
+
+	<div class="form-group">
+		<div class="col-sm-6" style="margin-bottom: 5px;">
+			<label class="control-label no-padding-right"> <strong>Logo:</strong> </label>
+			<div style="text-align: center;background: #F5F5F5;">
+				<div class="img-edificio" style="background: #F5F5F5 url('<?php echo $this->edificio['logo']; ?>') no-repeat center;"></div>
+				<img class="hide" id="preview-logo">
+				<button class="btn btn-sm btn-inverse btn-img col-lg-12" disabled="">Actualizar foto</button>
+				<input type="file" type-class="img-edificio" accept="image/*" type-folder="logo-edificio" id="logoedificio" type-action="logo" onchange="edificio.cambiarImagenLogo(event);" class="hidden" name="logoedificio">
+			</div>
+		</div>
+	</div>
+	<button type="submit" class="btn-submit hidden"></button>
+	</form>
+	</div>
+
+	<!--<div class="col-sm-3">
+		<img src="<?php echo $this->basePath(); ?>/public/images/publicidad.jpg" width="100%">
+	</div>-->
+
+</div>
+
+<!-- GOOGLE MAPS -->
+<div class="modal fade" id="myModalGoogleMaps" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="exampleModalLabel">Google Maps [<?php echo $this->edificio['direccion']; ?> - <?php echo $this->edificio['urbanizacion']; ?>]</h4>
+      </div>
+      <div class="modal-body">
+      		<div id="googleMaps2" style="width: 100%;height:400px;"></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- UBIGEO -->
+<div class="modal fade" id="myModalUbigeo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="exampleModalLabel">Buscar ubicación</h4>
+      </div>
+      <div class="modal-body">
+      	<div class="col-lg-12">
+      		<div class="input-body margin-bottom-15"></div>
+		</div>
+		<div class="row">
+			<div class="col-lg-12">
+				<div class="margin-bottom-15">
+                    <input type="text" id="txtFiltarUbigeo" class="form-control tooltipmsg" style="width:100%;" placeholder="Ingresa el Departamento, Provincia ó Distrito" Title="Ingresar el distrito a buscar">
+                </div>
+                <div class="row">
+                	<div class="col-lg-12 content-Ubigeo">
+                		<table id="grid-table_ubigeo"></table>
+                		<div id="grid-pager_ubigeo"></div>
+                	</div>
+                </div>	
+			</div>
+		</div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default btn-sm" data-dismiss="modal"><i class="ace-icon fa fa-times bigger-110"></i> Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+	$(document).ready(function(){
+		edificio.id_edificio = '<?php echo $this->edificio['id']; ?>';
+	});
+</script>
+<?php $this->inlineScript()
+	->appendFile($this->basePath('/script/mantenimiento/edificio.js'),'text/javascript')
+?>
+<!--Google Console key-->
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCZ2eAClRJYMJDADc1Lby9ie71oVxXb9fQ&callback=edificio.initMap">
+</script>

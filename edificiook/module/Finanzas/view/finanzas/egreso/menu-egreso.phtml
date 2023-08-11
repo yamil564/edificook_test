@@ -1,0 +1,18 @@
+<ul class="dropdown-menu dropdown-danger">
+	<li>
+		<a id="viewUnidadesPrincipales" href="<?php echo $this->url('finanzas', array('controller' => 'egreso', 'action' => 'index')); ?>"> Egreso</a>
+	</li>
+	<li class="divider"></li>
+	<li>
+		<a id="viewUnidadesPrincipales" href="<?php echo $this->url('finanzas', array('controller' => 'egreso', 'action' => 'provisionado')); ?>"> Provisionado</a>
+	</li>
+	<li>
+		<a id="viewUnidadesSecundarias" href="<?php echo $this->url('finanzas', array('controller' => 'egreso', 'action' => 'pendiente-de-aprobacion')); ?>">Pendiente de aprobación</a>
+	</li>
+	<li>
+		<a id="viewUnidadesSecundarias" href="<?php echo $this->url('finanzas', array('controller' => 'egreso', 'action' => 'pendiente-de-pago')); ?>">Pendiente de pago</a>
+	</li>
+	<li>
+		<a id="viewUnidadesSecundarias" href="<?php echo $this->url('finanzas', array('controller' => 'egreso', 'action' => 'pagado')); ?>">Pagado</a>
+	</li>
+</ul>

@@ -1,0 +1,153 @@
+<style>
+	#t_grid-concepto{
+	    height: 33px;
+		margin-top: 3px;
+	}
+	.form-group{
+		margin-bottom: 0px;
+	}
+	.bootstrap-timepicker-widget{
+		z-index: 10000!important;
+	}
+	.ui-jqgrid .ui-jqgrid-htable .ui-search-toolbar th{
+	    padding-top: 4px;
+	    padding-bottom: 3px;
+	}
+	#myModalFormDeleteConcepto .modal-dialog{
+		width: 23%;
+	}
+	#msg-descripcion{
+		color: #f00;
+		font-size: 13px;
+	}
+</style>
+
+<div class="row">
+	<div class="col-xs-12">
+		<div class="table-header">
+			<div class="row">
+				<div class="col-xs-4">Conceptos</div>
+				<div class="col-xs-8">
+					<div id="btn-actions-default"class="btn-group pull-right" role="group" aria-label="...">
+						<button type="button" id="btnDescargar" class="btn btn-default btn-sm btnOpe hidden" onclick="action.descargar();">
+							<i class="ace fa fa-cloud-download"></i>
+							<span>Descargar</span>
+						</button>
+						<button type="button" class="btn btn-default btn-sm btnOpe" onclick="action.new()">
+							<i class="glyphicon glyphicon-file"></i>
+							<span>Nuevo</span>
+						</button>
+					</div>
+					<div id="btn-actions" class="btn-group pull-right hidden" role="group" aria-label="...">
+						<!--<button type="button" class="btn btn-default btn-sm btnOpe" onclick="action.view()">
+					  		<i class="fa fa-eye"></i>
+							<span>Ver</span>
+					  	</button>-->
+						<button type="button" class="btn btn-default btn-sm btnOpe" onclick="action.edit()">
+							<i class="glyphicon glyphicon-pencil"></i>
+							<span>Editar</span>
+						</button>
+					  	<button type="button" class="btn btn-default btn-sm btnOpe" onclick="action.formDelete()">
+					  		<i class="glyphicon  glyphicon-trash"></i>
+							<span>Eliminar</span>
+					  	</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<table id="grid-concepto"></table>
+		<div id="grid-pager"></div>
+	</div>
+</div>
+
+<!-- FORM CONCEPTO -->
+<div class="modal fade" id="myModalFormConcepto" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog" role="document">
+    <form id="validateForm" class="formConcepto" action="">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	        <h4 class="modal-title">Conceptos</h4>
+	      </div>
+	      <div class="modal-body">
+	      		
+				<div class="row">
+					<div class="col-sm-12">
+						<div class="form-group">
+							<label class="col-sm-4 control-label no-padding-right"> Descripción: </label>
+							<div class="col-sm-8" style="margin-bottom: 5px;">
+								<div>
+									<input type="text" class="form-control" name="descripcion">
+									<span id="msg-descripcion"></span>
+								</div>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label class="col-sm-4 control-label no-padding-right"> Grupo de concepto: </label>
+							<div class="col-sm-8" style="margin-bottom: 5px;">
+								<div>
+									<select class="form-control" name="grupo" id="grupo">
+											<option selected="select" disabled="">Seleccionar...</option>	
+										<?php foreach($this->listarGrupoConcepto as $grupoConcepto): ?>
+											<option value="<?php echo $grupoConcepto['codigo']; ?>"><?php echo $grupoConcepto['descripcion']; ?></option>
+										<?php endforeach; ?>
+									</select>
+								</div>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label class="col-sm-4 control-label no-padding-right"> Tipo de concepto: </label>
+							<div class="col-sm-8" style="margin-bottom: 5px;">
+								<div>
+									<select class="form-control" name="tipo">
+										<option selected="select" disabled="">Seleccionar...</option>	
+										<option value="EGRESO">EGRESO</option>
+										<option value="INGRESO">INGRESO</option>
+									</select>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+	      </div>
+	      <div class="modal-footer">
+	        <button type="submit" class="btn btn-success btn-sm"><i class="ace-icon fa fa-floppy-o bigger-110"></i> Guardar</button>
+	        <button type="button" class="btn btn-default btn-sm" data-dismiss="modal"><i class="ace-icon fa fa-times bigger-110"></i> Cerrar</button>
+	      </div>
+	    </div>
+    </form>
+  </div>
+</div>
+
+<!-- FORM DELETE CONCEPTO -->
+<div class="modal fade" id="myModalFormDeleteConcepto" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Conceptos</h4>
+      </div>
+      <div class="modal-body">
+      		
+			<div class="row">
+				<div class="col-sm-12">
+					<p>Estas seguro que deseas eliminar el concepto?</p>
+				</div>
+			</div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-success btn-sm" onclick="action.delete()">Si</button>
+        <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">No</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<?php
+	$this->inlineScript()
+	    ->appendFile($this->basePath('/script/mantenimiento/concepto.js?t='.time()),'text/javascript')
+?>

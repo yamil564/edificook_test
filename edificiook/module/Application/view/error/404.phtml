@@ -1,0 +1,60 @@
+<style>
+.dark {
+    color: #333;
+    border: solid 1px #626262;
+    background-color: rgba(243,243,243,0);
+    font-size: 18px;
+    color: #313131;
+}
+.foradian-btn {
+    display: block;
+    max-width: 170px;
+    margin: auto;
+    margin-bottom: 100px;
+    padding: 10px 30px;
+    width: auto;
+    text-decoration: none;
+}
+.top-margin-100{
+  margin-top:100px;
+
+}
+.align_center {
+    width: 934px;
+    margin: 0 auto;
+    text-align: left;
+}
+.error-head {
+    margin: 20px;
+    text-align: center;
+    font-size: 30px;
+    color: #666666;
+    margin-top:100px;
+    font-family: arial;
+}
+.error-head span{
+  font-weight: bold;
+}
+.error-img-holer {
+    text-align: center;
+    margin: auto;
+    
+}
+
+.error-img-holer img{
+    height: 60px;
+}
+</style>
+<div class="error-page">
+    <div class="align_center">
+        <div class="error-head">
+            <div class="error-img-holer"><img src="<?php  echo 'http://'.$_SERVER['HTTP_HOST'].str_replace("./","/",$this->Theme()['logo_login']); ?>"></div>
+        </div>
+        <div class="error-head">
+            <span>404.</span> Página no encontrada. <?php echo $this->saludo;?>
+        </div>
+        <div class="error-head">
+            <p><a href="<?php echo 'http://'.$_SERVER['HTTP_HOST'];?>" class="foradian-btn dark">Página Principal</a></p>
+        </div>
+    </div>
+</div>

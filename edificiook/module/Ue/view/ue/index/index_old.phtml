@@ -1,0 +1,92 @@
+<style>
+	.profile-activity img{
+		width: 40px;
+		height: 40px;
+	}
+</style>
+<div class="row">
+	
+	<div class="col-lg-12">
+		<div class="row">
+			
+			<div class="col-md-12">
+
+				<div class="thumbnail">
+
+					<div class="content-img">
+						<div class="bg-img" style="background: #eee url('<?php echo $this->edificio['banner']; ?>') no-repeat center;"></div>
+						<!--change imagecontent-progress-->
+						<div class="bg-load" style="display:none;"></div>
+						<p class="load-img number-load" style="display:none;"></p>
+						<div class="load-img" style="display:none;"><i class="fa fa-spinner fa-spin"></i></div>
+						<input type="file" id="imgprincipal" type-class="bg-img" type-folder="banner-edificio" type-action="banner" accept="image/*" onchange="edificio.cambiarImagen(this);" class="hidden">
+					</div>
+
+					<!--progress-->
+					<!--option menu-->
+
+				</div>
+			</div>
+
+			<div class="col-md-12">
+
+				<!-- /section:pages/profile.info -->
+
+				<div class="widget-box transparent">
+					<div class="widget-header widget-header-small">
+						<h4 class="widget-title blue smaller">
+							<i class="ace-icon fa fa-rss orange"></i>Noticias Recientes
+						</h4>
+						<div class="widget-toolbar action-buttons">
+							<i class="ace-icon fa fa-check blue"></i>
+						</div>
+					</div>
+
+					<div class="widget-body">
+						<div class="widget-main padding-8">
+							<div id="profile-feed-1" class="profile-feed">
+								<?php foreach($this->noticias as $value): ?>
+								<div class="profile-activity clearfix">
+									<div>
+										<img class="pull-left margin-bottom-20" alt="Alex Doe's avatar" src="file/noticia/<?php echo $value['imagen']; ?>">
+										<a href="<?php echo $this->url('ue'); ?>/noticias" class="user"><span> <?php echo $value['titulo']; ?> </span></a><br>
+										<span><?php echo $value['concepto']; ?></span>
+										<div class="time">
+											<i class="ace-icon fa fa-calendar bigger-110"></i>
+											<?php echo $value['fecha']; ?>
+										</div>
+									</div>
+								</div>
+								<?php endforeach; ?>
+								<hr class="margin-bottom-5">
+								<div>
+									<a href="<?php echo $this->url('noticias', array('action' => 'index')); ?>" class="margin-left-10">
+										VER MÁS NOTICIAS
+									</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</div>
+
+
+</div>
+</div>
+
+
+
+</div>
+
+ 
+
+<script>
+	$(document).ready(function(){
+		edificio.id_edificio = '<?php echo $this->edificio['id']; ?>';
+	});
+</script>
+
+<?php $this->inlineScript()
+	->appendFile($this->basePath('/script/mantenimiento/edificio.js'),'text/javascript')
+?>

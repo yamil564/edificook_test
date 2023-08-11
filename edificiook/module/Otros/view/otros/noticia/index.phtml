@@ -1,0 +1,168 @@
+<style>
+	.table-header .btn-group {
+	    margin-right: 20px!important;
+	}
+	.noticia-image{
+	    background-position: center!important;
+	    height: 200px!important;
+	    background-size: contain!important;
+	    background-repeat: no-repeat!important;
+	}
+	.ui-jqgrid .ui-jqgrid-htable .ui-search-toolbar th{
+		padding-bottom: 2px!important;
+	}
+	.remove-file{
+		background: #333;
+	    border-radius: 100%;
+	    width: 25px;
+	    color: #fff;
+	    height: 25px;
+	    position: absolute;
+	    right: 5px;
+	    top: -8px;
+	    cursor: pointer;
+	}
+</style>
+
+<div class="row">
+	<div class="col-xs-12">
+		<div class="table-header" id="jqgrid">
+			<div class="row">
+				<div class="col-xs-4">Noticia</div>
+				<div id="btn-actions" class="btn-group pull-right hidden" role="group" aria-label="...">
+					<button type="button" class="btn btn-default btn-sm btnOpe" onclick="noticia.view()">
+				  		<i class="fa fa-eye"></i>
+				  		<span>Ver</span>
+				  	</button>
+					<button type="button" class="btn btn-default btn-sm btnOpe" onclick="noticia.edit()">
+					  		<i class="glyphicon glyphicon-pencil"></i>
+					  		<span>Editar</span>
+					</button>
+				  	<button type="button" class="btn btn-default btn-sm btnOpe" onclick="noticia.del()">
+				  		<i class="glyphicon  glyphicon-trash"></i>
+				  		<span>Eliminar</span>
+				  	</button>
+				</div>
+				<div class="btn-group pull-right" role="group" aria-label="...">
+					<button type="button" class="btn btn-default btn-sm btnOpe" onclick="noticia.new()">
+				  		<i class="glyphicon glyphicon-file"></i>
+				  		<span>Nuevo </span>
+				  	</button>
+				</div>
+			</div>	
+		</div>
+		<table id="grid-noticia"></table>
+    	<div id="grid-pager"></div>
+	</div>
+</div>
+
+<!-- modal small -->
+<div class="modal fade" id="myModalNoticia" tabindex="-1" role="dialog">
+	<form id="validate" class="form-data" enctype="multipart/form-data">
+	<div class="modal-dialog" role="document">
+
+		<div class="modal-content" style="border: 0;">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title"></h4>
+			</div>
+
+				<input type="text" class="form-control hidden" id="accion" name="accion" value="">
+				<input type="text" class="form-control hidden" id="idnoticia" name="idnoticia" value="">
+				<input type="hidden" name="ruta" value="Otros > Noticias">
+		
+				<div class="modal-body">
+					<div class="row">
+						<div class="col-lg-12">
+							
+						<div class="row">
+							
+							<div class="col-lg-8">
+								<div class="form-group">
+									<label class="col-lg-12 control-label no-padding-right"> <strong>Título</strong> </label>
+									<div class="col-lg-12" style="margin-bottom: 5px;">
+										<div><input type="text" class="form-control" id="titulo" name="titulo"></div>
+									</div>
+								</div>
+							</div>
+
+							<div class="col-lg-4">
+								<div class="form-group">
+									<label class="col-lg-12 control-label no-padding-right"> <strong>Fecha</strong> </label>
+									<div class="col-lg-12" style="margin-bottom: 5px;">
+										<div class="input-group">
+											<div><input class="form-control" value="<?php echo date('d/m/Y'); ?>" name="fecha" id="id-date-picker" type="text" data-date-format="dd-mm-yyyy" /></div>
+											<span class="input-group-addon">
+												<i class="fa fa-calendar bigger-110"></i>
+											</span>
+										</div>
+									</div>
+								</div>
+							</div>
+
+						</div>
+
+						<div class="form-group">
+							<label class="col-lg-12 control-label no-padding-right"> <strong>Contenido</strong> </label>
+							<div class="col-lg-12" style="margin-bottom: 5px;">
+								<div><textarea rows="4" class="form-control" id="contenido" name="contenido" style="resize:none"></textarea></div>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label class="col-lg-12 control-label no-padding-right"> <strong>Archivo</strong> </label>
+							<div class="col-xs-12 col-md-12">
+								<div class="noticia-image">
+									<div class="remove-file">
+										<i class=" ace-icon fa fa-times" style="font-size: 18px;margin-top: 3px;margin-left:5px;"></i>
+									</div>
+								</div>
+								<!-- <input type="file" name="imagen" id="id-input-file-3" accept="image/jpeg,image/png,application/pdf" onchange="noticia.loadArchivo(this);" multiple> -->
+								<input type="file" name="imagen[]" id="id-input-file-3" accept="image/jpeg,image/png,application/pdf" multiple>
+							</div>
+						</div>
+
+						</div>
+					</div>
+				</div>
+			
+		</div>
+
+		<div class="modal-footer">
+			<button type="submit" class="btn btn-success btn-sm btn-save"><i class="ace-icon fa fa-floppy-o bigger-110"></i> Guardar</button>
+			<button type="button" class="btn btn-default btn-sm" data-dismiss="modal"><i class="ace-icon fa fa-times bigger-110"></i> Cerrar</button>
+		</div>
+	
+	</div>
+	</form>
+</div>
+<!-- inline scripts related to this page -->
+<!-- modal eliminar -->
+<div class="modal fade" id="myModalNoticiaEliminar" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+	<div class="modal-dialog" role="document">
+
+		<div class="modal-content" style="border: 0;">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="exampleModalLabel">Noticia</h4>
+			</div>
+			<div class="modal-body">
+				<div class="row">
+					<div class="col-lg-12 center">
+						<p>Esta seguro de eliminar la noticia.</p>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="modal-footer">
+			<button type="button" class="btn btn-default btn-sm" data-dismiss="modal">No</button>
+			<button type="button" class="btn btn-primary btn-sm" onclick="noticia.delete()">Si</button>
+		</div>
+	
+	</div>
+</div>
+
+
+<?php $this->inlineScript()
+    ->appendFile($this->basePath('/script/otros/noticia.js?t='.time()),'text/javascript');

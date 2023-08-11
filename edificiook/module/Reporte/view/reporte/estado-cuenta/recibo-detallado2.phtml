@@ -1,0 +1,19 @@
+<?php echo $this->headLink()
+    ->appendStylesheet($this->basePath('css/bootstrap.min.css'))
+    ->appendStylesheet($this->basePath('css/font-awesome.min.css')) 
+?>
+
+<?php echo $this->inlineScript()
+	->appendFile($this->basePath('/js/jquery.min.js'),'text/javascript')
+  ->appendFile($this->basePath('/js/bootstrap.min.js'),'text/javascript')
+  ->appendFile($this->basePath('/script/reporte/ec-reporte.js'),'text/javascript')
+?>
+
+<script>
+  recibo.month = '<?php echo $this->month; ?>';
+  recibo.year = '<?php echo $this->year; ?>';
+  recibo.type = '<?php echo $this->type; ?>';
+  recibo.idrow = '<?php echo $this->idrow; ?>';
+  recibo.filterx = '<?php echo $this->filterx; ?>';
+  recibo.admin = '<?php echo $this->admin; ?>';
+</script>

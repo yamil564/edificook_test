@@ -1,0 +1,186 @@
+<style>
+	.profile-activity img{
+		width: 40px;
+		height: 40px;
+	}
+	.profile-user-info{
+		width: 100%;
+	}
+	.enlace{
+		color: #9585BF;
+    	cursor: pointer;
+	}
+	.enlace:hover{
+		text-decoration: underline;
+	}
+</style>
+<div class="row">
+	
+	<div class="col-lg-12">
+		<div class="row">
+			
+			<div class="col-md-12">
+
+				<div class="thumbnail">
+
+					<div class="content-img">
+						<div class="bg-img" style="background: #eee url('<?php echo $this->edificio['banner']; ?>') no-repeat center;"></div>
+						<!--change imagecontent-progress-->
+						<div class="bg-load" style="display:none;"></div>
+						<p class="load-img number-load" style="display:none;"></p>
+						<div class="load-img" style="display:none;"><i class="fa fa-spinner fa-spin"></i></div>
+						<input type="file" id="imgprincipal" type-class="bg-img" type-folder="banner-edificio" type-action="banner" accept="image/*" onchange="edificio.cambiarImagen(this);" class="hidden">
+					</div>
+
+					<!--progress-->
+					<!--option menu-->
+
+				</div>
+			</div>
+	
+
+			<div class="col-md-5">
+				<div class="widget-box transparent">
+					<div class="widget-header widget-header-small">
+						<h4 class="widget-title blue smaller">
+							<i class="ace-icon fa fa-rss orange"></i>Datos Generales
+						</h4>
+					</div>
+				</div>
+
+				<div class="profile-user-info profile-user-info-striped margin-0">
+					<div class="profile-info-row">
+						<div class="profile-info-name"> Nombre </div>
+
+						<div class="profile-info-value">
+							<span class="editable editable-click"><?php echo $this->edificio['nombre']; ?></span>
+						</div>
+					</div>
+
+					<div class="profile-info-row">
+						<div class="profile-info-name"> Dirección </div>
+
+						<div class="profile-info-value">
+							<span class="editable editable-click"><?php echo $this->edificio['direccion']; ?></span>
+						</div>
+					</div>
+
+					<div class="profile-info-row">
+						<div class="profile-info-name"> Urbanización </div>
+
+						<div class="profile-info-value">
+							<span class="editable editable-click">
+								<?php
+									foreach($this->tipo as $tipo){
+										if($tipo['id']==$this->edificio['idtipo']) echo $tipo['descripcion'];
+									}
+								?>
+							</span>
+						</div>
+					</div>
+
+					<div class="profile-info-row">
+						<div class="profile-info-name"> Fecha de Construcción </div>
+
+						<div class="profile-info-value">
+							<span class="editable editable-click"><?php echo $this->edificio['fechaConst']; ?></span>
+						</div>
+					</div>
+
+					<div class="profile-info-row">
+						<div class="profile-info-name"> Reglamento Interno </div>
+
+						<div class="profile-info-value">
+							<span class="editable editable-click">
+								<?php  if($this->edificio['reglamentoInterno']!=''): ?>
+									<a href="file/reglamento-interno/<?php echo $this->edificio['reglamentoInterno']; ?>" target="_blank" data-toggle="tooltip" data-placement="left" title="Click para ver PDF">
+										<img src="images/iconos/viewpdf.png" width="34">
+									</a>
+								<?php else: ?>
+									<p>-</p>
+								<?php endif; ?>
+							</span>
+						</div>
+					</div>
+
+					<div class="profile-info-row">
+						<div class="profile-info-name"> Manual de Operaciones </div>
+
+						<div class="profile-info-value">
+							<span class="editable editable-click" id="username">
+								<?php  if($this->edificio['manualOperaciones']!=''): ?>
+									<a href="file/manual-operaciones/<?php echo $this->edificio['manualOperaciones']; ?>" target="_blank" data-toggle="tooltip" data-placement="left" title="Click para ver PDF">
+										<img src="images/iconos/viewpdf.png" width="34">
+									</a>
+								<?php else: ?>
+									<p>-</p>
+								<?php endif; ?>
+							</span>
+						</div>
+					</div>
+
+				</div>
+
+
+			</div>
+
+			<div class="col-md-7">
+				<!-- /section:pages/profile.info -->
+				<div class="widget-box transparent">
+					<div class="widget-header widget-header-small">
+						<h4 class="widget-title blue smaller">
+							<i class="ace-icon fa fa-rss orange"></i>Noticias Recientes - - -
+						</h4>
+						<div class="widget-toolbar action-buttons">
+							<i class="ace-icon fa fa-check blue"></i>
+						</div>
+					</div>
+
+					<div class="widget-body">
+						<div class="widget-main padding-8">
+							<div id="profile-feed-1" class="profile-feed">
+								<?php foreach($this->noticias as $value): ?>
+								<div class="profile-activity clearfix">
+									<div>
+										<img class="pull-left margin-bottom-20" alt="Alex Doe's avatar" src="file/noticia/<?php echo $value['imagen']; ?>">
+										<span class="enlace" id="<?php echo $value['id']; ?>" onclick="edificio.detalleNoticia(this)"> <?php echo $value['titulo']; ?> </span><br>
+										<span><?php echo $value['concepto']; ?></span>
+										<div class="time">
+											<i class="ace-icon fa fa-calendar bigger-110"></i>
+											<?php echo $value['fecha']; ?>
+										</div>
+									</div>
+								</div>
+								<?php endforeach; ?>
+								<hr class="margin-bottom-5">
+								<div>
+									<a href="<?php echo $this->url('ue'); ?>/noticias" class="margin-left-10">
+										VER MÁS NOTICIAS
+									</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</div>
+
+
+</div>
+</div>
+
+</div>
+
+
+<div class="modal fade" id="myModalNoticia" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      
+    </div>
+  </div>
+</div>
+
+
+<?php $this->inlineScript()
+	->appendFile($this->basePath('/script/mantenimiento/edificio.js?t='.time()),'text/javascript')
+?>

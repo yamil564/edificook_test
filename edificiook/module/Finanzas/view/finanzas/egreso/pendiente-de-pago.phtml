@@ -1,0 +1,329 @@
+<div class="row">
+	<div class="col-xs-12">
+		<div class="table-header">
+			<div class="row">
+				<div class="col-xs-5">
+					<div class="btn-group pull-left" role="group" aria-label="...">
+						<button data-toggle="dropdown" class="btn btn-sm btnOpe dropdown-toggle ">
+							<i class="ace-icon glyphicon glyphicon-cog bigger-120"></i>
+							<i class="ace-icon fa fa-angle-down icon-on-right"></i>
+						</button>
+						<?php echo $this->partial('menu-egreso.phtml'); ?>
+					</div>
+					<span>Egreso <small><i class="ace-icon fa fa-angle-double-right"></i> Pendiente de pago</small><span>
+				</div>
+			</div>
+		</div>
+		<table id="grid-table"></table>
+		<div id="grid-pager"></div>
+		<div id="jqmsg_emptyrows" class="hidden"><i class="fa fa-exclamation-circle"></i> No hay egresos pendiente de pago en este periodo.</div>
+	</div>
+</div>
+
+
+<div class="modal fade" id="modalEgreso" tabindex="-1" role="dialog" aria-labelledby="labelModalEgreso" data-backdrop="static" data-keyboard="false">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="labelModalEgreso"><span>Egreso</span></h4>
+			</div>
+			<div class="modal-body">
+				<div class="space"></div>
+				<form id="formEgreso" action="#" enctype="multipart/form-data">
+					<input type="hidden" id="co_egresoId" name="co_egresoId" class="form-control">
+					<div class="row">
+						<div class="col-xs-12 col-md-6">
+							<div class="form-group">
+								<label for="selTipoDoc" class="label_1">Tipo de documento</label>
+								<select name="selTipoDoc" id="selTipoDoc" class="form-control">
+									<option value="0" disabled>Seleccionar</option>
+									<option value="FACTURA">FACTURA</option>
+									<option value="TICKET FACTURA">TICKET FACTURA</option>
+					                <option value="BOLETA">BOLETA</option>
+					                <option value="TICKET BOLETA">TICKET BOLETA</option>
+					                <option value="RECIBO SERVICIOS PUBLICOS">RECIBO SERVICIOS PUBLICOS</option>
+					                <option value="RECIBO POR HONORARIOS">RECIBO POR HONORARIOS</option>
+					                <option value="PLANILLA DE HABERES">PLANILLA DE HABERES</option>
+					                <option value="COMPROBANTE MOVILIDAD">COMPROBANTE MOVILIDAD</option>
+					                <option value="OTROS">OTROS</option>
+								</select>
+							</div>
+						</div>
+						<div class="col-xs-4 col-md-2">
+							<div class="form-group">
+								<label for="textSerie" class="label_1">N° de Serie</label>
+								<input type="text" id="textSerie" name="textSerie" value="" placeholder="" class="form-control">
+								<span class="e"></span>
+							</div>
+						</div>
+						<div class="col-xs-8 col-md-4">
+							<div class="form-group">
+								<label for="textNroDocumento" class="label_1">N° de documento</label>
+								<input type="text" id="textNroDocumento" name="textNroDocumento" value="" placeholder="" class="form-control">
+								<span class="e"></span>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-6">
+							<div class="form-group">
+								<label for="textSerie" class="label_1">Fecha de emisión</label>
+								<input type="text" id="textFechaEmi" name="textFechaEmi" value="" placeholder="00-00-0000" class="form-control datepicker-default fecha">
+								<span class="e"></span>
+							</div>
+						</div>
+						<div class="col-xs-6">
+							<div class="form-group">
+								<label for="textSerie" class="label_1">Fecha de vencimiento</label>
+								<input type="text" id="textFechaVence" name="textFechaVence" value="" placeholder="00-00-0000" class="form-control datepicker-default fecha">
+								<span class="e"></span>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12">
+							<div class="form-group">
+								<label for="selProveedor" class="label_1">Proveedor</label>
+								<select name="selProveedor" id="selProveedor" class="form-control chosen-select">
+									<option value="0" disabled>Seleccionar</option>
+									<?php 
+					            		if($this->proveedor){
+					            			foreach ($this->proveedor as $key => $value) {
+					            				echo '<option value="'.$value['id'].'">'.$value['razonsocial'].'</option>';
+					            			}
+					            		}
+					            	?>
+								</select>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12">
+							<div class="form-group">
+								<label for="selConcepto" class="label_1">Concepto</label>
+								<select name="selConcepto" id="selConcepto" class="form-control chosen-select" >
+									<option value="0" disabled>Seleccionar</option>
+									<?php 
+					            		if($this->conceptos){
+					            			foreach ($this->conceptos as $key => $value) {
+					            				echo '<option value="'.$value['id'].'">'.$value['descripcion'].'</option>';
+					            			}
+					            		}
+					            	?>
+								</select>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-6">
+							<div class="form-group">
+								<label for="textSerie" class="label_1">Importe S/.</label>
+								<input type="text" id="textImporte" name="textImporte" value="" placeholder="0.00" class="form-control">
+								<span class="e"></span>
+							</div>
+						</div>
+						<div id="wrapper_metroscubicos" class="col-xs-6 hidde">
+							<div class="form-group">
+								<label for="textSerie" class="label_1">Metros cúbicos (M3)</label>
+								<input type="text" id="textM3" name="textM3" value="" placeholder="0" class="form-control" >
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12">
+							<label for="ta_nota" class="label_1">Nota</label>
+							<textarea class="form-control" id="ta_nota" name="ta_nota" placeholder="Escriba una nota." style="resize:none"></textarea>
+						</div>
+					</div>
+					<div class="space"></div>
+					<div class="row">
+						<div class="col-xs-12">
+							<div class="input-group">
+							  	<span class="input-group-addon" style="width: 145px;text-align:right">Provisionado Por:</span>
+							  	<input id="textRegistradoPor" type="text" class="form-control" value="">
+							  	<span class="input-group-addon" style="font-size: 12px;">Fecha: <i id="fechaRegistro">00-00-0000 00:00 __</i></span>
+							</div>
+							<div class="input-group">
+							  	<span class="input-group-addon" style="width: 145px;text-align:right">Procesado Por:</span>
+							  	<input id="textProcesadoPor" type="text" class="form-control" value="">
+							  	<span class="input-group-addon" style="font-size: 12px;">Fecha: <i id="fechaProceso">00-00-0000 00:00 __</i></span>
+							</div>
+							<div class="input-group">
+							  	<span class="input-group-addon" style="width: 145px;text-align:right">Aprobado Por:</span>
+							  	<input id="textAprobadoPor" type="text" class="form-control" value="">
+							  	<span class="input-group-addon" style="font-size: 12px;">Fecha: <i id="fechaAprobacion">00-00-0000 00:00 __</i></span>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer">
+	        	<button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Cerrar</button>
+	      	</div>
+		</div>
+	</div>
+</div>
+
+
+<div class="modal fade" id="modalPagoEgreso" tabindex="-1" role="dialog" aria-labelledby="labelModalPagoEgreso" data-backdrop="static" data-keyboard="false">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="labelModalEgreso"><span>Egreso</span></h4>
+			</div>
+			<div class="modal-body">				
+				<div>
+					<!-- Nav tabs -->
+					<ul id="TabPagos" class="nav nav-tabs nav-justified" role="tablist">
+						<li id="tab_registrarpago" role="presentation" class="active">
+							<a href="#home" aria-controls="home" role="tab" data-toggle="tab">
+								<h4 class="list-group-item-heading">Registrar pago</h4>
+								<p id="mpe_tab1descripcion" class="list-group-item-text">Debe 10.00 de 210.00</p>
+							</a>
+						</li>
+						<li id="tab_listarpagos" role="presentation" class="">
+							<a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">
+								<h4 class="list-group-item-heading">Pagos parciales</h4>
+								<p id="mpe_tab2descripcion" class="list-group-item-text">Pagado 200.00 de 210.00</p>
+							</a>
+						</li>
+					</ul>
+
+					<!-- Tab panes -->
+					<div class="tab-content">
+						<div role="tabpanel" class="tab-pane active" id="home">
+							<div class="wrapperNotaIngreso">
+								<span><b>NOTA:</b><span id="labelNotaIngreso"> </span></span>
+							</div>	
+							<form id="formPagoEgreso" action="" class="">
+								<div class="profile-user-info profile-user-info-striped">
+									<div class="form-group profile-info-row">
+										<div class="profile-info-name">Importe S/.</div>
+										<div class="profile-info-value">
+											<input id="mpe_textImporte" name="textImporte" type="text" class="form-control input-sm precio" value="">
+											<span class="e"></span>
+										</div>
+									</div>
+									<div class="profile-info-row">
+										<div class="profile-info-name">Banco</div>
+										<div class="profile-info-value">
+											<select  id="selBanco" name="selBanco" class="form-control input-sm">
+												<option value="" selected>Ningún banco / Efectivo</option>
+												<option value="BANCO DE CREDITO DEL PERU" selected>Banco de Crédito</option>
+												<option value="BANCO CONTINENTAL">BBVA Banco Continental</option>
+												<option value="BANCO DE LA NACIÓN">Banco de la Nación</option>
+											</select>
+											<span class="e"></span>
+										</div>
+									</div>
+									<div class="form-group profile-info-row">
+										<div class="profile-info-name">N° Operación</div>
+										<div class="profile-info-value">
+											<input type="text" id="textNroOperacion" name="textNroOperacion" class="form-control input-sm" autofocus>
+											<span class="e"></span>
+										</div>
+									</div>
+									<div class="form-group profile-info-row">
+										<div class="profile-info-name">Fecha Pago</div>
+										<div class="profile-info-value">
+											<input type="text" id="textFechaPago" name="textFechaPago" class="form-control input-sm mask-fecha datepicker-default" placeholder="00-00-0000">
+											<span class="e"></span>
+										</div>
+									</div>
+								</div>
+								<div class="wrapperPagoMensual" style="width:100%!important;">
+									<div class="col-xs-12">
+										<textarea id="taObservacion" name="taObservacion" class="form-control" cols="7" rows="2" placeholder="Observación" style="resize:none"></textarea>
+									</div>
+								</div>
+								<button  id="submitPagoEgreso" type="submit"  class="hide"></button>
+								<div style="clear:both;"></div>
+								<div style="padding: 5px 12px;">
+									<button type="button" id="btnSavePagoEgreso" class="btn btn-success btn-sm"><i class="glyphicon glyphicon-play-circle"></i> Efecturar Pago</button>
+								</div>
+							</form>
+						</div>
+						<div role="tabpanel" class="tab-pane" id="profile">
+							<div class="row">
+								<div style="padding: 0px 24px;">
+									<table id="mpe_listaEgresosParciales" class="table table-striped table-hover" style="margin-bottom:0px!important;">
+										<thead>
+											<tr>
+												<th width="20"><i class="ace-icon fa fa-caret-right blue"></i></th>
+												<th width="120"><i class="ace-icon fa fa-caret-right blue"></i> Fecha</th>
+												<th><i class="ace-icon fa fa-caret-right blue"></i> Banco</th>
+												<th width="120"><i class="ace-icon fa fa-caret-right blue"></i> Operación</th>
+												<th width="120"><div style="text-align: right;"><i class="ace-icon fa fa-caret-right blue"></i> Importe</div></th>
+												<th width="30"></th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+											</tr>
+										</tbody>
+										<tfoot></tfoot>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+	        	<button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Cerrar</button>
+	      	</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="modalConfirmacionEliminarEP_mep" tabindex="-1" role="dialog" aria-labelledby="labelModalConfirmacion" data-backdrop="static" data-keyboard="false">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title"><span>Egreso</span></h4>
+			</div>
+			<div class="modal-body">
+				<input type="hidden" id="co_idPagoDelete_mep" value="">
+				<div class="row">
+					<div class="col-xs-12">
+						<div class="form-group" style="height: 50px;">
+							<span class="ace-icon question-button bigger-200">?</span>
+							<div style="padding-left: 50px; font-size: 15px;">¿Está seguro de eliminar el pago seleccionado?</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<center>
+					<button id="btnConfirmarEliminarEP" type="button" class="btn btn-danger btn-sm" onclick="Action.deleteEP_mep()"> Aceptar</button>
+	        		<button type="button" class="btn btn-default btn-sm" data-dismiss="modal"> Cancelar</button>	
+				</center>
+	      	</div>
+		</div>
+	</div>
+</div>
+
+<style>
+	.wrapperNotaIngreso{
+		margin-left: 10px;
+		padding-bottom: 5px;
+	}
+	#TabPagos li a{
+	    background-color: #f5f5f5;
+	}
+</style>
+
+<?php $this->inlineScript()
+    ->appendFile($this->basePath('/js/jqGrid/src/i18n/grid.locale-es.js'),'text/javascript')
+    ->appendFile($this->basePath('/js/jqGrid/js/jquery.jqGrid.min.js'),'text/javascript')
+    ->appendFile($this->basePath('/js/slidereveal/js/slidereveal.js'),'text/javascript')
+    ->appendFile($this->basePath('/script/finanzas/egreso_pendientepago.js?t='.time()),'text/javascript')  
+?>

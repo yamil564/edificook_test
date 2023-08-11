@@ -1,0 +1,427 @@
+<!--
+ * edificioOk (https://www.edificiook.com)
+ * creado por: Meler Carranza, 11/03/2016.
+ * ultima modificacion por: Jhnon Gómez
+ * Fecha Modificacion: 21/04/2016.
+ * Descripcion: 
+ *
+ * @autor     Fidel J. Thompson 
+ * @link      https://www.edificiook.com
+ * @copyright Copyright (c) 2011-2016 KND S.A.C (http://www.knd.pe)
+ * @license   http://www.edificiook.com/license/comercial Software Comercial
+ * 
+ *
+-->
+
+<?php
+	$optionsUsuariosPorEdificio='';
+	if($this->usuariosPorEdificio){
+		foreach ($this->usuariosPorEdificio as $key => $value){
+			if($value['tipo']=='PJ'){
+				$optionsUsuariosPorEdificio.='<option value="'.$value['id'].'">'.$value['apellido'].'</option>';
+			}else{
+				$optionsUsuariosPorEdificio.='<option value="'.$value['id'].'">'.$value['nombre']." ".$value['apellido'].'</option>';
+			}
+		}
+	}
+?>
+
+<style>
+	#grid-table #TOTALES {
+		background-color: #F3F3F3!important;
+	}
+	#grid-table #TOTALES td .tree-wrap{
+		display: none;
+	}
+</style>
+
+<div class="row">
+	<div class="col-xs-12">
+		<div class="table-header" id="jqgrid">
+			<div class="row">
+				<div class="col-xs-4">Unidades</div>
+				<input type="hidden"  id="co_unidadId" name="co_unidadId">
+				<div class="col-xs-8">
+					<div id="btn-actions-default"class="btn-group pull-right" role="group" aria-label="...">
+						<button type="button" id="btnDescargar" class="btn btn-default btn-sm btnOpe" onclick="rowAction.descargar();">
+							<i class="ace fa fa-cloud-download"></i>
+							<span>Descargar</span>
+						</button>
+						<button type="button" class="btn btn-default btn-sm btnOpe" btn-accion="adjunto" onclick="rowAction.viewimport()">
+							<i class="fa fa-file-excel-o"></i>
+							<span>Importar </span>
+						</button>
+						<button type="button" class="btn btn-default btn-sm btnOpe" btn-accion="nuevo" onclick="rowAction.nuevo()">
+							<i class="fa fa-plus"></i>
+							<span>Nuevo </span>
+						</button>
+					</div>
+					<div id="btn-actions" class="btn-group pull-right hidden" role="group" aria-label="...">
+						<button type="button" class="btn btn-default btn-sm btnOpe" onclick="rowAction.view()">
+					  		<i class="fa fa-eye"></i>
+							<span>Ver</span>
+					  	</button>
+						<button type="button" class="btn btn-default btn-sm btnOpe" onclick="rowAction.edit()">
+							<i class="glyphicon glyphicon-pencil"></i>
+							<span>Editar</span>
+						</button>
+					  	<button type="button" class="btn btn-default btn-sm btnOpe" onclick="rowAction.del()">
+					  		<i class="glyphicon  glyphicon-trash"></i>
+							<span>Eliminar</span>
+					  	</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<table id="grid-table"></table>
+		<div id="grid-pager"></div>
+	</div>
+</div>
+
+<!-------------------------------------------------------------------------------------------------------------------------->
+<div class="modal fade" id="myModalAdjuntarArchivo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" data-backdrop="static" data-keyboard="false">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+				<h4 class="modal-title" id="exampleModalLabel">Adjuntar archivo de consumo individual</h4>
+			</div>
+			<div class="modal-body">
+				<div class="row center">
+					<div class="col-lg-6">
+						<div class="form-group">
+							<label class="col-sm-12 control-label no-padding-right"> Adjuntar lecturas de agua en formato excel. (.xlsx) </label>
+							<div class="col-sm-12">
+								<button class="btn btn-sm btn-warning btn-close" style="display: none;">
+									<i class="ace-icon fa fa-times bigger-110"></i>
+									<span class="bigger-110 no-text-shadow">Cancelar</span>
+								</button>
+								<button class="btn btn-sm btn-grey btn-adjuntar">
+									<i class="ace-icon fa fa-plus bigger-110"></i>
+									<span class="bigger-110 no-text-shadow">Adjuntar</span>
+								</button>
+								<button class="btn btn-sm btn-success btn-registrar" onclick="rowAction.registrarArchivo(this);" style="display:none;">
+									<span class="spinner hidden">
+										<i class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></i>
+									</span>
+									<span class="bigger-110 no-text-shadow">Registrar</span>
+								</button>
+								<input type="file" name="filexls" id="filexls" style="display:none;" onchange="rowAction.uploadArchivo(this);">
+								<div class="progress progress-mini progress-striped active margin-top-5" style="display:none;">
+									<div class="progress-bar progress-bar-success"></div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-6" style="border-left: 1px solid #eee;">
+						<div class="form-group">
+							<label class="col-sm-12 control-label no-padding-right"> Descargar formato: </label>
+							<div class="col-sm-12">
+								<div class="format-xls">
+									<span onclick="rowAction.formato(this)" key="dowload" style="cursor: pointer;">
+										<img src="images/icon-excel.png">
+									</span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default btn-sm" data-dismiss="modal"><i class="ace-icon fa fa-times bigger-110"></i> Cerrar</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<!-------------------------------------------------------------------------------------------------------------------------->
+<div class="modal fade" id="modalFormUnidadesNuevas" tabindex="-1" role="dialog" aria-labelledby="labelModalFormUnidadesNuevas" data-backdrop="static" data-keyboard="false">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="labelModalFormUnidadesNuevas">Información</h4>
+			</div>
+			<div class="modal-body">
+				<form id="form-unidadn" action="#">
+					<input type="hidden" name="ruta" value="Mantenimiento > Unidades">  
+					<div class="row">
+						<div class="col-md-4 col-xs-12">
+							<label for="selTipon">Tipo:</label>
+							<select id="selTipon" name="selTipon" class="chosen-select" data-placeholder="Seleccionar Tipo">
+								<option value="0">Seleccionar Tipo</option>
+							<?php 
+							if($this->tiposDeUnidad){
+								foreach ($this->tiposDeUnidad as $key => $value) {
+									echo '<option value="'.$value['descripcion'].'">'.$value['descripcion'].'</option>';
+								}
+							}
+							?>
+							</select>
+					</div>
+					<div class="col-md-4 col-xs-12">
+						<label for="textNombren">Número / Descripción</label>
+							<input type="text" id="textNombren" name="textNombren" class="form-control" value="">
+						</div>
+					</div>
+					<div class="space"></div>
+					<div class="row">
+						<div class="col-md-3 col-xs-12">
+							<label for="textAream2n">Área m2</label>
+							<input type="text" id="textAream2n" name="textAream2n" class="form-control" value="">
+						</div>
+						<div class="col-md-3 col-xs-12">
+							<label for="textAreaOcupadan">Área ocupada m2</label>
+							<input type="text" id="textAreaOcupadan" name="textAreaOcupadan" class="form-control" value="">
+						</div>
+						<div class="col-md-3 col-xs-12">
+							<label for="textPctn">% Participación</label>
+							<input type="text" id="textPctn" name="textPctn" class="form-control" value="">
+						</div>
+						<div class="col-md-3 col-xs-12">
+							<label for="textCuotan">% Cuota</label>
+							<input type="text" id="textCuotan" name="textCuotan" class="form-control" value="">
+						</div>
+					</div>
+					<div class="space"></div>
+					<div class="row">
+						<div class="col-md-6 col-xs-12">
+							<label for="selPropietario_">Propietario del inmueble</label><br>
+							<select name="selPropietario_" id="selPropietario_" class="chosen-select">
+							<? echo $optionsUsuariosPorEdificio; ?>
+							</select>
+						</div>
+						<div class="col-md-6 col-xs-12">
+							<label for="selResidente_">Residente del inmueble</label><br>
+							<select name="selResidente_" id="selResidente_" class="chosen-select">
+								<? echo $optionsUsuariosPorEdificio; ?>
+							</select>
+						</div>
+					</div>
+					<div class="space"></div>
+					<div class="row">
+						<div class="col-md-2 col-xs-12">
+							<label for="textNroMunicipaln">N° Municipal</label>
+							<input type="text" id="textNroMunicipaln" name="textNroMunicipaln" class="form-control" value="">
+						</div>
+						<div class="col-md-2 col-xs-12">
+							<label for="textNroPartidan">N° Partida - sunarp</label>
+							<input type="text" id="textNroPartidan" name="textNroPartidan" class="form-control" value="">
+						</div>
+						<div class="col-md-2 col-xs-12">
+							<label for="selPison">Piso:</label>
+							<select id="selPison" name="selPison" class="form-control" data-placeholder="Seleccionar Piso">
+								<!--<option disabled="">Seleccionar Piso</option>-->
+							</select>
+						</div>
+						<div class="col-md-3 col-xs-12">
+							<label for="selUson">Uso:</label>
+							<select id="selUson" name="selUson" class="form-control" data-placeholder="Seleccionar Uso">
+								<option value="">SIN USO</option>
+								<option value="PARQUEO VEHICULAR">PARQUEO VEHICULAR</option>
+							</select>
+						</div>
+					</div>
+					<div class="space"></div>
+					<div class="row">
+						<div class="col-md-8 col-xs-12">
+							<label for="textDireccionn">Dirección</label>
+							<input type="text" id="textDireccionn" name="textDireccionn" class="form-control" value="">
+						</div>
+						<div class="col-md-4 col-xs-12 unidad-padre">
+							<label for="selUnidadPadren">Unidad Padre:</label><br>
+							<!--<select id="selUnidadPadren" name="selUnidadPadren" class="chosen-select" data-placeholder="Seleccionar Padre">-->
+							<select id="selUnidadPadren" name="selUnidadPadren" class="chosen-select">
+								<option value="0">Ninguno</option>
+							<?php
+							if($this->unidadespadresPorEdificio){
+								foreach ($this->unidadespadresPorEdificio as $key => $value) {
+									echo '<option value="'.$value['id'].'">'.$value['descripcion'].'</option>';
+								}
+							}
+							?>
+							</select>
+						</div>
+					</div>
+					<div class="space"></div>
+					<div class="row">
+						<div class="col-md-12 col-xs-12">
+							<textarea name="taDescripcionn" id="taDescripcionn" cols="" rows="2" class="form-control" placeholder="Ingrese una descripción aquí..." draggable="false"></textarea>
+						</div>
+					</div>
+				</form> 
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-success btn-sm btn-save" onclick="rowAction.saveN();"><i class="ace-icon fa fa-floppy-o bigger-110"></i> Guardar</button>
+				<button type="button" class="btn btn-default btn-sm btn-close" data-dismiss="modal"><i class="ace-icon fa fa-times bigger-110"></i> Cerrar</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+
+
+
+
+<!-------------------------------------------------------------------------------------------------------------------------->
+<div class="modal fade" id="modalFormUnidades" tabindex="-1" role="dialog" aria-labelledby="labelModalFormUnidades" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="labelModalFormUnidades">Información</h4>
+      </div>
+      <div class="modal-body">
+    	<form id="form-unidad" action="#">  
+    	<input type="hidden" name="ruta" value="Mantenimiento > Unidades">  
+       	<div class="row">
+       		<div class="col-md-4 col-xs-12">
+	            <label for="selTipo">Tipo:</label>
+	            <select id="selTipo" name="selTipo" class="chosen-select" data-placeholder="Seleccionar Tipo">
+	            	<option value="0">Seleccionar Tipo</option>
+	            	<?php 
+
+	            		if($this->tiposDeUnidad){
+	            			foreach ($this->tiposDeUnidad as $key => $value) {
+	            				echo '<option value="'.$value['descripcion'].'">'.$value['descripcion'].'</option>';
+	            			}
+	            		}
+
+	            	?>
+	            </select>
+	        </div>
+	        <div class="col-md-4 col-xs-12">
+	        	<label for="textNombre">Número / Descripción</label>
+	        	<input type="text" id="textNombre" name="textNombre" class="form-control" value="">
+	        </div>
+       	</div>
+       	<div class="space"></div>
+       	<div class="row">
+       		<div class="col-md-3 col-xs-12">
+	        	<label for="textAream2">Área m2</label>
+	        	<input type="text" id="textAream2" name="textAream2" class="form-control" value="">
+	        </div>
+	        <div class="col-md-3 col-xs-12">
+	        	<label for="textAreaOcupada">Área ocupada m2</label>
+	        	<input type="text" id="textAreaOcupada" name="textAreaOcupada" class="form-control" value="">
+	        </div>
+	        <div class="col-md-3 col-xs-12">
+	        	<label for="textPct">% Participación</label>
+	        	<input type="text" id="textPct" name="textPct" class="form-control" value="">
+	        </div>
+	        <div class="col-md-3 col-xs-12">
+	        	<label for="textCuota">% Cuota</label>
+	        	<input type="text" id="textCuota" name="textCuota" class="form-control" value="">
+	        </div>
+       	</div>
+       	<div class="space"></div>
+       	<div class="row">
+       		<div class="col-md-6 col-xs-12">
+	        	<label for="selPropietario">Propietario del inmueble</label><br>
+	        	<select name="selPropietario" id="selPropietario" class="chosen-select">
+	        		<? echo $optionsUsuariosPorEdificio; ?>
+	        	</select>
+	        </div>
+	        <div class="col-md-6 col-xs-12">
+	        	<label for="selResidente">Residente del inmueble</label><br>
+	        	<select name="selResidente" id="selResidente" class="chosen-select">
+	        		<? echo $optionsUsuariosPorEdificio; ?>
+	        	</select>
+	        </div>
+       	</div>
+       	<div class="space"></div>
+       	<div class="row">
+       		<div class="col-md-2 col-xs-12">
+	        	<label for="textNroMunicipal">N° Municipal</label>
+	        	<input type="text" id="textNroMunicipal" name="textNroMunicipal" class="form-control" value="">
+	        </div>
+	        <div class="col-md-2 col-xs-12">
+	        	<label for="textNroPartida">N° Partida - sunarp</label>
+	        	<input type="text" id="textNroPartida" name="textNroPartida" class="form-control" value="">
+	        </div>
+	        <div class="col-md-2 col-xs-12">
+	        	<label for="selPiso">Piso:</label>
+	            <select id="selPiso" name="selPiso" class="form-control" data-placeholder="Seleccionar Piso">
+	            	<!--<option disabled="">Seleccionar Piso</option>-->
+	            </select>
+	        </div>
+
+	        <div class="col-md-3 col-xs-12">
+	        	<label for="selUso">Uso:</label>
+	            <select id="selUso" name="selUso" class="form-control" data-placeholder="Seleccionar Uso">
+	            	<option value="">SIN USO</option>
+                    <option value="PARQUEO VEHICULAR">PARQUEO VEHICULAR</option>
+	            </select>
+	        </div>
+	        
+       	</div>
+       	<div class="space"></div>
+       	<div class="row">
+       		<div class="col-md-8 col-xs-12">
+	        	<label for="textDireccion">Dirección</label>
+	        	<input type="text" id="textDireccion" name="textDireccion" class="form-control" value="">
+	        </div>
+
+	        <div class="col-md-4 col-xs-12 unidad-padre">
+	        	<label for="selUnidadPadre">Unidad Padre:</label><br>
+	        	<!--<select id="selUnidadPadre" name="selUnidadPadre" class="chosen-select" data-placeholder="Seleccionar Padre">-->
+	            <select id="selUnidadPadre" name="selUnidadPadre" class="chosen-select">
+	            	<option value="0">Ninguno</option>
+	            	<?php
+	            		if($this->unidadespadresPorEdificio){
+	            			foreach ($this->unidadespadresPorEdificio as $key => $value) {
+	            				echo '<option value="'.$value['id'].'">'.$value['descripcion'].'</option>';
+	            			}
+	            		}
+	            	?>
+	            </select>
+	        </div>
+       	</div>
+       	<div class="space"></div>
+       	<div class="row">
+       		<div class="col-md-12 col-xs-12">
+	        	<textarea name="taDescripcion" id="taDescripcion" cols="" rows="2" class="form-control" placeholder="Ingrese una descripción aquí..." draggable="false"></textarea>
+	        </div>
+       	</div>
+       	</form> 
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-success btn-sm btn-save" onclick="rowAction.save();"><i class="ace-icon fa fa-floppy-o bigger-110"></i> Guardar</button>
+        <button type="button" class="btn btn-default btn-sm btn-close" data-dismiss="modal"><i class="ace-icon fa fa-times bigger-110"></i> Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<div class="modal fade" id="modalLoading" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+
+    <div class="modal-body">
+      <div class="row">
+        <div class="col-lg-12" style="text-align: center;">
+          <i class="fa fa-circle-o-notch fa-spin" style="font-size: 100px;margin-bottom: 15px;color: #C15F9D;"></i>
+          <p style="font-weight: 800;color: #555;">Generando archivo...</p>
+        </div>
+      </div>
+    </div>
+     
+    </div>
+  </div>
+</div>
+
+	<?php $this->inlineScript()
+    ->appendFile($this->basePath('/js/jqGrid/src/i18n/grid.locale-es.js'),'text/javascript')
+    ->appendFile($this->basePath('/js/jqGrid/js/jquery.jqGrid.min.js'),'text/javascript')
+    ->appendFile($this->basePath('/script/mantenimiento/departamento.js?t='.time()),'text/javascript')
+  
+    ?>
+
+

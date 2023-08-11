@@ -1,0 +1,75 @@
+
+<div class="row">
+	<div class="col-md-12">
+		<div class="page-head">
+			<h2>Resumen Financiero</h2>
+		</div>
+		<div class="row">
+			<div class="col-xs-6">
+				<h3 class="header smaller lighter blue">Periodo</h3>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-6">
+				<label for="">Mes</label>
+				<select class="chosen-select" id="cboPeriodo" data-placeholder="Seleccione el edificio...">
+					<?php
+					$mes = array("01"=>"ENERO","02"=>"FEBRERO","03"=>"MARZO","04"=>"ABRIL","05"=>"MAYO","06"=>"JUNIO","07"=>"JULIO","08"=>"AGOSTO","09"=>"SEPTIEMBRE","10"=>"OCTUBRE","11"=>"NOVIEMBRE","12"=>"DICIEMBRE");
+					foreach($mes as $key=>$val):
+						?>
+						<option value="<?php echo $key; ?>"><?php echo $val; ?></option>
+					<?php endforeach; ?>
+				</select>
+			</div>
+		</div>
+		<div class="space"></div>
+		<div class="row">
+			<div class="col-md-6">
+				<label for="">Año</label>
+				<select class="chosen-select" id="cboAnio" data-placeholder="Seleccione el edificio...">
+
+					<?php
+					foreach($this->periodos as $val):
+						if($val['year'] == date('Y')):
+							?>
+							<option values="<?php echo $val['year']; ?>" selected='selected'><?php echo $val['year']; ?></option>
+						<?php else: ?>
+							<option values="<?php echo $val['year']; ?>"><?php echo $val['year']; ?></option>
+							<?php
+						endif;
+					endforeach;
+					?>
+					<option values="2018" selected='selected'>2018</option>
+				</select>
+			</div>
+		</div>
+		<div class="space"></div>
+		<div class="row">
+			<div class="col-md-6">
+				<label for="">Tipo de reporte</label>
+				<select class="form-control" id="cboTipo">
+					<option value="detallado">Detallado</option>
+					<option value="resumido">Resumido</option>
+				</select>
+			</div>
+		</div>
+
+		<div class="space"></div>
+		<div class="row">
+			<div class="form-group col-lg-6">
+				<hr>
+				<button id="balance" class="btn btn-sm btn-success col-lg-12 margin-bottom-5" onclick="balance.reporte()">
+					<i class="fa fa-circle-o-notch fa-spin margin-right-5 hide" style="font-size: 17px;"></i>
+					<span>Generar Reporte</span>
+				</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<?php $this->inlineScript()
+    ->appendFile($this->basePath('/script/reporte/balance.js?t='.time()),'text/javascript');
+
+
+
+

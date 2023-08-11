@@ -1,0 +1,165 @@
+<div class="row">
+	<div class="col-xs-12">
+		<div class="table-header" id="jqgrid">
+			<div class="row">
+				<div class="col-xs-4">Unidades</div>
+				<div class="col-xs-8 btn-actions" style="display: none;">
+					<div class="btn-group pull-right" role="group">
+					  <button type="button" class="btn btn-default btn-sm btnOpe" data-accion="pdf" onclick="estadoCuenta.modal(this)">
+					  		<i class="ace fa fa-file-pdf-o"></i> Exportar PDF
+					  </button>
+					  <button type="button" class="btn btn-default btn-sm btnOpe" data-accion="email" onclick="estadoCuenta.modal(this)">
+					  		<i class="ace fa fa-envelope-o"></i> Enviar Correo
+					  </button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<table id="grid-estado"></table>
+    	<div id="grid-pager"></div>
+	</div>
+</div>
+
+<!--PDF-->
+<div class="modal fade" id="modalPdf" tabindex="-1" role="dialog" aria-labelledby="labelModalPdf" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="labelModalPdf">Exportar PDF - Estado de cuenta</h4>
+      </div>
+      <form id="validate" class="form-pdf" method="post" target="_blank">
+	      <div class="modal-body">
+			<input type="text" style="display: none;" name="admin" value="1">
+	      	<input type="text" style="display: none;" id="idrow" name="idrow" value="">
+	      	<input type="hidden" id="" name="typeRender" value="html">
+			<div class="row">
+	       		<div class="col-sm-4">
+		        	<label for="textAream2">Mes</label>
+		        	<?php $month = array("ENERO","FEBRERO","MARZO","ABRIL","MAYO","JUNIO","JULIO","AGOSTO","SEPTIEMBRE","OCTUBRE","NOVIEMBRE","DICIEMBRE"); ?>
+		        	<div>
+		        		<select id="month" name="month">
+			        			<option selected="select" disabled="">Seleccione</option>	
+			        		<?php
+			        			$i=1;
+			        			foreach($month as $val):
+			        		?>
+								<option value="<?php echo $i++; ?>"><?php echo $val; ?></option>
+			        		<?php endforeach; ?>	
+			        	</select>
+		        	</div>
+		        </div>
+		        <div class="col-sm-4">
+		        	<label for="textAreaOcupada">Año</label>
+		        	<div>
+		        		<input type="text" id="year" class="form-control" id="year" name="year" value="<?php echo date('Y'); ?>">
+		        	</div>
+		        </div>
+		        <div class="col-sm-4">
+		        	<label for="textPct">Tipo Recibo</label>
+		        	<div>
+		        		<select class="t-recibo" id="type" name="type">
+			        		<option selected="select" disabled="">Seleccione</option>	
+		                	<option value="estandar">ESTANDAR</option>
+		                    <option value="detallado">DETALLADO</option>
+		                </select>
+		        	</div>
+		        </div>
+	       	</div>
+	      </div>
+	      <div class="modal-footer">
+	        <button type="submit" class="btn btn-success btn-sm btn-save"><i class="ace-icon fa fa-floppy-o bigger-110"></i> Aceptar</button>
+	        <button type="button" class="btn btn-default btn-sm btn-close" data-dismiss="modal"><i class="ace-icon fa fa-times bigger-110"></i> Cerrar</button>
+	      </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!--EMAIL-->
+<div class="modal fade" id="modalEmail" tabindex="-1" role="dialog" aria-labelledby="labelModalEmail" data-backdrop="static" data-keyboard="false">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="labelModalEmail">Enviar Correo - Estado de Cuenta</h4>
+			</div>
+			<form id="mvalidate" class="form-mail" method="post">
+			<div class="modal-body">
+				
+					<!--<div class="col-lg-12 center">
+						<button class="btn btn-lg btn-success btn-md btn-mail" data-accion="estado-cuenta">Est. Cta.</button>
+						<button class="btn btn-lg btn-success btn-md btn-mail" data-accion="balance">Balance</button>
+						<button class="btn btn-lg btn-success btn-md btn-mail" data-accion="ambos">Ambos</button>
+					</div>-->
+					
+					<div class="row">
+						
+	       		<div class="col-sm-4">
+		        	<label>Mes</label>
+		        	<?php $month = array("ENERO","FEBRERO","MARZO","ABRIL","MAYO","JUNIO","JULIO","AGOSTO","SEPTIEMBRE","OCTUBRE","NOVIEMBRE","DICIEMBRE"); ?>
+		        	<div>
+		        		<select id="mmonth" name="mmonth">
+			        			<option selected="select" disabled="">Seleccione</option>	
+			        		<?php
+			        			$i=1;
+			        			foreach($month as $val):
+			        		?>
+								<option value="<?php echo $i++; ?>"><?php echo $val; ?></option>
+			        		<?php endforeach; ?>	
+			        	</select>
+		        	</div>
+		        </div>
+		        <div class="col-sm-4">
+		        	<label>Año</label>
+		        	<div>
+		        		<input type="text" id="myear" class="form-control" id="myear" name="myear" value="<?php echo date('Y'); ?>">
+		        	</div>
+		        </div>
+		        <div class="col-sm-4">
+		        	<label>Tipo</label>
+		        	<div>
+		        		<select class="t-recibo" id="mtype" name="mtype">
+									<option selected="select" disabled="">Seleccione</option>	
+									<option value="estado-cuenta">ESTADO DE CUENTA</option>
+									<option value="balance">BALANCE</option>
+									<option value="ambos">AMBOS</option>
+								</select>
+		        	</div>
+		        </div>
+	       	</div>
+					
+				</div>
+			
+			<div class="modal-footer">
+				<button type='button' class="btn btn-success btn-sm btn-mail" data-accion=""><i class="ace-icon fa fa-envelope bigger-110"></i> Enviar</button>
+				<button type="button" class="btn btn-default btn-sm btn-close" data-dismiss="modal"><i class="ace-icon fa fa-times bigger-110"></i> Cerrar</button>
+			</div>
+			</form>
+		</div>
+	</div>
+
+</div>
+
+<!--PRINT-->
+<div class="modal fade" id="modalPrint" tabindex="-1" role="dialog" aria-labelledby="labelModalPrint" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="labelModalPrint">Estado de cuenta</h4>
+      </div>
+      <div class="modal-body">
+		<p>print</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default btn-sm btn-close" data-dismiss="modal">Cerrar</button>
+        <button type="button" class="btn btn-primary btn-sm btn-save" onclick="">Guardar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<?php $this->inlineScript()
+	->appendFile($this->basePath('public/script/reporte/estado-cuenta.js?t='.time()),'text/javascript')
+?>

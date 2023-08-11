@@ -1,0 +1,100 @@
+<div class="row">
+	<div class="col-xs-12">
+		<div class="table-header">
+			<div class="row">
+				<div class="col-xs-5">
+					<div class="btn-group pull-left">
+						<button data-toggle="dropdown" class="btn btn-sm btnOpe dropdown-toggle ">
+							<i class="ace-icon glyphicon glyphicon-cog bigger-120"></i>
+							<i class="ace-icon fa fa-angle-down icon-on-right"></i>
+						</button>
+						<ul class="dropdown-menu dropdown-danger">
+							<li>
+								<a id="viewUsuariosExternos" href="javascript::void();"> Externos</a>
+							</li>
+							<li class="divider"></li>
+							<li>
+								<a id="viewUsuariosInternos" href="javascript::void();"> Internos</a>
+							</li>
+						</ul>
+					</div><!-- /.btn-group -->
+
+					<span>Acceso de usuarios <small><i class="ace-icon fa fa-angle-double-right"></i> <span id="subtitleIngreso"> Externos</span></small><span>
+				</div>
+				<div class="col-xs-7">
+					<div id="btn-actions" class="btn-group pull-right hidden" role="group" aria-label="...">
+						<button type="button" class="btn btn-default btn-sm btnOpe" onclick="Action.AsignarPermisos()">
+							<i class="glyphicon glyphicon-file"></i>
+							<span>Permisos</span>
+						</button>
+						<button type="button" class="btn btn-default btn-sm btnOpe" onclick="Action.recordarDatos()">
+							<i class="ace-icon fa fa-envelope-o"></i>
+							<span>Recordar Acceso</span>
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<table id="grid-table"></table>
+		<div id="grid-pager"></div>
+	</div>
+</div>
+
+
+
+<div class="modal fade" id="modalPermisos" tabindex="-1" role="dialog" aria-labelledby="labelModalPermisos" data-backdrop="static" data-keyboard="false">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="labelModalPermisos">Permisos >> usuarios externos</h4>
+			</div>
+			<div class="modal-body">
+				<div class="row" id="wrapper_opcionesSis">
+					
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" id="btnAddIngreo" class="btn btn-success btn-sm" onclick="Action.save();">
+					<i class="ace-icon fa fa-floppy-o bigger-110"></i> Guardar
+				</button>
+				<button type="button" class="btn btn-default btn-sm" data-dismiss="modal">
+					<i class="ace-icon fa fa-times bigger-110"></i> Cerrar
+				</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+<style>
+	ul.list-group {
+	    margin: 0 0 10px 45px;
+	}
+	.list-group-item{
+		padding:5px 5px!important;
+	}
+
+	.icon-list{
+		display: inline-block;
+	    text-shadow: 0 -1px 0 rgba(0,0,0,.25)!important;
+	    border: 5px solid #FFF;
+	    border-radius: 43px;
+	    cursor: pointer;
+	    vertical-align: middle;
+	    background-color: #f5f5f5;
+	    padding: 5px;
+	}
+
+	.item-group{
+		border:1px solid #f5f5f5;
+	}
+
+
+</style>
+
+
+<?php $this->inlineScript()
+    ->appendFile($this->basePath('/script/seguridad/useraccess.js?t='.time()),'text/javascript')
+?>

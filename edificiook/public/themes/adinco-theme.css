@@ -1,0 +1,170 @@
+
+
+/*nav panel*/
+.navbar{
+    background-color: #2273B6;
+}
+
+.ace-nav>li.fondo_color>a {
+    background-color: #296ba2;
+}
+.ace-nav>li.fondo_color>a:hover, .ace-nav>li.fondo_color>a:focus {
+    background-color: #135994;
+}
+
+/*barra de botones de operaciones*/
+.table-header .btnOpe{
+    background-color: #2273b6!important;
+    border: 1px solid #6191b9!important;
+    border-radius: 5px!important;
+}
+.table-header .btnOpe:hover,table-header .btnOpe:focus{
+    background-color: #2273b6!important;
+    border: 1px solid #ffffff!important;
+}
+.table-header .btn-group{
+    margin-top: 5px;
+    margin-right:10px;
+}
+.table-header .btn.dropdown-toggle {
+    background-color: #2273b6!important;
+}
+/*Estilos comunes*/
+div.space{
+    margin:4px 0px;
+}
+.pointer{
+    cursor: pointer;
+}
+
+
+.ui-search-input input{
+    padding: 0px;
+    width: 100%;
+}
+
+
+/*Panels */
+.panel-green{
+    border-color: #5cb85c;
+}
+.panel-green > .panel-heading {
+    border-color: #5cb85c;
+    color: #fff;
+    background-color: #5cb85c;
+}
+.panel-green > a {
+    color: #5cb85c;
+}
+.panel-yellow {
+    border-color: #f0ad4e;
+}
+.panel-yellow > .panel-heading {
+    border-color: #f0ad4e;
+    color: #fff;
+    background-color: #f0ad4e;
+}
+.panel-yellow > a {
+    color: #f0ad4e;
+}
+.panel-red{
+    border-color: #d9534f;
+}
+.panel-red > .panel-heading {
+    border-color: #d9534f;
+    color: #fff;
+    background-color: #d9534f;
+}
+.panel-red > a {
+    color: #d9534f;
+}
+
+#t_tblConsumo{
+    background: #307ecc;
+    color: #fff;
+    font-weight: bold;
+}
+/*jqgrid empty rows mensaje*/
+#jqmsg_emptyrows{
+    position: absolute;
+    top: 45%;
+    left: 40%;
+    width: auto;
+    height: auto;
+    z-index: 101;
+    padding: 6px;
+    margin: 5px;
+    text-align: center;
+    font-size: 12px;
+}
+.label_1{
+    font-weight:600; 
+}
+
+.datepicker{z-index: 10000!important;}
+
+.question-button{
+    height: 37px;
+    color: #004193;
+    padding: 0 12px;
+    line-height: 32px;
+    text-align: center;
+    border-radius: 100%;
+    background: #E1F6FF;
+    border: 2px solid #A1C6F2;
+    -webkit-box-shadow: 0 1px 0 1px rgba(0,0,0,.2);
+    box-shadow: 0 1px 0 1px rgba(0,0,0,.2);
+    position: absolute;
+}
+
+
+/*login*/
+
+.b-login .main-container:before{
+    background-color:#f0eff0!important;
+}
+
+#login-box .widget-body{
+    background-color: #f0eff0;
+}
+
+#loginForm .input-icon>input {
+    height: 40px;
+    padding-left: 30px;
+    padding-right: 6px;
+    background-color: #f9f9f9!important;
+    border-radius: 8px!important;
+}
+#loginForm .input-icon>.ace-icon{
+    line-height: 34px;
+}
+#loginForm .lbl{
+    font-size: 12px;
+}
+#loginForm .common-error-msg ul{
+    list-style: none;
+    margin: 0px;
+}
+#loginForm .common-error-msg ul li{
+    font-style: italic;
+    color: #D4351A;
+}
+.msg_denied li{
+    background-color: #d35351;
+    padding: 10px;
+    color:#f1f1f1;
+    border-radius: 8px
+}
+#loginForm .btn-login{
+    border-radius: 5px!important;
+}
+#loginForm .btn-login, .btn:focus{
+    background-color: #2273B6!important;
+    border-color: #2273B6;
+}
+#loginForm .btn-login:hover{
+    background-color: #195b92!important;
+    border-color: #2273B6;
+}
+
+

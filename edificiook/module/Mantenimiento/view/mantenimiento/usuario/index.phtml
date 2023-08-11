@@ -1,0 +1,424 @@
+<div class="row">
+	<div class="col-md-12">
+		<div class="table-header">
+			<div class="row">
+				<div class="col-xs-5">
+					<span>Usuarios <span>
+				</div>
+				<div class="col-xs-7">
+					
+					<div id="btn-actions" class="btn-group pull-right hidden" role="group" aria-label="...">
+						<button type="button" class="btn btn-default btn-sm btnOpe" onclick="Action.viewModalEditar()">
+							<i class="glyphicon glyphicon-pencil"></i>
+							<span>Editar</span>
+						</button>
+						<button type="button" class="btn btn-default btn-sm btnOpe" onclick="Action.confirmarDelete()">
+							<i class="glyphicon  glyphicon-trash"></i>
+							<span>Eliminar</span>
+						</button>
+					</div>
+					<div id="btn-actions-default" class="btn-group pull-right" role="group" aria-label="...">
+						<button type="button" class="btn btn-default btn-sm btnOpe" onclick="Action.new()">
+							<i class="glyphicon glyphicon-file"></i>
+							<span>Nuevo</span>
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<table id="grid-table"></table>
+		<div id="grid-pager"></div>
+	</div>
+</div>
+
+
+<div class="modal fade" id="modalNuevoUsuario" tabindex="-1" role="dialog" aria-labelledby="labelModalFormNuevoUsuario" data-backdrop="static" data-keyboard="false">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="labelModalFormNuevoUsuario">Crear un nuevo usuario</h4>
+			</div>
+			<div class="modal-body">
+				<form action="javascript::void();" id="form-1">
+					<div class="row">
+						<div class="col-md-6">
+							<div class="form-group">
+								<select name="selTipo" id="selTipo" class="form-control input-sm">
+									<option value="PN">Persona Natural</option>
+									<option value="PJ">Persona Jurídica</option>
+								</select>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-6">
+							<div class="form-group">
+								<label for="textNombre" id="labelNombre">Nombre</label>
+								<input type="text" id="textNombre" name="textNombre" class="form-control input-sm" value="">
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group">
+								<label for="textApellido" id="labelApellido">Apellido</label>
+								<input type="text" id="textApellido" name="textApellido" class="form-control input-sm" value="">
+							</div>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-md-6">
+							<div class="form-group">
+								<label for="textCorreo">Correo</label>
+								<input type="text" id="textCorreo" name="textCorreo" class="form-control input-sm" value="">
+							</div>
+						</div>
+						<div class="col-md-3">
+							<div class="form-group">
+								<label for="textDni">D.N.I</label>
+								<input type="text" id="textDni" name="textDni" class="form-control input-sm numero" value="" maxlength="8">
+							</div>
+						</div>
+						<div class="col-md-3">
+							<div class="form-group">
+								<label for="textRuc">R.U.C</label>
+								<input type="text" id="textRuc" name="textRuc" class="form-control input-sm numero" value="" maxlength="11">
+							</div>
+						</div>
+					</div>
+					<div id="wrapper-logintop" class="row">
+						<div class="col-md-12">
+							<label for=""><a href="javascript::void();" id="btn-asignarDatosLogin">Asignar datos de acceso:</a></label>
+						</div>
+					</div>
+					<div id="wrapper-login" class="hidden">
+						<input type="hidden" id="tipoPass" name="tipoPass" value="">
+						<div class="row">
+							<div class="col-md-12">
+								<h5 class="title"><b>Datos de acceso al sistema</b></h5>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-4">
+								<div class="form-group">
+									<label for="textUsername">Usuario</label>
+									<input type="text" id="textUsername" name="textUsername" class="form-control input-sm" value="">
+								</div>
+							</div>
+							<div id="wrapper-passwordDefault" class="">
+								<div class="col-md-4">
+									<div class="form-group">
+										<label for="textPassDefault">Contraseña</label>
+										<input type="text" id="textPassDefault" name="textPassDefault" readonly="readonly" class="form-control input-sm" value="">
+									</div>
+								</div>
+								<div class="col-md-3">
+									<div class="form-group" style="padding-top: 29px;" >
+										<a id="btn-definirPass" href="javascript::void();"> Definir contraseña</a> 
+									</div>
+								</div>
+							</div>
+							<div id="wrapper-passwordPersonalizado" class="hidden">
+								<div class="col-md-4">
+									<div class="form-group">
+										<label for="textPassPerzo">Contraseña</label>
+										<input type="password" id="textPassPerzo" name="textPassPerzo" class="form-control input-sm" value="">
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="form-group">
+										<label for="textRepetirPassPerzo">Repetir contraseña</label>
+										<input type="password" id="textRepetirPassPerzo" name="textRepetirPassPerzo" class="form-control input-sm" value="">
+									</div>
+								</div>
+								<div class="col-md-offset-4 col-md-8 wrapper-rowLevelSecurityPass">
+									<div class="label">
+										Nivel de seguridad :
+									</div>
+									<div id="rptaLevelPass"></div>
+									<div class="bk-testpass">
+										<div class="progress">
+									  		<div id="progressbar-securityPass" class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
+									  		</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-12 rowGenerarPass">
+									<div class="form-group" style="padding-top: 0px;" >
+										<a id="btn-generarPasswordAuto" href="javascript::void();"> Generar contraseña automáticamente</a> 
+									</div>
+								</div>
+								
+							</div>
+						</div>
+					</div>
+					<div id="wrapper-loginfooter" class="row hidden">
+						<div class="col-md-12">
+							<label for=""> <a href="javascript::void();" id="btn-omitirDatosLogin">Omitir datos de acceso:</a></label>
+						</div>
+					</div>
+				</form>
+				<form action="javascript::void();" id="form-2" class="hidden">
+
+					<div class="row">
+						<div class="col-md-3">
+							<div class="form-group">
+								<label for="textCelular">Celular</label>
+								<input type="text" id="textCelular" name="textCelular" class="form-control input-sm numero" value="" maxlength="15">
+							</div>
+						</div>
+						<div class="col-md-3">
+							<div class="form-group">
+								<label for="textTelefono">Teléfono</label>
+								<input type="text" id="textTelefono" name="textTelefono" class="form-control input-sm numero" value="" maxlength="15">
+							</div>
+						</div>
+						<div class="col-md-3">
+							<div class="form-group">
+								<label for="textTelefonoOfi">Teléfono oficina</label>
+								<input type="text" id="textTelefonoOfi" name="textTelefonoOfi" class="form-control input-sm numero" value="" maxlength="15">
+							</div>
+						</div>
+						<div class="col-md-3">
+							<div class="form-group">
+								<label for="textFax">Fax</label>
+								<input type="text" id="textFax" name="textFax" class="form-control input-sm numero" value="" maxlength="20">
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-6">
+							<div class="form-group">
+								<label for="textRPL">Representante legar</label>
+								<input type="text" id="textRPL" name="textRPL" class="form-control input-sm" value="">
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group">
+								<label for="textDireccion">Dirección</label>
+								<input type="text" id="textDireccion" name="textDireccion" class="form-control input-sm" value="">
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<div id="wrapper-btnVerInforAdicional" class="pull-left">
+					<button id="btn-verInfoAdicional" type="button" class="btn btn-default btn-sm"> Información adicional</button>
+				</div>
+				<div id="wrapper-btnNextBack" class="pull-left hidden">
+					<button id="btn-backForm" type="button" class="btn btn-default btn-sm"> Anterior</button>
+				</div>
+				<div class="pull-right">
+					<button id="btnCrearUsuario" type="button" class="btn btn-success btn-sm"><i class="ace-icon fa fa-floppy-o bigger-110"></i> Crear</button>
+	        		<button type="button" class="btn btn-default btn-sm" data-dismiss="modal"><i class="ace-icon fa fa-times bigger-110"></i> Cerrar</button>
+				</div>
+	      	</div>
+		</div>
+	</div>
+</div>
+
+
+<div class="modal fade" id="modalEditarUsuario" tabindex="-1" role="dialog" aria-labelledby="labelModalEditarUsuario" data-backdrop="static" data-keyboard="false">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="labelModalEditarUsuario">Editar de usuario</h4>
+			</div>
+			<div class="modal-body">
+				<form action="javascript::void();" id="form-editarUsuario" class="">
+					<div class="row">
+						<div class="col-md-6">
+							<div class="form-group">
+								<select name="selTipo" id="frmEdit_selTipo" class="form-control input-sm">
+									<option value="PN">Persona Natural</option>
+									<option value="PJ">Persona Jurídica</option>
+								</select>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-6">
+							<div class="form-group">
+								<label id="frmEdit_labelNombre" for="textNombre">Nombre</label>
+								<input type="text" id="frmEdit_textNombre" name="textNombre" class="form-control input-sm" value="">
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group">
+								<label id="frmEdit_labelApellido" for="textApellido">Apellido</label>
+								<input type="text" id="frmEdit_textApellido" name="textApellido" class="form-control input-sm" value="">
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-6">
+							<div class="form-group">
+								<label for="textCorreo">Correo</label>
+								<input type="text" id="frmEdit_textCorreo" name="textCorreo" class="form-control input-sm" value="">
+							</div>
+						</div>
+						<div class="col-md-3">
+							<div class="form-group">
+								<label for="textDni">D.N.I</label>
+								<input type="text" id="frmEdit_textDni" name="textDni" class="form-control input-sm numero" value="" maxlength="8">
+							</div>
+						</div>
+						<div class="col-md-3">
+							<div class="form-group">
+								<label for="textRuc">R.U.C</label>
+								<input type="text" id="frmEdit_textRuc" name="textRuc" class="form-control input-sm numero" value="" maxlength="11">
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-3">
+							<div class="form-group">
+								<label for="textCelular">Celular</label>
+								<input type="text" id="frmEdit_textCelular" name="textCelular" class="form-control input-sm numero" value="" maxlength="15">
+							</div>
+						</div>
+						<div class="col-md-3">
+							<div class="form-group">
+								<label for="textTelefono">Teléfono</label>
+								<input type="text" id="frmEdit_textTelefono" name="textTelefono" class="form-control input-sm numero" value="" maxlength="15">
+							</div>
+						</div>
+						<div class="col-md-3">
+							<div class="form-group">
+								<label for="textTelefonoOfi">Teléfono oficina</label>
+								<input type="text" id="frmEdit_textTelefonoOfi" name="textTelefonoOfi" class="form-control input-sm numero" value="" maxlength="15">
+							</div>
+						</div>
+						<div class="col-md-3">
+							<div class="form-group">
+								<label for="textFax">Fax</label>
+								<input type="text" id="frmEdit_textFax" name="textFax" class="form-control input-sm" value="">
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-6">
+							<div class="form-group">
+								<label for="textRPL">Representante legal</label>
+								<input type="text" id="frmEdit_textRPL" name="textRPL" class="form-control input-sm" value="">
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group">
+								<label for="textDireccion">Dirección</label>
+								<input type="text" id="frmEdit_textDireccion" name="textDireccion" class="form-control input-sm" value="">
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12">
+							<h5>Actualizar Datos de acceso:</h5>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-6">
+							<div class="form-group">
+								<label for="textRPL">Usuario</label>
+								<input type="text" id="frmEdit_textUsername" name="textUsername" class="form-control input-sm" value="">
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group">
+								<label for="textDireccion">Contraseña</label>
+								<input type="text" id="frmEdit_textPass" name="textPass" class="form-control input-sm" value="">
+							</div>
+						</div>
+					</div>
+
+					<button type="submit" id="submit_saveEditUsu" class="hidden"></button>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button id="btnSaveEdit" type="button" class="btn btn-success btn-sm"><i class="ace-icon fa fa-floppy-o bigger-110"></i> Guardar</button>
+	        	<button type="button" class="btn btn-default btn-sm" data-dismiss="modal"><i class="ace-icon fa fa-times bigger-110"></i> Cerrar</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+<div class="modal fade" id="modalConfirmarEliminacion" tabindex="-1" role="dialog" aria-labelledby="labelModalConfirmarEliminacion" data-backdrop="static" data-keyboard="false">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title"><span>Usuarios</span></h4>
+			</div>
+			<div class="modal-body">
+				<div class="row">
+					<div class="col-xs-12">
+						<div class="form-group" style="height: 50px;">
+							<span class="ace-icon question-button bigger-200">?</span>
+							<div style="padding-left: 50px; font-size: 15px;">¿Está seguro de que desea eliminar el usuario seleccionado?</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<center>
+					<button id="btnConfirmarProcesar" type="button" class="btn btn-success btn-sm" onclick="Action.deteleUsuario();"> Aceptar</button>
+	        		<button type="button" class="btn btn-default btn-sm" data-dismiss="modal"> Cancelar</button>	
+				</center>
+	      	</div>
+		</div>
+	</div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+	.wrapper-rowLevelSecurityPass{
+		display: inline-block;
+		margin-top: -14px;
+    	padding-left: 12px
+	}
+	.wrapper-rowLevelSecurityPass .label,wrapper-rowLevelSecurityPass #rptaLevelPass{
+		float: left;
+		background-color: #fff!important;
+    	color: #428bca;
+    	font-size: 11px;
+	}
+
+	.rowGenerarPass{
+		display: inline-block;
+	}
+	.bk-testpass{
+	    width: 47%;
+	    background-color: #797b7b;
+	    clear: both;
+	}
+	.bk-testpass .progress{
+		height: 4px;
+	}
+	
+	ul.list-group {
+	    margin: 0 0 10px 10px;
+	}
+	.list-group-item{
+		padding:5px 5px!important;
+	}
+</style>
+	
+<?php $this->inlineScript()
+    ->appendFile($this->basePath('/script/mantenimiento/usuario.js?t='.time()),'text/javascript')
+?>

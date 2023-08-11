@@ -1,0 +1,30 @@
+[31-Aug-2016 13:52:50 UTC] PHP Warning:  POST Content-Length of 15383256 bytes exceeds the limit of 8388608 bytes in Unknown on line 0
+[23-Jan-2017 06:03:22 America/Lima] PHP Warning:  session_write_close(): write failed: Disk quota exceeded (122) in /home/vpsedificiook/public_html/vendor/zendframework/zend-session/src/SessionManager.php on line 204
+[23-Jan-2017 06:03:22 America/Lima] PHP Warning:  session_write_close(): Failed to write session data (files). Please verify that the current setting of session.save_path is correct (/tmp) in /home/vpsedificiook/public_html/vendor/zendframework/zend-session/src/SessionManager.php on line 204
+[23-Jan-2017 06:03:22 America/Lima] PHP Warning:  session_write_close(): write failed: Disk quota exceeded (122) in /home/vpsedificiook/public_html/vendor/zendframework/zend-session/src/SessionManager.php on line 204
+[23-Jan-2017 06:03:22 America/Lima] PHP Warning:  session_write_close(): Failed to write session data (files). Please verify that the current setting of session.save_path is correct (/tmp) in /home/vpsedificiook/public_html/vendor/zendframework/zend-session/src/SessionManager.php on line 204
+[23-Jan-2017 06:03:37 America/Lima] PHP Warning:  session_write_close(): write failed: Disk quota exceeded (122) in /home/vpsedificiook/public_html/vendor/zendframework/zend-session/src/SessionManager.php on line 204
+[23-Jan-2017 06:03:37 America/Lima] PHP Warning:  session_write_close(): Failed to write session data (files). Please verify that the current setting of session.save_path is correct (/tmp) in /home/vpsedificiook/public_html/vendor/zendframework/zend-session/src/SessionManager.php on line 204
+[23-Jan-2017 06:03:37 America/Lima] PHP Warning:  session_write_close(): write failed: Disk quota exceeded (122) in /home/vpsedificiook/public_html/vendor/zendframework/zend-session/src/SessionManager.php on line 204
+[23-Jan-2017 06:03:37 America/Lima] PHP Warning:  session_write_close(): Failed to write session data (files). Please verify that the current setting of session.save_path is correct (/tmp) in /home/vpsedificiook/public_html/vendor/zendframework/zend-session/src/SessionManager.php on line 204
+[23-Jan-2017 06:04:29 America/Lima] PHP Warning:  session_write_close(): write failed: Disk quota exceeded (122) in /home/vpsedificiook/public_html/vendor/zendframework/zend-session/src/SessionManager.php on line 204
+[23-Jan-2017 06:04:29 America/Lima] PHP Warning:  session_write_close(): Failed to write session data (files). Please verify that the current setting of session.save_path is correct (/tmp) in /home/vpsedificiook/public_html/vendor/zendframework/zend-session/src/SessionManager.php on line 204
+[23-Jan-2017 06:04:30 America/Lima] PHP Warning:  session_write_close(): write failed: Disk quota exceeded (122) in /home/vpsedificiook/public_html/vendor/zendframework/zend-session/src/SessionManager.php on line 204
+[23-Jan-2017 06:04:30 America/Lima] PHP Warning:  session_write_close(): Failed to write session data (files). Please verify that the current setting of session.save_path is correct (/tmp) in /home/vpsedificiook/public_html/vendor/zendframework/zend-session/src/SessionManager.php on line 204
+[23-Jan-2017 06:09:41 America/Lima] PHP Warning:  session_write_close(): write failed: Disk quota exceeded (122) in /home/vpsedificiook/public_html/vendor/zendframework/zend-session/src/SessionManager.php on line 204
+[23-Jan-2017 06:09:41 America/Lima] PHP Warning:  session_write_close(): Failed to write session data (files). Please verify that the current setting of session.save_path is correct (/tmp) in /home/vpsedificiook/public_html/vendor/zendframework/zend-session/src/SessionManager.php on line 204
+[23-Jan-2017 06:09:42 America/Lima] PHP Warning:  session_write_close(): write failed: Disk quota exceeded (122) in /home/vpsedificiook/public_html/vendor/zendframework/zend-session/src/SessionManager.php on line 204
+[23-Jan-2017 06:09:42 America/Lima] PHP Warning:  session_write_close(): Failed to write session data (files). Please verify that the current setting of session.save_path is [04-Mar-2017 00:07:03 UTC] PHP Warning:  POST Content-Length of 25054129 bytes exceeds the limit of 8388608 bytes in Unknown on line 0
+[05-May-2017 15:39:43 UTC] PHP Warning:  POST Content-Length of 60877093 bytes exceeds the limit of 8388608 bytes in Unknown on line 0
+[05-May-2017 16:04:05 UTC] PHP Warning:  POST Content-Length of 60877093 bytes exceeds the limit of 8388608 bytes in Unknown on line 0
+[05-May-2017 16:16:23 UTC] PHP Warning:  POST Content-Length of 60877087 bytes exceeds the limit of 8388608 bytes in Unknown on line 0
+[02-Apr-2018 14:58:23 UTC] PHP Warning:  POST Content-Length of 27074634 bytes exceeds the limit of 8388608 bytes in Unknown on line 0
+[02-Apr-2018 15:14:18 UTC] PHP Warning:  POST Content-Length of 27074637 bytes exceeds the limit of 8388608 bytes in Unknown on line 0
+[02-Apr-2018 15:16:12 UTC] PHP Warning:  POST Content-Length of 27074637 bytes exceeds the limit of 8388608 bytes in Unknown on line 0
+[02-Apr-2018 15:21:02 UTC] PHP Warning:  POST Content-Length of 27074637 bytes exceeds the limit of 8388608 bytes in Unknown on line 0
+[02-Apr-2018 15:22:55 UTC] PHP Warning:  POST Content-Length of 27074637 bytes exceeds the limit of 8388608 bytes in Unknown on line 0
+[02-Apr-2018 15:24:48 UTC] PHP Warning:  POST Content-Length of 27074637 bytes exceeds the limit of 8388608 bytes in Unknown on line 0
+[02-Apr-2018 15:26:41 UTC] PHP Warning:  POST Content-Length of 27074637 bytes exceeds the limit of 8388608 bytes in Unknown on line 0
+[02-Apr-2018 15:28:35 UTC] PHP Warning:  POST Content-Length of 27074637 bytes exceeds the limit of 8388608 bytes in Unknown on line 0
+[02-Apr-2018 17:03:38 UTC] PHP Warning:  POST Content-Length of 27074637 bytes exceeds the limit of 8388608 bytes in Unknown on line 0
+[02-Apr-2018 17:09:42 UTC] PHP Warning:  POST Content-Length of 27074637 bytes exceeds the limit of 8388608 bytes in Unknown on line 0

@@ -1,0 +1,65 @@
+.menu_tools .dropdown-menu{
+right: 0;
+left:inherit;
+width: 298px;
+}
+.menu_tools .notification-list .media-body h5 {
+text-overflow: ellipsis;
+white-space: nowrap;
+display: block;
+width: 100%;
+overflow: hidden;
+line-height: 22px;
+font-size: 13px;
+font-weight: 700;
+margin: 0px;
+}
+.menu_tools .dropdown-menu-lg .media-body p {
+color: #7a7d84;
+line-height: 16px;
+}
+.menu_tools .m-0 {
+margin: 0 !important;
+}
+li.menu_tools{
+line-height: 15px;
+border-left: 0;
+}
+.menu_tools .list-group-item {
+border: none;
+border-bottom: 2px solid #f5f5f5;
+padding: 14px 20px;
+border-radius: 0 !important;
+}
+.menu_tools .notification-list .media-left {
+float: left;
+display: inherit;
+}
+.menu_tools .notification-list em {
+width: 36px;
+color: #ffffff;
+text-align: center;
+height: 36px;
+line-height: 36px;
+border-radius: 50%;
+margin-top: 2px;
+font-size: 16px;
+}
+.menu_tools .media-body, .media-left {
+display: table-cell;
+vertical-align: top;
+}
+.menu_tools .media-left {
+padding-right: 10px;
+}
+.menu_tools .dropdown-menu:before {
+content: '';
+display: inline-block;
+border-left: 8px solid transparent;
+border-right: 8px solid transparent;
+border-bottom: 8px solid #fff;
+position: absolute;
+top: -7px;
+right: 9px;
+}
+

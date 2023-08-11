@@ -1,0 +1,1241 @@
+<?php
+$currentYear=date('Y');
+$listYear=array();
+
+
+for($i=1;$i<=4;$i++){
+	$listYear[]=$currentYear;
+	$currentYear--;
+}
+
+$nombreMeses=array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
+
+?>
+<style>
+	
+	#tblPagos tr{
+		cursor: pointer;
+	}
+	table tr#TOTAL_INGRESO, table tr#TOTAL_COBRADO, table tr#TOTAL_PENDIENTE, table tr#TOTAL_BANCO{
+		background-color: #F3F3F3!important;
+	}
+
+	table#tblConceptosReadOnly label{
+		display:none;
+	}
+</style>
+<div id="pageTab_grid" class="row" style="/*display: none*/;">
+	<div class="col-xs-12">
+		<div class="table-header">
+			<div class="row">
+				<div class="col-xs-5">
+					<div class="btn-group pull-left">
+						<button data-toggle="dropdown" class="btn btn-sm btnOpe dropdown-toggle ">
+							<i class="ace-icon glyphicon glyphicon-cog bigger-120"></i>
+							<i class="ace-icon fa fa-angle-down icon-on-right"></i>
+						</button>
+						<ul class="dropdown-menu dropdown-danger">
+							<li>
+								<a id="viewUnidadesPrincipales" href="#"> Unidades principales</a>
+							</li>
+							<li class="divider"></li>
+							<li>
+								<a id="viewUnidadesSecundarias" href="#"> Unidades secundarias</a>
+							</li>
+						</ul>
+					</div><!-- /.btn-group -->
+
+					<span>Ingreso <small><i class="ace-icon fa fa-angle-double-right"></i> <span id="subtitleIngreso">Unidades principales</span></small><span>
+				</div>
+				<div class="col-xs-7">
+					<div class="btn-actions-default btn-group pull-right" role="group" aria-label="...">
+					  <button type="button" id="btnImportar" class="btn btn-default btn-sm btnOpe" onclick="">
+					  		<span>Importar</span>
+					  		<i class="ace fa fa-table"></i>
+					  </button>
+					  <button type="button" id="btnDescargar" class="btn btn-default btn-sm btnOpe" onclick="">
+					  		<span>Descargar </span>
+					  		<i class="ace fa fa-cloud-download"></i>
+					  </button>
+					</div>
+					<div id="btn-actions" class="btn-group pull-right hidden" role="group" aria-label="...">
+						<button type="button" class="btn btn-default btn-sm btnOpe" onclick="Action.viewModalIngreso()">
+					  		<i class="glyphicon glyphicon-file"></i>
+					  		<span>Nuevo</span>
+					  	</button>
+					</div>
+					<div class="btn-group pull-right" role="group" aria-label="...">
+						<button type="button" class="btn btn-default btn-sm btnOpe" onclick="DateControls.backYear()">
+					  		<i class="ace-icon fa fa-angle-left biger-150"></i>
+					  	</button>
+					  	<button  type="button" class="btn btn-default btn-sm btnOpe">
+					  		<span id="currentYear"><?php echo date('Y');?></span>
+					  	</button>
+					  	<button type="button" class="btn btn-default btn-sm btnOpe" onclick="DateControls.nextYear()">
+					  		<i class="ace-icon fa fa-angle-right"></i>
+					  	</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<table id="grid-table"></table>
+		<div id="grid-pager"></div>
+	</div>
+</div>
+
+<div id="pageTab_detalleIngresoParcial" class="row" style="display:none;">
+	<div class="modal-header">
+		<button type="button" id="btn-closeDetalle" class="close"><span aria-hidden="true">×</span></button>
+		<h4 class="modal-title" id="labelNuevoIngreso"><span>Ingreso <small><i class="ace-icon fa fa-angle-double-right"></i> <span id="subtitleIngreso">Ingreso bancario</span></small><span>
+				</span></span></h4>
+	</div>
+	<div class="col-md-12">
+		<table id="grid-tableIP"></table>
+		<div id="grid-pagerIP"></div>
+	</div>
+</div>
+
+
+<div class="modal fade" id="modalPagoTotal" tabindex="-1" role="dialog" aria-labelledby="labelModalFormIngreso" data-backdrop="static" data-keyboard="false">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="labelModalFormIngreso">Pago Total</h4>
+			</div>
+			<div class="modal-body">
+				<div style="width: 100%;">
+					<div class="col-xs-12">
+						<table id="tblIngresosPendienteDePago" class="table table-striped table-hover">
+						 	<thead>
+						 		<tr>
+						 			<th><i class="ace-icon fa fa-caret-right blue"></i> Mes</th>
+						 			<th width="100"><div style="text-align: right;"><i class="ace-icon fa fa-caret-right blue"></i> Total</div></th>
+						 			<th width="100"><div style="text-align: right;"><i class="ace-icon fa fa-caret-right blue"></i> Pagado</div></th>
+						 			<th width="100"><div style="text-align: right;"><i class="ace-icon fa fa-caret-right blue"></i> Debe</div></th>
+						 		</tr>
+						 	</thead>
+						 	<tbody></tbody>
+						 	<tfoot></tfoot>
+						</table>
+					</div>
+				</div>
+				<form action="#" id="form-pagototal">
+					<div class="wrapperPagoTotalDeuda profile-user-info profile-user-info-striped">
+						<div class="profile-info-row">
+							<div class="profile-info-name">Importe S/.</div>
+							<div class="profile-info-value">
+								<input id="textImporte_PT" name="textImporte" type="text" class="form-control input-sm precio" value="0.00">
+							</div>
+						</div>
+						<div class="profile-info-row">
+							<div class="profile-info-name">Banco</div>
+							<div class="profile-info-value">
+								<select id="selBanco_PT" name="selBanco"  class="form-control input-sm">
+									<option value="" selected>Ningún banco / Efectivo</option>
+									<option value="BANCO DE CREDITO DEL PERU">Banco de Crédito</option>
+									<option value="BBVA BANCO CONTINENTAL">BBVA Banco Continental</option>
+									<option value="BANCO DE LA NACIÓN">Banco de la Nación</option>
+									<option value="INTERBANK">Interbank</option>
+								</select>
+							</div>
+						</div>
+						<div class="form-group profile-info-row">
+							<div class="profile-info-name">N° Operación</div>
+							<div class="profile-info-value">
+								<input type="text" id="textNroOperacion_PT" name="textNroOperacion" class="form-control input-sm">
+								<span class="e"></span>
+							</div>
+						</div>
+						<div class="form-group profile-info-row">
+							<div class="profile-info-name">Fecha Pago</div>
+							<div class="profile-info-value">
+								<input type="text" id="textFechaPago_PT" name="textFechaPago" class="form-control input-sm mask-fecha datepicker-right" placeholder="00-00-0000">
+								<span class="e"></span>
+							</div>
+						</div>
+						<div class="profile-info-row">
+							<div class="profile-info-name">Documento:</div>
+							<div class="profile-info-value">
+								<select id="selTipoDoc_PT" name="selTipoDoc"  class="form-control input-sm">
+									<option value="BOLETA">BOLETA</option>
+									<option value="FACTURA">FACTURA</option>
+									<option value="RECIBO DE MANTENIMIENTO">RECIBO DE MANTENIMIENTO</option>
+								</select>
+							</div>
+						</div>
+					</div>
+					<div class="wrapperPagoTotalDeuda" style="width:100%">
+						<div class="col-xs-12">
+							<textarea id="taObservacion_PT" name="taObservacion" class="form-control" cols="7" rows="2" placeholder="Observación" style="resize:none"></textarea>
+						</div>
+					</div>
+					<div style="clear: both;"></div>
+					<button  id="submitPagoTotal" type="submit"  class="hide"></button>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button id="btnSavePagoTotal" type="button" class="btn btn-success btn-sm"><i class="glyphicon glyphicon-play-circle"></i> Efecturar Pago</button>
+	        	<button type="button" class="btn btn-warning btn-sm" data-dismiss="modal"><i class="glyphicon glyphicon-repeat"></i> Cerrar</button>
+	        	
+	      	</div>
+		</div>
+	</div>
+</div>
+
+
+
+
+
+<div class="modal fade" id="modalListarPagos" tabindex="-1" role="dialog" aria-labelledby="labelModalListarPagos" data-backdrop="static" data-keyboard="false">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="labelModalListarPagos"><span>Lista de Pagos</span></h4>
+			</div>
+			<div class="modal-body">
+				<div style="width: 100%;">
+					<div class="col-xs-12">
+						<table id="tblIngresosParciales" class="table table-striped table-hover">
+						 	<thead>
+						 		<tr>
+						 			<th></th>
+						 			<th><i class="ace-icon fa fa-caret-right blue"></i> Fecha</th>
+						 			<th><i class="ace-icon fa fa-caret-right blue"></i> Tipo Doc</th>
+						 			<th><i class="ace-icon fa fa-caret-right blue"></i> N° Operación</th>
+						 			<th><i class="ace-icon fa fa-caret-right blue"></i> Banco</th>
+						 			<th><div style="text-align: right;"><i class="ace-icon fa fa-caret-right blue"></i> Importe</div></th>
+						 			<td width="20"><i class="ace-icon fa fa-comment bigger-130 bluet blue"></i></td>
+						 		</tr>
+						 	</thead>
+						 	<tbody>
+						 	</tbody>
+						 	<tfoot>
+							</tfoot>
+						</table>
+					</div>
+				</div>
+				<form action="#" id="form-editarPago">
+					<input type="hidden" id="co_pagoId" value="">
+					<div id="wrapperPagoTotalDeuda" class="profile-user-info profile-user-info-striped">
+						<div class="profile-info-row">
+							<div class="profile-info-name">Banco</div>
+							<div class="profile-info-value">
+								<select id="selBanco_EP" name="selBanco"  class="form-control input-sm">
+									<option value="" selected>Ningún banco / Efectivo</option>
+									<option value="BANCO DE CREDITO DEL PERU" selected="">Banco de Crédito</option>
+									<option value="BBVA BANCO CONTINENTAL">BBVA Banco Continental</option>
+									<option value="BANCO DE LA NACIÓN">Banco de la Nación</option>
+									<option value="INTERBANK">Interbank</option>
+								</select>
+							</div>
+						</div>
+						<div class="profile-info-row">
+							<div class="profile-info-name">N° Operación</div>
+							<div class="profile-info-value">
+								<input type="text" id="textNroOperacion_EP" name="textNroOperacion" class="form-control input-sm">
+							</div>
+						</div>
+						<div class="profile-info-row">
+							<div class="profile-info-name">Fecha Pago</div>
+							<div class="profile-info-value">
+								<input type="text" id="textFechaPago_EP" name="textFechaPago" class="form-control input-sm mask-fecha datepicker-right">
+							</div>
+						</div>
+						<div class="profile-info-row">
+							<div class="profile-info-name">Documento:</div>
+							<div class="profile-info-value">
+								<select id="selTipoDoc_EP" name="selTipoDoc" class="form-control input-sm">
+									<option value="BOLETA">BOLETA</option>
+									<option value="FACTURA">FACTURA</option>
+									<option value="RECIBO DE MANTENIMIENTO">RECIBO DE MANTENIMIENTO</option>
+								</select>
+							</div>
+						</div>
+					</div>
+					<button type="submit" id="submit_EditPago" style="display: none;"></button>
+				</form>
+				<div id="btn-actions-pagos-delete" style="width: 100%;" class="hidden">
+					<div class="col-xs-12">
+						<div class="alert alert-danger">
+							<button class="close" data-dismiss="" disabled="true" style="cursor:default!important;">
+								<i class="ace-icon fa fa-times bigger-200"></i>&nbsp; &nbsp;
+							</button>
+							<p class="center">¿Esta realmente seguro de querer eliminar el registro seleccionado?</p>
+							<p class="center">
+								<button type="button" class="btn btn-sm btn-danger" onclick="TablePagos.deletePago();">Si</button>
+								<button type="button" class="btn btn-sm" onclick="TablePagos.cancelDelForm();">No</button>
+							</p>
+						</div>
+					</div>
+				</div>
+				<div style="width: 100%">
+					<div class="col-xs-12">
+						<div id="btn-actions-pagos" class="btn-group btn-group-justified hidden" role="group">
+							<div class="btn-group" role="group"><button type="button" id="btnEditPago" class="btn tbn-info" onclick="TablePagos.activateEditForm();"> Editar</button></div>
+							<div class="btn-group" role="group"><button type="button" id="btnDelPago" class="btn btn-danger" onclick="TablePagos.activateDelForm()">Eliminar</button></div>
+						</div>
+					</div>
+				</div>
+				<div style="width: 100%">
+					<div class="col-xs-12">
+						<div id="btn-actions-pagos-save" class="btn-group btn-group-justified hidden" role="group">
+							<div class="btn-group" role="group"><button id="" type="button" class="btn btn-warning" onclick="TablePagos.cancelEditForm();"><i class="glyphicon glyphicon-repeat"></i> Atras</button></div>
+							<div class="btn-group" role="group"><button type="button" id="btnSaveEditPago" class="btn btn-success"><i class="glyphicon glyphicon-play-circle"></i> Guardar</button></div>
+						</div>
+					</div>
+				</div>
+				<div style="clear:both;"></div>
+			</div>
+			<div class="modal-footer">
+	        	<button type="button" class="btn btn-default btn-sm" data-dismiss="modal" onclick="Action.closeModal()">Cerrar</button>
+	      	</div>
+		</div>
+	</div>
+</div>
+
+
+<div class="modal fade" id="modalNuevoIngreso" tabindex="-1" role="dialog" aria-labelledby="labelNuevoIngreso" data-backdrop="static" data-keyboard="false">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="labelNuevoIngreso">Nuevo Ingreso</h4>
+			</div>
+			<div class="modal-body">
+				<div class="space"></div>
+				<form id="formNuevoIngreso" action="#">
+					<input type="hidden" id="co_unidadId_ni" value="0">
+					<div id="" class="profile-user-info profile-user-info-striped">
+						<div class="profile-info-row">
+							<div class="profile-info-name"> UNIDAD: </div>
+							<div class="profile-info-value">
+								<i class="glyphicon glyphicon-home purple bigger-100"></i>
+								<span id="spnUnidad_ni">...</span>
+							</div>
+						</div>
+						<div class="profile-info-row">
+							<div class="profile-info-name"> Propietario </div>
+							<div class="profile-info-value">
+								<i class="glyphicon glyphicon-user purple bigger-100"></i>
+								<span id="spnPropietario_ni">...</span>
+							</div>
+						</div>
+						<div class="profile-info-row">
+							<div class="profile-info-name"> Residente </div>
+							<div class="profile-info-value">
+								<i class="glyphicon glyphicon-user purple bigger-100"></i>
+								<span id="spnResidente_ni">...</span>
+							</div>
+						</div>
+						<div class="profile-info-row">
+							<div class="profile-info-name">Deuda Total S/.</div>
+							<div class="profile-info-value">
+								<i class="fa fa fa-money red bigger-100"></i>
+								<span id="spnDeudaTotalUnidad_ni">0.00</span>
+							</div>
+						</div>
+					</div>
+					<div class="space"></div>
+					<div style="width: 100%">
+						<div class="col-md-4 form-group" >
+							<label for="selDiaIni">Fecha Emisión</label>
+							<input type="text" class="form-control fecha datepicker-default" name="textFechaEmi" id="textFechaEmi" placeholder="00-00-0000" disabled="true">
+							<input type="hidden" id="textFechaEmi_1" name="textFechaEmi_1" value="">
+						</div>
+						<div class="col-md-4 form-group">
+							<label for="selDiaIni">Fecha Vencimiento</label>
+							<input type="text" class="form-control fecha datepicker-default" name="textFechaVence" id="textFechaVence" placeholder="00-00-0000" disabled="true">
+							<input type="hidden" id="textFechaVence_1" name="textFechaVence_1" value="">
+						</div>
+						<div class="col-xs-2">
+							<br>
+							<br>
+							<label class="middle">
+								<input class="ace" type="checkbox" id="chkPersonalizarFechaEmision" onclick="Action.personalizarFechaEmision();">
+								<span class="lbl"> Personalizar</span>
+							</label>
+						</div>
+					</div>
+					<div style="margin: 6px 0px;"></div>
+					<div style="width: 100%">
+						<div class="col-md-9 form-group">
+							<label for="">Concepto</label>
+							<select name="selConcepto" id="selConcepto_ni" class="chosen-select form-control">
+								<option value="" readonly>seleccionar</option>
+							</select>
+						</div>
+						<div class="col-md-3 form-group">
+							<label for="">Total</label>
+							<input type="text" id="textTotalConceptoIngreso" name="textTotalConceptoIngreso" class="form-control input-sm precio" placeholder="0.00">
+							<span class="e"></span>
+						</div>
+					</div>
+					<div style="width:100% " >
+						<div class="col-md-12">
+							<textarea id="ta_nota_ni" name="ta_nota" class="form-control" placeholder="Nota..."></textarea>
+							<span class="e"></span>
+						</div>
+					</div>
+					<button type="submit" id="submit_NewIngreso" style="display: none;"></button>
+				</form>
+				<div style="clear: both;"></div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" id="btnAddIngreo" class="btn btn-success btn-sm">
+					<i class="ace-icon fa fa-floppy-o bigger-110"></i> Guardar
+				</button>
+				<button type="button" class="btn btn-default btn-sm" data-dismiss="modal">
+					<i class="ace-icon fa fa-times bigger-110"></i> Cerrar
+				</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+
+
+
+<div class="modal fade" id="modalConceptos" tabindex="-1" role="dialog" aria-labelledby="labelModalConceptos" data-backdrop="static" data-keyboard="false">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="labelModalConceptos">Conceptos de Ingreso</h4>
+			</div>
+			<div class="modal-body">
+				<div style="width: 100%;">
+					<div class="col-xs-12">
+						<table id="tblConceptos" class="table table-striped table-hover">
+						 	<thead>
+						 		<tr>
+						 			<th style="width: 30px;"></th>
+						 			<th><i class="ace-icon fa fa-caret-right blue"></i>	Descripción</th>
+						 			<th style="width: 100px;"><div style="text-align: right;"><i class="ace-icon fa fa-caret-right blue"></i>Total</div></th>
+						 			<td width="20"><i class="ace-icon fa fa-comment bigger-130 bluet blue"></i></td>
+						 		</tr>
+						 	</thead>
+						 	<tbody>
+						 	</tbody>
+						 	<tfoot>
+							</tfoot>
+						</table>
+					</div>
+				</div>
+				<div class="space"></div>
+				<div style="width: 100%">
+					<div class="col-xs-12">
+						<div id="btn-actions-concepto-nuevo" class="btn-group btn-group-justified" role="group">
+							<div class="btn-group" role="group"><button type="button" id="btnNuevoIngreso" class="btn tbn-info" onclick="TableConceptos.activateNewConcepto();"> Nuevo</button></div>
+						</div>
+					</div>
+				</div>
+				<form id="formNuevoConcepto" action="#" class="hidden">
+					<div id="wrapperFormEditarConcepto" class="profile-user-info profile-user-info-striped">
+						<div class="profile-info-row form-group">
+							<div class="profile-info-name">Concepto</div>
+							<div class="profile-info-value">
+								<select name="selConcepto" id="selConcepto_nc" class="chosen-select form-control">
+									<option value="">...</option>
+								</select>
+								<span class="e"></span>
+							</div>
+						</div>
+						<div class="profile-info-row form-group">
+							<div class="profile-info-name">Total S/.</div>
+							<div class="profile-info-value">
+								<input type="text" id="textTotalConcepto_nc" name="textTotalConcepto" class="form-control input-sm precio" placeholder="0.00">
+								<span class="e"></span>
+							</div>
+						</div>
+						<div class="profile-info-row form-group">
+							<div class="profile-info-name">Nota</div>
+							<div class="profile-info-value">
+							<textarea id="ta_nota_nc" name="ta_nota" class="form-control"></textarea>
+								<span class="e"></span>
+							</div>
+						</div>
+					</div>
+					<button type="submit" id="submit_NewConcepto" style="display: none;"></button>
+				</form>
+				<div style="width: 100%">
+					<div class="col-xs-12">
+						<div id="btn-actions-concepto-add" class="btn-group btn-group-justified hidden" role="group">
+							<div class="btn-group" role="group"><button id="btnCancelNewForm" type="button" class="btn btn-warning" onclick="TableConceptos.cancelNewForm();"><i class="glyphicon glyphicon-repeat"></i> Atras</button></div>
+							<div class="btn-group" role="group"><button type="button" id="btnAddConcepto" class="btn btn-success"><i class="glyphicon glyphicon-play-circle"></i> Guardar</button></div>
+						</div>
+					</div>
+				</div>
+
+				<form id="formEditarConcepto" action="#" class="hidden">
+					<input type="hidden" id="co_conceptoId" name="co_conceptoId" class="form-control input-sm">
+					<div id="wrapperFormEditarConcepto" class="profile-user-info profile-user-info-striped">
+						<div class="profile-info-row form-group">
+							<div class="profile-info-name">Total S/.</div>
+							<div class="profile-info-value">
+								<input type="text" id="textTotalConcepto" name="textTotalConcepto" class="form-control input-sm precio" disabled>
+								<span class="e"></span>
+							</div>
+						</div>
+						<div class="profile-info-row form-group">
+							<div class="profile-info-name">Nota</div>
+							<div class="profile-info-value">
+							<textarea id="ta_nota" name="ta_nota" class="form-control"></textarea>
+								<span class="e"></span>
+							</div>
+						</div>
+					</div>
+					<button type="submit" id="submit_EditConcepto" style="display: none;"></button>
+				</form>
+				<div id="btn-actions-concepto-delete" style="width: 100%;" class="hidden">
+					<div class="col-xs-12">
+						<div class="alert alert-danger">
+							<button class="close" data-dismiss="" disabled="true" style="cursor:default!important;">
+								<i class="ace-icon fa fa-times bigger-200"></i>&nbsp; &nbsp;
+							</button>
+							<p class="center">¿Esta realmente seguro de querer eliminar el concepto seleccionado?</p>
+							<p class="center">
+								<button type="button" class="btn btn-sm btn-danger" onclick="TableConceptos.deleteConcepto();">Si</button>
+								<button type="button" class="btn btn-sm" onclick="TableConceptos.cancelDelForm();">No</button>
+							</p>
+						</div>
+					</div>
+				</div>
+				<div style="width: 100%">
+					<div class="col-xs-12">
+						<div id="btn-actions-concepto" class="btn-group btn-group-justified hidden" role="group">
+							<div class="btn-group" role="group"><button type="button" id="btnEditConcepto" class="btn tbn-info" onclick="TableConceptos.activateEditForm();"> Editar</button></div>
+							<div class="btn-group" role="group"><button type="button" id="btnDelConcepto" class="btn btn-danger" onclick="TableConceptos.activateDelForm()"> Eliminar</button></div>
+						</div>
+					</div>
+				</div>
+				<div style="width: 100%">
+					<div class="col-xs-12">
+						<div id="btn-actions-concepto-save" class="btn-group btn-group-justified hidden" role="group">
+							<div class="btn-group" role="group"><button id="btnCancelEditForm" type="button" class="btn btn-warning" onclick="TableConceptos.cancelEditForm();"><i class="glyphicon glyphicon-repeat"></i> Atras</button></div>
+							<div class="btn-group" role="group"><button type="button" id="btnSaveEditConcepto" class="btn btn-success"><i class="glyphicon glyphicon-play-circle"></i> Guardar</button></div>
+						</div>
+					</div>
+				</div>
+				<div style="clear: both;"></div>
+			</div>
+			<div class="modal-footer">
+	        	<button type="button" class="btn btn-default btn-sm" data-dismiss="modal" onclick="Action.closeModal()">Cerrar</button>
+	      	</div>
+		</div>
+	</div>
+</div>
+
+
+
+<div class="modal fade" id="modalConceptosReadOnly" tabindex="-1" role="dialog" aria-labelledby="labelConceptosReadOnly" data-backdrop="static" data-keyboard="false">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="labelConceptosReadOnly">Conceptos de Ingreso</h4>
+			</div>
+			<div class="modal-body">
+				<div style="width: 100%;">
+					<div class="col-xs-12">
+						<table id="tblConceptosReadOnly" class="table table-striped table-hover">
+						 	<thead>
+						 		<tr>
+						 			<th style="width: 30px;"></th>
+						 			<th><i class="ace-icon fa fa-caret-right blue"></i>	Descripción</th>
+						 			<th><div style="text-align: right;"><i class="ace-icon fa fa-caret-right blue"></i> Total</div></th>
+						 			<td width="20"><i class="ace-icon fa fa-comment bigger-130 bluet blue"></i></td>
+						 		</tr>
+						 	</thead>
+						 	<tbody>
+						 	</tbody>
+						 	<tfoot>
+							</tfoot>
+						</table>
+					</div>
+				</div>
+				<div class="space"></div>
+				<div style="clear: both;"></div>
+			</div>
+			<div class="modal-footer">
+	        	<button type="button" class="btn btn-default btn-sm" data-dismiss="modal" onclick="">Cerrar</button>
+	      	</div>
+		</div>
+	</div>
+</div>
+
+
+<div class="modal fade" id="modalExportarOptions" tabindex="-1" role="dialog" aria-labelledby="labelModalExportarOptions" data-backdrop="static" data-keyboard="false">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title"><span>Ingreso</span></h4>
+			</div>
+			<div class="modal-body">
+				
+				<div id="contentPanel" class="center">
+					<button class="btn btn-primary" panel="simple" onclick="showPanel.view(this)">Generar Reporte Simple</button>
+					<button class="btn btn-primary" panel="bcp" onclick="showPanel.view(this)">Generar Reporte BCP</button>
+				</div>
+
+				<form id="formReporteIngreso" class="hidden" action="#">
+					<input type="hidden" id="co_currentmes" value="<?php echo (int)date('m'); ?>">
+					<div class="row">
+						<div class="col-md-6">
+							<label for="">Año</label>
+							<select id="textYearEmision" name="textYearEmision" class="form-control">
+								<?php 
+									foreach ($listYear as $key => $value) {
+										echo "<option value='$value'>".$value."</option>";
+									}
+								?>
+							</select>
+						</div>
+						<div class="col-md-6">
+							<label for="">Mes</label>
+							<select id="textMesEmision" name="textMesEmision"  class="form-control">
+								<?php
+									foreach ($nombreMeses as $key => $value) {
+										echo "<option value='".($key+1)."'>".$value."</option>";
+									}
+								?>
+							</select>
+						</div>
+					</div>
+					<div class="space"></div>
+					<div class="row">
+						<div class="col-md-12">
+							<fieldset>
+								<legend style="font-size: 19px!important;">De la unidad, ¿a quien desea incluir en el reporte?</legend>
+								<div class="form-group">
+									<div class="inline radio">
+										<label>
+											<input id="or_Propietario" name="rd_representateUnidad" type="radio" value="propietario" class="ace">
+											<span class="lbl"> Propietario</span>
+										</label>
+									</div>
+									<div class="inline radio">
+										<label>
+											<input id="or_Residente" name="rd_representateUnidad" type="radio" value="residente" class="ace">
+											<span class="lbl"> Residente</span>
+										</label>
+									</div>
+									<div class="inline radio">
+										<label>
+											<input id="or_Ambos" name="rd_representateUnidad" type="radio" value="ambos" class="ace">
+											<span class="lbl"> Ambos</span>
+										</label>
+									</div>
+								</div>
+							</fieldset>
+						</div>
+					</div>
+					<div class="space"></div>
+					<div class="row">
+						<div class="col-xs-12 col-sm-12">
+							<fieldset>
+								<legend style="font-size: 19px!important;">¿Que tipo de reporte deseas?</legend>
+								<div class="control-group">
+									<div class="inline radio">
+										<label>
+											<input id="or_Totales" name="rd_tiporeporte" type="radio" value="total" class="ace">
+											<span class="lbl"> Total</span>
+										</label>
+									</div>
+									<div class="inline radio">
+										<label>
+											<input id="or_Detallado" name="rd_tiporeporte" type="radio" value="detallado" class="ace">
+											<span class="lbl"> Detallado</span>
+										</label>
+									</div>
+									<div id="wrapper_or_Personalizado" class="inline radio" style="height:34px!important;">
+										<label>
+											<input id="or_Personalizado" name="rd_tiporeporte" type="radio" value="personalizado" class="ace">
+											<span class="lbl"> Detallado Personalizado</span>
+										</label>
+									</div>
+								</div>
+							</fieldset>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12 col-sm-12">
+							<div class="control-group" id="wrapperConceptosRptPersonalizado">
+								
+							</div>
+						</div>
+					</div>
+
+				</form>
+
+				<!---->
+
+				<form id="formReporteIngresoBCP" class="hidden" action="#">
+					<input type="hidden" id="co_currentmes" value="<?php echo (int)date('m'); ?>">
+					<div class="row">
+						<div class="col-md-6">
+							<label for="">Año</label>
+							<select id="textYearEmisionBcp" name="textYearEmisionBcp" class="form-control">
+								<?php 
+									foreach ($listYear as $key => $value) {
+										echo "<option value='$value'>".$value."</option>";
+									}
+								?>
+							</select>
+						</div>
+						<div class="col-md-6">
+							<label for="">Mes</label>
+							<select id="textMesEmisionBcp" name="textMesEmisionBcp"  class="form-control">
+								<?php
+									foreach ($nombreMeses as $key => $value) {
+										echo "<option value='".($key+1)."'>".$value."</option>";
+									}
+								?>
+							</select>
+						</div>
+					</div>
+					<div class="space"></div>
+					<div class="row">
+						<div class="col-md-12">
+							<fieldset>
+								<legend style="font-size: 19px!important;">Que nombre desea que aparezca?</legend>
+								<div class="form-group">
+									<div class="inline radio">
+										<label>
+											<input id="or_Propietario" name="rd_representateUnidadBcp" type="radio" value="propietario" class="ace">
+											<span class="lbl"> Propietario</span>
+										</label>
+									</div>
+									<div class="inline radio">
+										<label>
+											<input id="or_Residente" name="rd_representateUnidadBcp" type="radio" value="residente" class="ace" checked="">
+											<span class="lbl"> Residente</span>
+										</label>
+									</div>
+								</div>
+							</fieldset>
+						</div>
+					</div>
+				</form>
+				
+			</div>
+			<div class="modal-footer">
+				<!--button simple-->
+				<button id="btnGenerarReporte" type="button" class="btn btn-success btn-sm has-spinner hidden" onclick="Action.descargar()"><span class="spinner"><i class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></i></span> <span id="label">Generar</span></button>
+				<!--button BCP-->
+				<button id="btnGenerarReporteBCP" type="button" class="btn btn-success btn-sm has-spinner hidden" onclick="Action.generateExcelBcp()"><span class="spinner"><i class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></i></span> <span id="label">Generar</span></button>
+	        	<!--close-->
+	        	<button type="button" class="btn btn-default btn-sm" data-dismiss="modal"> Cancelar</button>
+	        	<!--return-->
+	        	<button id="btnReturnPanel" type="button" class="btn btn-warning btn-sm hidden" panel="return" onclick="showPanel.view(this)"><i class="fa fa-history"></i> Regresar</button>
+	      	</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="modalImportar" tabindex="-1" role="dialog" aria-labelledby="labelModalImportar" data-backdrop="static" data-keyboard="false">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title"><span>Importar Concepto</span></h4>
+			</div>
+			<div class="modal-body">
+				<form action="">
+					<div class="row">
+						<div class="col-xs-12">
+							<span>Registrar conceptos de ingreso usando un formato excel con calculos realizados por usted mismo: </span><a href="javascript:void(0)" onclick="Action.descargarFormatoConcepto();"><b>Descargar Formato.</b></a>
+						</div>
+						<div class="col-xs-12">
+							<label for=""></label>
+							<input type="file" id="fileFormatoConceptosIngreso" class="input-file-3" onchange="uploadArchivo()">
+						</div>
+						<div class="col-xs-12">
+							<div class="progress" style="display: none;">
+							  <div class="progress-bar" role="progressbar" aria-valuenow="70"
+							  aria-valuemin="0" aria-valuemax="100" style="width:0%">
+							    0%
+							  </div>
+							</div>
+
+						</div>
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-success btn-sm" id="" onclick="Action.importarConceptoDesdeExcel()">Guardar</button>
+				<button type="button" class="btn btn-default btn-sm" data-dismiss="modal" aria-label="Close">Cancelar</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<!---->
+<style>
+	.width-100pc{
+		width: 100%;
+		padding: 0 9px;
+		height: 31px;
+	}
+	.label-grupunidad{
+		width: 97%;
+	    padding: 4px;
+	    height: 25px;
+	    font-size: 14px;
+	}
+	.label-grupunidad.arrowed:before{
+		border-width: 13px 5px;
+	}
+	#tblGrupoUnidad tbody>tr>td{
+		padding: 5px 0 5px 0;
+	}
+</style>
+<?php
+	//code
+?>
+<div class="modal fade" id="modalGrupoUnidad" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title">Agrupar Unidad</h4>
+			</div>
+			<div class="modal-body">
+				<form class="frmGrupoUnidad">
+					<div id="inputMonth"></div>
+					<div id="idGrupoIngreso"></div>
+					<div id="dEmision"></div>
+					<div id="dVence"></div>
+					<div class="row">
+						<div class="col-md-7">
+							<select id="selUnidad" class="chosen-select" placeholder="seleccione">
+			            		<option value="0">Ninguno</option>
+			            	</select>
+						</div>
+						<div class="col-md-3">
+							<input type="text" style="height: 31px;" id="totalMes" disabled="" class="form-control">
+						</div>
+						<div class="col-md-2">
+							<button type="button" class="btn btn-success btn-sm width-100pc" id="btnAgruparUnidad" disabled="" onclick="GridIngreso.deleteUnidadAsociado()"><i class="fa fa-plus"></i> Añadir</button>
+						</div>
+					</div>
+				</form>
+
+				<div class="row">
+					<div class="col-md-12">
+						<div class="panel panel-default margin-top-15" id="panelListGrupoUnidad">
+			                <div class="panel-body panel-collapse" data-toggle="match-height">
+			                  <table class="table" id="tblGrupoUnidad">
+			                    <thead>
+			                      <tr>
+			                        <th></th>
+			                        <th>Unidad</th>
+			                        <th align="center">Total</th>
+			                      </tr>
+			                    </thead>
+			                    <tbody>
+			                    </tbody>
+			                  </table>
+			                </div>
+			            </div>
+			            <!---->
+			            <div class="panel panel-default margin-top-15 hidden" id="panelListGrupoUnidadConcepto">
+			            	<input type="hidden" id="idGrupoUnidad_guc">
+			                <div class="panel-body panel-collapse" data-toggle="match-height">
+			                  <table class="table" id="tblGrupoUnidadConcepto">
+			                    <thead>
+			                      <tr>
+			                        <th></th>
+			                        <th>Descripción</th>
+			                        <th align="center">Total</th>
+			                      </tr>
+			                    </thead>
+			                    <tbody>
+			                    </tbody>
+			                  </table>
+			                </div>
+			            </div>
+					</div>
+				</div>
+
+				<!---->
+				<div class="row">
+					<form id="formEditarGrupoUnidadConcepto" action="#" class="hidden">
+						<input type="hidden" id="co_conceptoId_guc" name="co_conceptoId" class="form-control input-sm">
+						<div id="wrapperFormEditarConcepto" class="profile-user-info profile-user-info-striped">
+							<div class="profile-info-row form-group">
+								<div class="profile-info-name">Total S/.</div>
+								<div class="profile-info-value">
+									<input type="text" id="textTotalConcepto_guc" name="textTotalConcepto" class="form-control input-sm precio" disabled>
+									<span class="e"></span>
+								</div>
+							</div>
+						</div>
+						<button type="submit" id="submit_EditGrupoUnidadConcepto" style="display: none;"></button>
+					</form>
+				</div>
+				<!---->
+
+				<!---->
+				<div class="row">
+					<div class="tools-gconcepto">
+						<div class="col-xs-12">
+							<div id="btn-actions-guc-concepto-nuevo" class="btn-group btn-group-justified hidden" role="group">
+								<div class="btn-group" role="group"><button type="button" class="btn btn-warning" onclick="TableConceptosGrupoUnidad.cancelTableList();"> <i class="glyphicon glyphicon-repeat"></i> Atras</button></div>
+							</div>
+						</div>
+						<div class="col-xs-12">
+							<div id="btn-actions-guc-concepto" class="btn-group btn-group-justified hidden" role="group">
+								<div class="btn-group" role="group">
+									<button type="button" id="btnEditConcepto" class="btn tbn-info" onclick="TableConceptosGrupoUnidad.activateEditForm();"> Editar</button>
+								</div>
+								<div class="btn-group" role="group">
+									<button id="btnCancelEditForm" type="button" class="btn btn-warning" onclick="TableConceptosGrupoUnidad.cancelTableList();"><i class="glyphicon glyphicon-repeat"></i> Atrás</button>
+								</div>
+							</div>
+						</div>
+						<div class="col-xs-12">
+							<div id="btn-actions-guc-concepto-save" class="btn-group btn-group-justified hidden" role="group">
+								<div class="btn-group" role="group">
+									<button id="btnCancelEditForm" type="button" class="btn btn-warning" onclick="TableConceptosGrupoUnidad.cancelEditForm();"><i class="glyphicon glyphicon-repeat"></i> Atrás</button>
+								</div>
+								<div class="btn-group" role="group">
+									<button type="button" id="btnSaveEditGrupoUnidadConcepto" class="btn btn-success"><i class="glyphicon glyphicon-play-circle"></i> Guardar</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!---->
+
+			</div>
+			<div class="modal-footer">
+				<!--<button id="btnSaveAgruparUnidad" type="button" class="btn btn-success btn-sm"><i class="glyphicon glyphicon-play-circle"></i> Aceptar</button>-->
+	        	<button type="button" class="btn btn-warning btn-sm" data-dismiss="modal"><i class="glyphicon glyphicon-repeat"></i> Cerrar</button>
+	      	</div>
+		</div>
+	</div>
+</div>
+<!---->
+
+<!-------------------------------------------->
+<div class="modal fade" id="modalConfirmUnidadAsociado" tabindex="-1" role="dialog" aria-labelledby="labelModalListarPagos" data-backdrop="static" data-keyboard="false" style="background: rgba(0, 0, 0, 0.611765);">
+	<div class="modal-dialog" role="document" style="top: 10%;box-shadow: 0 0 150px;">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5>Estas seguro de añadir al grupo la cuota de la unidad seleccionada. Tenga en cuenta que el registro de cuota sera eliminada de la unidad.</h5>
+			</div>
+			<div class="modal-footer">
+				<button type="submit" class="btn btn-success btn-sm" onclick="GridIngreso.addGrupoUnidad();"><i class="ace-icon fa fa-check"></i> Aceptar</button>
+	        	<button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Cerrar</button>
+	      	</div>
+		</div>
+	</div>
+</div>
+<div class="modal fade" id="modalDeleteUnidadAsociado" tabindex="-1" role="dialog" aria-labelledby="labelModalListarPagos" data-backdrop="static" data-keyboard="false" style="background: rgba(0, 0, 0, 0.611765);">
+	<div class="modal-dialog" role="document" style="top: 10%;box-shadow: 0 0 150px;">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5>Estas seguro de querer eliminar la unidad seleccionada del grupo?</h5>
+			</div>
+			<div class="modal-footer">
+				<button type="submit" class="btn btn-success btn-sm" data-id="" onclick="actionGrupoUnidades.eliminarUnidadAsociado();"><i class="ace-icon fa fa-check"></i> Aceptar</button>
+	        	<button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Cerrar</button>
+	      	</div>
+		</div>
+	</div>
+</div>
+<!-------------------------------------------->
+
+<div id='slide-panel-ingreso'>
+	<div class="tab-content">
+		<div class="page-header">
+			<div class="row">
+				<div class="col-xs-8">
+				<h1>
+					Ingreso
+					<small>
+						<i class="ace-icon fa fa-angle-double-right"></i>
+						<span id="spnPeriodo"></span>
+					</small>
+				</h1>	
+			</div>
+			<div class="col-xs-3">
+				<div class="btn-group pull-right">
+					<button data-toggle="dropdown" class="btn btn-sm btn-default dropdown-toggle">
+						<i class="ace-icon glyphicon glyphicon-cog bigger-120"></i>
+						<i class="ace-icon fa fa-angle-down icon-on-right"></i>
+					</button>
+
+					<ul class="dropdown-menu dropdown-danger">
+						<li>
+							<a id="viewModalPagoTotal" href="#">Pago Total</a>
+						</li>
+						<li class="divider"></li>
+						<li>
+							<a id="viewModalListarPagos" href="#">Lista de Pagos</a>
+							<a id="viewRecibo" href="#">Previsualizar Recibo</a>
+						</li>
+						<li class="divider"></li>
+						<li>
+							<a id="viewModalConceptos" href="#">Conceptos de Ingreso</a>
+						</li>
+						<li class="unidadesAgrupadas hidden">
+							<a id="viewModalUnidadesAgrupadas" href="#">Cuota de unidades agrupadas</a>
+						</li>
+					</ul>
+				</div><!-- /.btn-group -->
+			</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-12">
+				<input type="hidden" id="co_ingresoId" value="0">
+				<input type="hidden" id="co_unidadId" value="0">
+				<div id="" class="profile-user-info profile-user-info-striped">
+					<div class="profile-info-row">
+						<div class="profile-info-name"> UNIDAD: </div>
+						<div class="profile-info-value">
+							<i class="glyphicon glyphicon-home purple bigger-100"></i>
+							<span id="spnUnidad">...</span>
+						</div>
+					</div>
+					<div class="profile-info-row">
+						<div class="profile-info-name"> Propietario </div>
+
+						<div class="profile-info-value">
+							<i class="glyphicon glyphicon-user purple bigger-100"></i>
+							<span id="spnPropietario">...</span>
+						</div>
+					</div>
+					<div class="profile-info-row">
+						<div class="profile-info-name"> Residente </div>
+
+						<div class="profile-info-value">
+							<i class="glyphicon glyphicon-user purple bigger-100"></i>
+							<span id="spnResidente">...</span>
+						</div>
+					</div>
+					<div class="profile-info-row">
+						<div class="profile-info-name">Deuda Total S/.</div>
+						<div class="profile-info-value">
+							<i class="fa fa fa-money red bigger-100"></i>
+							<span id="spnDeudaTotalUnidad">0.00</span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div id="panelGroup_dtEmision" class="profile-user-info profile-user-info-striped">
+			<div class="profile-info-row">
+				<div class="profile-info-name">N° documento</div>
+				<div class="profile-info-value">
+					<i class="glyphicon glyphicon-starpurple bigger-100"></i>
+					<span id="spnDocumento" style="font-weight:600;">000-0000</span>
+				</div>
+			</div>
+			<div class="profile-info-row">
+				<div class="profile-info-name">F. Emision:</div>
+				<div class="profile-info-value">
+					<i class="fa fa-calendar purple bigger-100"></i>
+					<span id="spnFechaEmi">00-00-0000</span>
+				</div>
+			</div>
+			<div class="profile-info-row">
+				<div class="profile-info-name">F. Vence:</div>
+				<div class="profile-info-value">
+					<i class="fa fa-calendar red bigger-100"></i>
+					<span id="spnFechaVence">00-00-0000</span>
+				</div>
+			</div>
+		</div>
+		<div class="profile-user-info profile-user-info-striped">
+			<div class="profile-info-row">
+				<div class="profile-info-name">Emisión S/.</div>
+				<div class="profile-info-value">
+					<i class="fa fa fa-money orange bigger-100"></i>
+					<span id="spnTotalEmision" onclick="Action.viewModalConceptosReadOnly();" style="cursor:pointer; text-decoration: underline;">0.00</span>
+				</div>
+			</div>
+			<div class="profile-info-row">
+				<div class="profile-info-name">Pagado S/.</div>
+				<div class="profile-info-value">
+					<i class="fa fa fa-money orange green-100"></i>
+					<span id="spnTotalPagado">0.00</span>
+				</div>
+			</div>
+			<div class="profile-info-row">
+				<div class="profile-info-name">Debe S/.</div>
+				<div class="profile-info-value">
+					<i class="fa fa fa-money orange bigger-100"></i>
+					<span id="spnTotalDebe">0.00</span>
+				</div>
+			</div>
+		</div>
+		<form id="form-pagomensual" action="#">
+			<div class="wrapperPagoMensual profile-user-info profile-user-info-striped">
+				<div class="form-group profile-info-row">
+					<div class="profile-info-name">Importe S/.</div>
+					<div class="profile-info-value">
+						<input id="textImporte_PM" name="textImporte" type="text" class="form-control input-sm precio" value="0.00">
+					</div>
+				</div>
+				<div class="profile-info-row">
+					<div class="profile-info-name">Banco</div>
+					<div class="profile-info-value">
+						<select  id="selBanco_PM" name="selBanco" class="form-control input-sm">
+							<option value="" selected>Ningún banco / Efectivo</option>
+							<option value="BANCO DE CREDITO DEL PERU" selected>Banco de Crédito</option>
+							<option value="BANCO CONTINENTAL">BBVA Banco Continental</option>
+							<option value="BANCO DE LA NACIÓN">Banco de la Nación</option>
+							<option value="INTERBANK">Interbank</option>
+						</select>
+					</div>
+				</div>
+				<div class="form-group profile-info-row">
+					<div class="profile-info-name">N° Operación</div>
+					<div class="profile-info-value">
+						<input type="text" id="textNroOperacion_PM" name="textNroOperacion" class="form-control input-sm">
+					</div>
+				</div>
+				<div class="form-group profile-info-row">
+					<div class="profile-info-name">Fecha Pago</div>
+					<div class="profile-info-value">
+						<input type="text" id="textFechaPago_PM" name="textFechaPago" class="form-control input-sm mask-fecha datepicker-default" placeholder="00-00-0000">
+					</div>
+				</div>
+				<div class="profile-info-row">
+					<div class="profile-info-name">Documento:</div>
+					<div class="profile-info-value">
+						<select id="selTipoDoc_PM" name="selTipoDoc" class="form-control input-sm">
+							<option value="BOLETA">BOLETA</option>
+							<option value="FACTURA">FACTURA</option>
+							<option value="RECIBO DE MANTENIMIENTO">RECIBO DE MANTENIMIENTO</option>
+						</select>
+					</div>
+				</div>
+			</div>
+			<div class="wrapperPagoMensual" style="width:100%!important;">
+				<div class="col-xs-12">
+					<textarea id="taObservacion_PM" name="taObservacion" class="form-control" cols="7" rows="2" placeholder="Observación" style="resize:none"></textarea>
+				</div>
+			</div>
+			<button  id="submitPagoMensual" type="submit"  class="hide"></button>
+		</form>
+
+		<div style="width: 100%">
+			<div class="col-xs-12">
+				<button id="btnViewPagoMensual" style="width: 100%" type="button" class="btn btn-default" onclick="Action.viewFormPagoMensual()">Pago Mensual</button>
+			</div>
+			<div class="col-xs-12">
+				<div class="btn-group btn-group-justified">
+					<div class="btn-group"><button id="btnOcultarPagoMensual" type="button" class="btn btn-warning" onclick="Action.backPagoMensual();"><i class="glyphicon glyphicon-repeat"></i> Atras</button></div>
+					<div class="btn-group"><button id="btnSavePagoMensual"type="button" class="btn btn-success"><i class="glyphicon glyphicon-play-circle"></i> Efectuar Pago</button></div>
+				</div>
+			</div>
+		</div>
+		<div style="clear:both"></div>
+	</div>
+</div>
+<button id='trigger' class="hidden">btnViewPanel</button>
+
+<style>
+	#slide-panel-ingreso{
+		background-color: #f5f5f5;
+	}
+	.datepicker{
+		z-index:1151 !important;
+	}
+	.tab-content .page-header {
+		margin: 0 0 0px!important;
+		padding-top: 0px!important;
+	}
+	.or_personalizado_active{
+		background-color: #DDDDDD;
+	    height: 28px;
+	    padding-top: 4px;
+	    padding-right: 20px;
+	    border-radius: 11px 11px 0px 0px;
+	    -moz-border-radius: 11px 11px 0px 0px;
+	    -webkit-border-radius: 11px 11px 0px 0px;
+	    border: 0px solid #000000;
+	    margin-bottom: 0px;
+	}
+	.glyphicon-refresh-animate {
+	    -animation: spin .7s infinite linear;
+	    -webkit-animation: spin2 .7s infinite linear;
+	}
+
+	@-webkit-keyframes spin2 {
+	    from { -webkit-transform: rotate(0deg);}
+	    to { -webkit-transform: rotate(360deg);}
+	}
+
+	@keyframes spin {
+	    from { transform: scale(1) rotate(0deg);}
+	    to { transform: scale(1) rotate(360deg);}
+	}
+
+	.spinner {
+	  display: inline-block;
+	  opacity: 0;
+	  width: 0;
+
+	  -webkit-transition: opacity 0.25s, width 0.25s;
+	  -moz-transition: opacity 0.25s, width 0.25s;
+	  -o-transition: opacity 0.25s, width 0.25s;
+	  transition: opacity 0.25s, width 0.25s;
+	}
+
+	.has-spinner.active {
+	  cursor:progress;
+	}
+
+	.has-spinner.active .spinner {
+	  opacity: 1;
+	  width: auto; /* This doesn't work, just fix for unkown width elements */
+	}
+
+	.has-spinner.btn-mini.active .spinner {
+	    width: 10px;
+	}
+
+	.has-spinner.btn-small.active .spinner {
+	    width: 13px;
+	}
+
+	.has-spinner.btn.active .spinner {
+	    width: 16px;
+	}
+
+	.has-spinner.btn-large.active .spinner {
+	    width: 19px;
+	}
+
+	tr#TOTAL_BANCO td.col-mes:hover{
+		cursor: pointer;
+		color: #03A01D;
+		text-decoration: underline
+	}
+	.tooltipmsg{
+		color: #478fca!important;
+	}
+	.tooltipmsg:hover{
+		color: #2d75af!important;
+		cursor: pointer;
+	}
+
+</style>
+
+	<?php $this->inlineScript()
+    ->appendFile($this->basePath('/js/jqGrid/src/i18n/grid.locale-es.js'),'text/javascript')
+    ->appendFile($this->basePath('/js/jqGrid/js/jquery.jqGrid.min.js'),'text/javascript')
+    ->appendFile($this->basePath('/js/slidereveal/js/slidereveal.js'),'text/javascript')
+    ->appendFile($this->basePath('/script/finanzas/ingreso.js?t='.time()),'text/javascript')
+  
+    ?>

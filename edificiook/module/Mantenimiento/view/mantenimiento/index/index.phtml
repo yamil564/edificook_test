@@ -1,0 +1,19 @@
+<?php
+
+if(!empty($this->pageItems)){
+
+    echo '<ul class="icons">';
+    foreach ($this->pageItems as $key=>$value){
+        echo '<li class="pageIcon">
+                 <a href="'.$this->directorioraiz.$value['url'].'">
+                     <i class="menu-icon fa fa-folder bigger-180"></i>
+                     <span>'.$value['menu'].'</span>
+                 </a>
+              </li>';
+    }
+    echo "</ul>";
+}
+
+echo $this->headLink()->prependStylesheet($this->basePath('/css/style-menugroup.css'));
+
+

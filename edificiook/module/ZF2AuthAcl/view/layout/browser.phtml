@@ -1,0 +1,80 @@
+<?php echo $this->doctype(); 
+    if (defined('RUNNING_FROM_ROOT')) {
+        $this->plugin('basePath')->setBasePath($this->basePath().'/public');
+    }
+?>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <base href="<?php echo $this->serverUrl().$this->basePath()."/";?>" />
+    <?php echo $this->headTitle($this->Theme()['titulo_panel'])->setSeparator(' - ')->setAutoEscape(false) ?>
+
+    <?php echo $this->headMeta()
+    ->appendName('viewport', 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no')
+    ->appendHttpEquiv('X-UA-Compatible', 'IE=edge')
+    ->appendName( 'autor' ,  'KND S.A.C')
+    ->appendName( 'keywords' ,  '')
+
+    ?>
+    <!-- bootstrap & fontawesome -->
+    <?php echo $this->headLink(array('rel' => 'shortcut icon', 'type' => 'images/favicon.png', 'href' => $this->basePath() . '/images/favicon.png'))
+    ->appendStylesheet($this->basePath('css/bootstrap.min.css'))
+    ->appendStylesheet($this->basePath('css/font-awesome.min.css'))
+    ->appendStylesheet($this->basePath('css/chosen.css'))
+    /*jqgrid*/
+    ->appendStylesheet($this->basePath('css/jquery-ui.min.css'))
+    ->appendStylesheet($this->basePath('css/datepicker.css'))
+    ->appendStylesheet($this->basePath('css/bootstrap-timepicker.css'))
+    ->appendStylesheet($this->basePath('css/bootstrap-datetimepicker.css'))
+    ->appendStylesheet($this->basePath('css/ui.jqgrid.css'))
+    ->appendStylesheet($this->basePath('css/ace-fonts.css'))
+    ->appendStylesheet($this->basePath('css/ace.min.css'))
+    ->appendStylesheet($this->basePath('css/jquery.gritter.css'))
+    ->appendStylesheet($this->basePath('css/ace-skins.min.css'))
+    ->appendStylesheet($this->basePath('css/ace-rtl.min.css'))
+    ->appendStylesheet($this->basePath('css/ace.onpage-help.css'))
+    ->appendStylesheet($this->basePath('css/jqgrid-style.css'))
+    ->appendStylesheet($this->basePath('css/style.css'))
+    ->appendStylesheet($this->basePath($this->Theme()['ruta_theme']))
+    
+    ?>
+</head>
+<body class="no-skin">
+    <div id="navbar" class="navbar navbar-default">
+        <script type="text/javascript">
+            try{ace.settings.check('navbar' , 'fixed')}catch(e){}
+        </script>
+        <div class="navbar-container" id="navbar-container">
+            <div class="navbar-header pull-left">
+                <a href="#" class="navbar-brand" style="padding:3px 0 0 0;">
+                    <img src="<?php echo $this->basePath($this->Theme()['logo_panel'] ) ;?>" width="135px">
+                </a>
+            </div>
+        </div>
+    </div>
+
+<div class="page-content" style="background: #e4e6e9;">
+    <?php echo $this->content; ?>
+</div>
+</div>
+<div class="footer" style="background-color:#55555;clear:both;">
+<div class="footer-inner">
+    <div class="footer-content" style="border-top: 1px solid #ddd;width: 50%;margin: 0 auto;">
+        <span class="bigger-120">
+            <img src="images/marca_edificiook.png" alt="" height="30" width="100">
+            <small>Derechos reservados</small> © <?php echo date('Y'); ?>
+        </span>
+        <span class="action-buttons">
+            <a href="https://www.facebook.com/edificiook">
+                <i class="ace-icon fa fa-facebook-square text-primary bigger-150"></i>
+            </a>
+        </span>
+    </div>
+</div>
+</div>
+<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse display">
+<i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
+</a>     
+</body>
+</html>

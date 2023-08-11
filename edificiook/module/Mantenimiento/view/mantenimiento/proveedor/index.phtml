@@ -1,0 +1,189 @@
+<div class="row">
+	<div class="col-md-12">
+		<div class="table-header">
+			<div class="row">
+				<div class="col-xs-5">
+					<span>Proveedores <span>
+				</div>
+				<div class="col-xs-7">
+					
+					<div id="btn-actions" class="btn-group pull-right hidden" role="group" aria-label="...">
+						<button type="button" class="btn btn-default btn-sm btnOpe" onclick="Action.viewModalEditar()">
+							<i class="glyphicon glyphicon-pencil"></i>
+							<span>Editar</span>
+						</button>
+						<button type="button" class="btn btn-default btn-sm btnOpe" onclick="Action.confirmarDelete()">
+							<i class="glyphicon  glyphicon-trash"></i>
+							<span>Eliminar</span>
+						</button>
+					</div>
+					<div id="btn-actions-default" class="btn-group pull-right" role="group" aria-label="...">
+						<button type="button" class="btn btn-default btn-sm btnOpe" onclick="Action.new()">
+							<i class="glyphicon glyphicon-file"></i>
+							<span>Nuevo</span>
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<table id="grid-table"></table>
+		<div id="grid-pager"></div>
+	</div>
+</div>
+
+
+<div class="modal fade" id="modalNuevoProveedor" tabindex="-1" role="dialog" aria-labelledby="labelModalFormNuevoUsuario" data-backdrop="static" data-keyboard="false">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="labelModalFormNuevoUsuario">Nuevo proveedor</h4>
+			</div>
+			<div class="modal-body">
+				<form action="javascript::void();" id="form-nuevoProveedor">
+					<div class="row">
+						<div class="col-md-12">
+							<div class="form-group">
+								<label for="textRazonSocial">Razón Social</label>
+								<input type="text" id="textRazonSocial" name="textRazonSocial" class="form-control input-sm" value="">
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-6">
+							<div class="form-group">
+								<label for="textRuc">Documento <small style="font-size: 9px;"> ( RUC / DNI )</small></label>
+								<input type="text" id="textRuc" name="textRuc" class="form-control input-sm numero" value="" maxlength="11">
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<div class="pull-right">
+					<button id="btnSaveNuevo" type="button" class="btn btn-success btn-sm"><i class="ace-icon fa fa-floppy-o bigger-110"></i> Guardar</button>
+	        		<button type="button" class="btn btn-default btn-sm" data-dismiss="modal"><i class="ace-icon fa fa-times bigger-110"></i> Cerrar</button>
+				</div>
+	      	</div>
+		</div>
+	</div>
+</div>
+
+
+<div class="modal fade" id="modalEditarProveedor" tabindex="-1" role="dialog" aria-labelledby="labelModalEditarUsuario" data-backdrop="static" data-keyboard="false">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="labelModalEditarUsuario">Editar proveedor</h4>
+			</div>
+			<div class="modal-body">
+				<form action="javascript::void();" id="form-editarProveedor" class="">
+					<div class="row">
+						<div class="col-md-12">
+							<div class="form-group">
+								<label  for="frmEdit_textRazonSocial">Razón social</label>
+								<input type="text" id="frmEdit_textRazonSocial" name="textRazonSocial" class="form-control input-sm" value="">
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-6">
+							<div class="form-group">
+								<label for="textRuc">Documento <small style="font-size:9px;">(RUC / DNI)</small></label>
+								<input type="text" id="frmEdit_textRuc" name="textRuc" class="form-control input-sm numero" value="" maxlength="11">
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button id="btnSaveEdit" type="button" class="btn btn-success btn-sm"><i class="ace-icon fa fa-floppy-o bigger-110"></i> Guardar</button>
+	        	<button type="button" class="btn btn-default btn-sm" data-dismiss="modal"><i class="ace-icon fa fa-times bigger-110"></i> Cerrar</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+<div class="modal fade" id="modalConfirmarEliminacion" tabindex="-1" role="dialog" aria-labelledby="labelModalConfirmarEliminacion" data-backdrop="static" data-keyboard="false">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title"><span>Proveedor</span></h4>
+			</div>
+			<div class="modal-body">
+				<div class="row">
+					<div class="col-xs-12">
+						<div class="form-group" style="height: 50px;">
+							<span class="ace-icon question-button bigger-200">?</span>
+							<div style="padding-left: 50px; font-size: 15px;">¿Está seguro de que desea eliminar el proveedor seleccionado?</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<center>
+					<button id="btnConfirmarProcesar" type="button" class="btn btn-success btn-sm" onclick="Action.deteleProveedor();"> Aceptar</button>
+	        		<button type="button" class="btn btn-default btn-sm" data-dismiss="modal"> Cancelar</button>	
+				</center>
+	      	</div>
+		</div>
+	</div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+	.wrapper-rowLevelSecurityPass{
+		display: inline-block;
+		margin-top: -14px;
+    	padding-left: 12px
+	}
+	.wrapper-rowLevelSecurityPass .label,wrapper-rowLevelSecurityPass #rptaLevelPass{
+		float: left;
+		background-color: #fff!important;
+    	color: #428bca;
+    	font-size: 11px;
+	}
+
+	.rowGenerarPass{
+		display: inline-block;
+	}
+	.bk-testpass{
+	    width: 47%;
+	    background-color: #797b7b;
+	    clear: both;
+	}
+	.bk-testpass .progress{
+		height: 4px;
+	}
+	
+	ul.list-group {
+	    margin: 0 0 10px 10px;
+	}
+	.list-group-item{
+		padding:5px 5px!important;
+	}
+</style>
+	
+<?php $this->inlineScript()
+    /*->appendFile('https://fb.me/react-0.13.3.js')
+    ->appendFile('https://fb.me/JSXTransformer-0.13.3.js')*/
+    /*->appendFile($this->basePath('/script/mantenimiento/usuario.js?t='.time()),'text/javascript')*/
+    ->appendFile($this->basePath('/script/mantenimiento/proveedor.js?t='.time()),'text/javascript')
+?>

@@ -1,0 +1,191 @@
+<style>
+	#s-documento{pointer-events: none!important;}
+</style>
+
+<div class="row">
+
+	<div class="col-lg-12">
+		<button class="btn btn-default btn-sm right margin-left-5 btn-edit">
+			<i class="ace-icon fa fa-pencil-square-o bigger-110"></i> Editar información
+		</button>
+		<button class="btn btn-success btn-sm right margin-left-5 btn-save hide">
+			<i class="ace-icon fa fa-floppy-o bigger-110"></i> Guardar datos
+		</button>
+		<button class="btn btn-warning btn-sm right margin-left-5 btn-cancel hide">
+			<i class="ace-icon fa fa-times bigger-110"></i> Cancelar
+		</button>
+		<a href="<?php echo $this->url('mantenimiento', array('controller' => 'edificio', 'action' => 'index')); ?>" class="btn btn-default btn-sm right margin-left-5 btn-return">
+			<i class="ace-icon fa fa-reply bigger-110"></i>Regresar
+		</a>
+		<h4 class="header smaller lighter blue">Configuración</h4>
+	</div>
+	
+	<form id="validate" class="contact-form" accion="configuracion">
+	<input type="hidden" name="ruta" value="Edificio > Configuración">
+	<div class="col-sm-12">
+
+		<div class="form-group">
+			<label class="col-sm-2 control-label no-padding-right"> Razón social: </label>
+			<div class="col-sm-6">
+				<input type="text" class="col-xs-10 col-sm-12" name="textRazonSocial" readonly value="<?php echo $this->edificio['razonSocial']; ?>">
+			</div>
+
+			<label class="col-sm-2 control-label no-padding-right" style="text-align: right;"> Ruc: </label>
+			<div class="col-sm-2" style="margin-bottom: 5px;">
+				<input type="text" class="col-xs-10 col-sm-12" name="textRuc" readonly value="<?php echo $this->edificio['ruc']; ?>">
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label class="col-sm-2 control-label no-padding-right"> Mensaje: </label>
+			<div class="col-sm-10" style="margin-bottom: 5px;">
+				<textarea class="form-control" rows="6" name="textMensaje" readonly=""><?php echo $this->edificio['mensaje']; ?></textarea>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label class="col-sm-2 control-label no-padding-right"> Día de proceso: </label>
+			<div class="col-sm-2">
+				<select class="form-control" name="selDiaDeProceso" disabled="">
+					<?php for($i=1;$i<32; $i++): ?>
+						<option value="<?php echo $i; ?>" <?php if($this->edificio['diaDeProceso'] == $i) echo "selected='select'"; ?> ><?php echo $i; ?></option>
+					<?php endfor; ?>
+				</select>
+			</div>
+			
+			<label class="col-sm-2 control-label no-padding-right text-right"> Día de pago: </label>
+			<div class="col-sm-1">
+				<select class="form-control" name="selDiaDePago" disabled="">
+					<?php for($i=1;$i<32; $i++): ?>
+						<option value="<?php echo $i; ?>" <?php if($this->edificio['diaDePago'] == $i) echo "selected='select'"; ?> ><?php echo $i; ?></option>
+					<?php endfor; ?>
+				</select>
+			</div>
+
+			<label class="col-sm-2 control-label no-padding-right text-right"> Tipo de documento: </label>
+			<div class="col-sm-3" style="margin-bottom: 5px;">
+				<select class="form-control" name="selTipoDeDocumento" disabled="">
+					<option value="FACTURA" <?php if($this->edificio['tipoDeDocumento'] == 'FACTURA') echo "selected='select'"; ?> >FACTURA</option>
+                    <option value="BOLETA" <?php if($this->edificio['tipoDeDocumento'] == 'BOLETA') echo "selected='select'"; ?> >BOLETA</option>
+                    <option value="RECIBO DE MANTENIMIENTO" <?php if($this->edificio['tipoDeDocumento'] == 'RECIBO DE MANTENIMIENTO') echo "selected='select'"; ?> >RECIBO DE MANTENIMIENTO</option>
+				</select>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label class="col-sm-2 control-label no-padding-right"> Cobro de consumo individual </label>
+			<div class="col-sm-1" style="margin-bottom: 5px;">
+				<div class="checkbox">
+					<label class="padding-left-0">
+						<input name="chkCobroDeConsumo" id="cobro-consumo" type="checkbox" <?php if($this->edificio['cobroDeConsumo'] == 1) echo "checked"; ?> class="ace" disabled="">
+						<span class="lbl"></span>
+					</label>
+				</div>
+			</div>
+
+			<label class="col-sm-2 control-label no-padding-right text-right"> Tipo calculo: </label>
+			<div class="col-sm-3" style="margin-bottom: 5px;">
+				<select class="form-control" name="selTipoCalculo" id="tipo-calculo" disabled="">
+					<option value="0" <?php if($this->edificio['tipoCalculo'] == 0) echo "selected='select'"; ?> >TARIFA A TODO COSTO</option>
+					<option value="1" <?php if($this->edificio['tipoCalculo'] == 1) echo "selected='select'"; ?> >TARIFA DIFERENCIADA</option>
+				</select>
+			</div>
+
+			<label class="col-sm-2 control-label no-padding-right text-right"> Formato cuota: </label>
+			<div class="col-sm-2" style="margin-bottom: 5px;">
+				<select class="form-control" name="selFormatoCuota" disabled="">
+					<option value="0" <?php if($this->edificio['formatoCuota'] == 0) echo "selected='select'"; ?> >EXACTO</option>
+					<option value="1" <?php if($this->edificio['formatoCuota'] == 1) echo "selected='select'"; ?> >REDONDEO</option>
+					<option value="2" <?php if($this->edificio['formatoCuota'] == 2) echo "selected='select'"; ?> >REDONDEO AL MINIMO</option>
+				</select>
+			</div>
+		</div>
+
+		
+
+	</div>
+
+	<div class="col-lg-12">
+		<div class="form-group">
+			
+			<label class="col-sm-2 control-label no-padding-right"> Aplicar mora automáticamente: </label>
+			<div class="col-sm-1">
+				<div class="checkbox">
+					<label class="padding-left-0">
+						<input type="checkbox" id="aplicar-mora" name="chkAplicarMora" class="ace" <?php if($this->edificio['aplicarMora'] == 'SI') echo "checked"; ?> disabled="">
+						<span class="lbl"></span>
+					</label>
+				</div>
+			</div>
+
+			<label class="col-sm-2 control-label no-padding-right text-right"> Costo mora por día: </label>
+			<div class="col-sm-3">
+				<input type="text" class="col-xs-10 col-sm-12 moneda" id="costo-mora" disabled="" value="<?php echo $this->edificio['costoMoraPorDia']; ?>" />
+			</div>
+
+		</div>
+	</div>
+
+	<div class="col-lg-12">
+		<h4 class="header smaller lighter blue">Recibo de mantenimiento</h4>
+	</div>
+
+	<div class="col-lg-12">
+	
+		<div class="form-group">
+			<label class="col-sm-3 control-label no-padding-right"> # Serie - Documento (último registrado): </label>
+			<div class="col-sm-3" style="margin-bottom: 5px;">	
+				<input type="text" class="col-xs-10 col-sm-12 numero" readonly="readonly" id="s-documento" value="<?php echo $this->edificio['serieDocumento']; ?>">
+			</div>
+
+			<label class="col-sm-2 control-label no-padding-right text-right"> # Serie: </label>
+			<div class="col-sm-1" style="margin-bottom: 5px;">
+				<input type="text" class="col-xs-10 col-sm-12 numero" readonly name="textNumeroSerie" value="<?php echo $this->edificio['numeroSerie']; ?>" >
+			</div>
+
+			<label class="col-sm-2 control-label no-padding-right text-right"> # Documento: </label>
+			<div class="col-sm-1">
+				<input type="text" class="col-xs-10 col-sm-12 numero" readonly name="textNumeroDocumento" value="<?php echo $this->edificio['numeroDocumento']; ?>">
+			</div>
+		</div>
+
+	</div>
+
+
+	<div class="col-lg-12">
+		<h4 class="header smaller lighter blue">Cuentas Bancarias</h4>
+	</div>
+
+	<div class="col-lg-12">
+	
+		<div class="form-group">
+			<label class="col-sm-3 control-label no-padding-right"> Nombre de cuenta recaudadora: </label>
+			<div class="col-sm-5">
+				<input type="text" class="col-xs-10 col-sm-12" name="textNombreCuentaRecaudadora" readonly value="<?php echo $this->edificio['nombreCuentaRecaudadora']; ?>">
+			</div>
+
+			<label class="col-sm-2 control-label no-padding-right text-right"> Monto mínimo: </label>
+			<div class="col-sm-2" style="margin-bottom: 5px;">
+				<input type="text" class="col-xs-10 col-sm-12 moneda" name="textMontoMinimo" readonly value="<?php echo $this->edificio['montoMinimo']; ?>">
+			</div>
+
+			<label class="col-sm-3 control-label no-padding-right"> Número de cuenta: </label>
+			<div class="col-sm-5">
+				<input type="text" class="col-xs-10 col-sm-12" name="textNumeroDeCuenta" readonly value="<?php echo $this->edificio['numeroDeCuenta']; ?>">
+			</div>
+		</div>
+
+	</div>
+	<button type="submit" class="btn-submit hidden"></button>
+</form>
+</div>
+
+<script>
+	$("[name='textNumeroDeCuenta']").keypress(function(event){
+		if(event.keyCode == 45) return false;
+	});
+</script>
+
+<?php $this->inlineScript()
+	->appendFile($this->basePath('/script/mantenimiento/edificio.js'),'text/javascript')
+?>

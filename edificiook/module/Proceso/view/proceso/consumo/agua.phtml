@@ -1,0 +1,417 @@
+<style>
+	.form-group {margin-bottom: 0px;}
+
+	.datepicker{z-index: 10000!important;}
+	.dropdown-menu{z-index: 100000;}
+	.msg-error{color: #f00;font-size: 12px;}
+
+	.label-meses{
+		width: 180px;
+	}
+	.wrapper-flectura{
+	    margin: 0px;
+		padding: 0px!important;
+		height: 20px!important;
+    	background: #d8d8d8;
+    	width: 92px;
+    	left: -8px;
+    	text-align: center;
+    	font-size: 11px;
+	}
+	.wrapper-flectura:hover{
+		background: #aacee6;
+	}
+	.ui-jqgrid .ui-jqgrid-htable th{
+		height: 	53px!important;
+	}
+</style>
+
+<div class="row">
+	
+	<span class="id" data-id="<?php echo $this->idedificio; ?>"></span>
+
+	<div class="col-lg-12 margin-bottom-15 margin-top-10">
+		
+		<div class="form-group">
+			<label class="col-sm-1 control-label no-padding-right"> Tipo: </label>
+			<div class="col-sm-2">
+				<select class="form-control" id="tipo">
+					<option value="M3">M3</option>
+	                <option value="LITRO">LITRO</option>
+	                <option value="GALON">GALÓN</option>
+				</select>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label class="col-sm-1 control-label no-padding-right"> Servicio: </label>
+			<div class="col-sm-2">
+				<select class="form-control" id="servicio">
+					<option value="AGUA">AGUA</option>
+				</select>
+			</div>
+		</div>
+
+	</div>
+
+	<!-------------------------------------------------------------------------------------------------------------------------->
+
+	<div class="col-xs-12">
+		<div class="table-header">
+			<div class="row">
+				<div class="col-xs-4">Consumo de agua</div>
+				<div class="col-xs-8">
+					<div class="btn-group pull-right" role="group">
+						<div id="btn-actions" class="btn-group pull-right margin-0 margin-right-0" role="group">
+							<button type="button" class="btn btn-default btn-sm btnOpe" btn-accion="new" onclick="consumo.view(this)">
+						  		<i class="glyphicon glyphicon-file"></i>
+						  		<span>Nuevo </span>
+						  	</button>
+						</div>
+						<?php if ($this->edificio['tipoCalculo'] == 1): ?>
+						  	<div id="btn-actions" class="btn-group pull-right margin-0 margin-right-0" role="group">
+								<button type="button" class="btn btn-default btn-sm btnOpe" btn-accion="tarifa" onclick="consumo.view(this)">
+							  		<i class="fa fa-exclamation-circle"></i>
+							  		<span>Planes Sedapal </span>
+							  	</button>
+							</div>
+						<?php endif; ?>
+						<div id="btn-actions" class="btn-group pull-right margin-0 margin-right-0" role="group">
+							<button type="button" class="btn btn-default btn-sm btnOpe" btn-accion="adjunto" onclick="consumo.view(this)">
+						  		<i class="fa fa-file-excel-o"></i>
+						  		<span>Importar </span>
+						  	</button>
+						</div>
+
+						<div class="btn-group pull-right margin-top-0 margin-right-0" role="group" aria-label="...">
+							<button type="button" class="btn btn-default btn-sm btnOpe" onclick="DateControls.backYear()">
+						  		<i class="ace-icon fa fa-angle-left biger-150"></i>
+						  	</button>
+						  	<button  type="button" class="btn btn-default btn-sm btnOpe">
+						  		<span id="currentYear"><?php echo date('Y');?></span>
+						  	</button>
+						  	<button type="button" class="btn btn-default btn-sm btnOpe" onclick="DateControls.nextYear()">
+						  		<i class="ace-icon fa fa-angle-right"></i>
+						  	</button>
+						</div>
+
+					</div>
+				</div>
+			</div>
+		</div>
+		<table id='tblConsumo'></table>
+		<div id="pager"></div>
+	</div>
+	
+	<!-------------------------------------------------------------------------------------------------------------------------->
+
+	<div class="modal fade" id="myModalNewConsumo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" data-backdrop="static" data-keyboard="false">
+	  <div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	        <h4 class="modal-title" id="exampleModalLabel">Unidad</h4>
+	      </div>
+	      <div class="modal-body">
+	      		<div class="row">
+	      			
+	      			<div class="col-lg-6">
+		      			<div class="form-group">
+							<label class="col-sm-12 control-label no-padding-right"> Unidad </label>
+							<div class="col-sm-12" style="margin-bottom: 5px;">
+								<div>
+									<select class="form-control chosen-select" name="selIdTipo" id="cboUnidadInmobiliaria">
+											<option disabled="">Seleccionar...</option>
+										<?php foreach($this->listarUnidad as $unidad): ?>
+											<option value="<?php echo $unidad['id']; ?>"><?php echo $unidad['nombreDepartamento']." ".$unidad['numeroDepartamento']; ?></option>
+										<?php endforeach; ?>
+									</select>
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-12 control-label no-padding-right"> Fecha </label>
+							<div class="col-sm-12" style="margin-bottom: 5px;">
+								<div class="input-group">
+									<input class="form-control fecha" value="<?php echo date('d/m/Y'); ?>" id="txtFecha" type="text" data-date-format="dd/mm/yyyy">
+									<span class="input-group-addon">
+										<i class="fa fa-calendar bigger-110"></i>
+									</span>
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-12 control-label no-padding-right"> Lectura anterior </label>
+							<div class="col-sm-12" style="margin-bottom: 5px;">
+								<div><input type="text" class="col-xs-10 col-sm-12" readonly="" id="txtLecIni" name="textNumero" value=""></div>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-12 control-label no-padding-right"> Ver consumo en </label>
+							<div class="col-sm-12" style="margin-bottom: 5px;">
+								<div>
+									<select class="form-control" id="cboUnidadMedida">
+										<option disabled="">Seleccionar...</option>
+		                                <option value="M3">M3</option>
+		                                <option value="LITRO">LITRO</option>                            
+		                                <option value="GALON">GALÓN</option>
+		                            </select>
+								</div>
+							</div>
+						</div>
+		      		</div>
+
+		      		<div class="col-lg-6">
+		      			<div class="form-group">
+							<label class="col-sm-12 control-label no-padding-right"> Servicio </label>
+							<div class="col-sm-12" style="margin-bottom: 5px;">
+								<div>
+									<select class="form-control" id="cboServicio">
+										<option value="AGUA">AGUA</option>
+									</select>
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-12 control-label no-padding-right"> Hora </label>
+							<div class="col-sm-12">
+								<div class="input-group">
+									<input id="txtHora" type="text" class="form-control" />
+									<span class="input-group-addon">
+										<i class="fa fa-clock-o bigger-110"></i>
+									</span>
+								</div>
+
+
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-12 control-label no-padding-right"> Lectura Actual </label>
+							<div class="col-sm-12" style="margin-bottom: 5px;">
+								<div>
+									<input type="text" class="col-xs-10 col-sm-12 moneda" id="txtLecFin" value="">
+									<span class="msg-error"></span>
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-12 control-label no-padding-right"> Tipo </label>
+							<div class="col-sm-12" style="margin-bottom: 5px;">
+								<div>
+									<select class="form-control" id="cboTipoUnidadMedida">
+		                                <option value="LITRO">LITRO</option>
+		                                <option value="M3">M3</option>                            
+		                                <option value="GALON">GALÓN</option>
+		                            </select>
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-12 control-label no-padding-right"> Consumo </label>
+							<div class="col-sm-12" style="margin-bottom: 5px;">
+								<div><input type="text" class="col-xs-10 col-sm-12" id="txtConsumo" readonly=""></div>
+							</div>
+						</div>
+		      		</div>
+
+	      		</div>
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-success btn-sm btn-save"><i class="ace-icon fa fa-floppy-o bigger-110"></i> Guardar</button>
+	        <button type="button" class="btn btn-default btn-sm" data-dismiss="modal"><i class="ace-icon fa fa-times bigger-110"></i> Cerrar</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+
+	<!-------------------------------------------------------------------------------------------------------------------------->
+
+	<div class="modal fade" id="myModalTarifaSedapal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" data-backdrop="static" data-keyboard="false">
+	  <div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header" style="background: #9A437A;color: #fff;text-align:center;">
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: #fff;"><span aria-hidden="true">&times;</span></button>
+	        <h4 class="modal-title" id="exampleModalLabel">Tarifa Sedapal</h4>
+	      </div>
+	      <div class="modal-body">
+	      		<div class="row">
+					<div class="col-lg 12">		 
+						<?php if ($this->edificio['tipoCalculo'] == 1): ?>				 
+							<table class="table table-striped table-bordered table-hover margin-0">
+								<thead class="thin-border-bottom">
+									<tr>
+										<th>M3</th>
+										<th>AGUA</th>
+										<th>ALCANTARILLADO</th>
+										<th>TOTAL</th>	
+									</tr>
+								</thead>
+								<tbody>
+								<?php foreach ($this->tarifa as $tarifa): ?>
+									<tr>
+										<td><?php echo $tarifa['descripcion']; ?></td>
+										<td>S./ <?php echo $tarifa['precio1']; ?></td>
+										<td>S./ <?php echo $tarifa['precio2']; ?></td>
+										<td>S./ <?php echo $tarifa['precio3']; ?></td>
+									</tr>
+								<?php endforeach; ?>
+								</tbody>
+							</table>
+						<?php endif; ?>
+		      		</div>
+	      		</div>
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-default btn-sm" data-dismiss="modal"><i class="ace-icon fa fa-times bigger-110"></i> Cerrar</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+
+	<!-------------------------------------------------------------------------------------------------------------------------->
+	
+
+	<div class="modal fade" id="myModalAdjuntarArchivo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" data-backdrop="static" data-keyboard="false">
+	  <div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	        <h4 class="modal-title" id="exampleModalLabel">Adjuntar archivo de consumo individual</h4>
+	      </div>
+	      <div class="modal-body">
+				<div class="row center">
+					
+					<div class="col-lg-6">		 
+						<div class="form-group">
+							<label class="col-sm-12 control-label no-padding-right"> Adjuntar lecturas de agua en formato excel. (.xlsx) </label>
+							<div class="col-sm-12">
+								<button class="btn btn-sm btn-warning btn-close" style="display: none;">
+									<i class="ace-icon fa fa-times bigger-110"></i>
+									<span class="bigger-110 no-text-shadow">Cancelar</span>
+								</button>
+								<button class="btn btn-sm btn-grey btn-adjuntar">
+									<i class="ace-icon fa fa-plus bigger-110"></i>
+									<span class="bigger-110 no-text-shadow">Adjuntar</span>
+								</button>
+								<button class="btn btn-sm btn-success btn-registrar" onclick="consumo.registrarArchivo(this);" style="display:none;">
+									<span class="spinner hidden"><i class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></i></span>
+									<span class="bigger-110 no-text-shadow">Registrar</span>
+								</button>
+								<input type="file" name="filexls" id="filexls" style="display:none;" onchange="consumo.uploadArchivo(this);">
+								<div class="progress progress-mini progress-striped active margin-top-5" style="display:none;">
+									<div class="progress-bar progress-bar-success"></div>
+								</div>
+							</div>
+						</div>
+		      		</div>
+
+					<div class="col-lg-6" style="border-left: 1px solid #eee;">
+						<div class="form-group">
+							<label class="col-sm-12 control-label no-padding-right"> Descargar formato: </label>
+							<div class="col-sm-12">
+								<div class="format-xls">
+									<span onclick="consumo.formato(this)" key="dowload" style="cursor: pointer;">
+										<img src="images/icon-excel.png">
+									</span>
+								</div>
+							</div>
+						</div>
+					</div>
+
+
+				</div>
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-default btn-sm" data-dismiss="modal"><i class="ace-icon fa fa-times bigger-110"></i> Cerrar</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+
+
+
+	<div class="modal fade" id="modalInfoLectura" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" data-backdrop="static" data-keyboard="false">
+	  <div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header" style="background: #9A437A;color: #fff;text-align:center;">
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: #fff;"><span aria-hidden="true">&times;</span></button>
+	        <h4 class="modal-title">Lectura</h4>
+	      </div>
+	      <div class="modal-body">
+	      		<input type="hidden" id="co_mesLectura" name="co_mesLectura" value="">
+	      		<div class="row">
+					<div class="col-xs-12 col-md-12">		 
+						<label for="mlec_fechalectura">Fecha de Lectura</label>
+						<input type="text" class="form-control datepicker" id="text_fechaLectura" name="text_fechaLectura">
+		      		</div>
+	      		</div>
+	      </div>
+	      <div class="modal-footer">
+	      	<button type="button" id="btn-change-fecha"	class="btn btn-success btn-sm"><i class="ace-icon fa fa-check bigger-110"></i> Guardar</button>
+	        <button type="button" class="btn btn-default btn-sm" data-dismiss="modal"><i class="ace-icon fa fa-times bigger-110"></i> Cerrar</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+
+	
+
+</div>
+
+<style>
+
+	.glyphicon-refresh-animate {
+	    -animation: spin .7s infinite linear;
+	    -webkit-animation: spin2 .7s infinite linear;
+	}
+
+	@-webkit-keyframes spin2 {
+	    from { -webkit-transform: rotate(0deg);}
+	    to { -webkit-transform: rotate(360deg);}
+	}
+
+	@keyframes spin {
+	    from { transform: scale(1) rotate(0deg);}
+	    to { transform: scale(1) rotate(360deg);}
+	}
+
+	.spinner {
+	  display: inline-block;
+	  opacity: 1;
+	  width: 15px;
+
+	  -webkit-transition: opacity 0.25s, width 0.25s;
+	  -moz-transition: opacity 0.25s, width 0.25s;
+	  -o-transition: opacity 0.25s, width 0.25s;
+	  transition: opacity 0.25s, width 0.25s;
+	}
+
+	.has-spinner.active {
+	  cursor:progress;
+	}
+
+	.has-spinner.active .spinner {
+	  opacity: 1;
+	  width: auto; /* This doesn't work, just fix for unkown width elements */
+	}
+
+	.has-spinner.btn-mini.active .spinner {
+	    width: 10px;
+	}
+
+	.has-spinner.btn-small.active .spinner {
+	    width: 13px;
+	}
+
+	.has-spinner.btn.active .spinner {
+	    width: 16px;
+	}
+
+	.has-spinner.btn-large.active .spinner {
+	    width: 19px;
+	}
+</style>
+
+<?php $this->inlineScript()
+	->appendFile($this->basePath('/script/proceso/consumo.js?t='.time()),'text/javascript')
+?>

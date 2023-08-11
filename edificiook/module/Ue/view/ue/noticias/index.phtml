@@ -1,0 +1,64 @@
+<style>
+	.process{
+	    position: absolute;
+	    bottom: 100px;
+	    left: 45%;
+	    right: 45%;
+	    text-align: center;
+	    z-index: 1000;
+	}
+	.widget-header{
+		padding-left:0px;
+		border-bottom: 0px;
+		border-bottom: 2px solid rgba(158, 158, 158, 0.56);
+	}
+	.widget-article {
+		padding: 6px;
+		background-color: #EFEFEF;
+		border: 1px solid rgba(158, 158, 158, 0.13);
+	}
+	.content-noticia h3{
+		font-size: 16px;
+    	font-weight: bold;
+	}
+	.widget-body {
+	    background-color: #EFEFEF;
+	    border-radius: 5px;
+	}
+	.widget-body-footer p{
+		text-align: right;
+    	font-weight: bold;
+		font-size: 12px;
+    	color: #807C7C;
+	}
+	.widget-body span{
+		color: #428bca;
+    	cursor: pointer;
+	}
+</style>
+
+<div class="row">
+	<div class="col-xs-12">	
+		<div class="content-noticia grid"></div>
+	</div>
+	<div class="process">
+		<span class="fa fa-spinner fa-spin" style="font-size: 48px;color: #333;"></span>
+	</div>
+	<div class="col-xs-12 center margin-top-30 hide" id="result">
+		<div style="background: #f5f5f5;padding: 5px;">No se encontraron resultados</div>
+	</div>
+</div>
+
+<div class="modal fade" id="myModalNoticia" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      
+    </div>
+  </div>
+</div>
+
+
+<?php
+	$this->inlineScript()
+	    ->appendFile($this->basePath('/script/ue/noticias.js'),'text/javascript')
+?>
